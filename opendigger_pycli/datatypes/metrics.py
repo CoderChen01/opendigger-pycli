@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from typing import List, ClassVar
+from typing import ClassVar, List
 
-
-from .base import BaseData, NonTrivialMetricDict, NameAndValue
+from .base import BaseData, NameAndValue, NonTrivialMetricDict
 
 
 @dataclass
