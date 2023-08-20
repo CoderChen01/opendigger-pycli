@@ -1,8 +1,8 @@
 from opendigger_pycli.dataloader.indices import (
     ActivityRepoDataloader,
-    OpenRankRepoDataloader,
-    AttentionRepoDataloader,
     ActivityUserDataLoader,
+    AttentionRepoDataloader,
+    OpenRankRepoDataloader,
     OpenRankUserDataLoader,
 )
 

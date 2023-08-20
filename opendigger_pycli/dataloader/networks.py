@@ -1,20 +1,20 @@
-from opendigger_pycli.dataloader.base import DataloaderState
 from opendigger_pycli.datatypes import (
-    DeveloperNetworkData,
-    RepoNetworkData,
-    ProjectOpenRankNetworkData,
     BaseData,
+    DeveloperNetworkData,
+    ProjectOpenRankNetworkData,
+    RepoNetworkData,
 )
+
 from .base import (
+    BaseOpenRankNetworkDataloader,
     BaseRepoDataloader,
     BaseUserDataloader,
-    BaseOpenRankNetworkDataloader,
     DataloaderState,
-    register_dataloader,
-    get_repo_data,
     get_developer_data,
+    get_repo_data,
     load_network_data,
     load_openrank_network_data,
+    register_dataloader,
 )
 
 
@@ -23,11 +23,15 @@ class DeveloperNetworkRepoDataloader(BaseRepoDataloader[DeveloperNetworkData]):
     name = "developer_network"
     metric_type = "network"
 
-    def load(self, org: str, repo: str) -> DataloaderState[DeveloperNetworkData]:
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderState[DeveloperNetworkData]:
         data = get_repo_data(org, repo, DeveloperNetworkData.name)
         if data is None:
             return DataloaderState(
-                is_success=False, data=None, desc="Cannot find data for this indicator"
+                is_success=False,
+                data=None,
+                desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
@@ -45,7 +49,9 @@ class RepoNetworkRepoDataloader(BaseRepoDataloader[RepoNetworkData]):
         data = get_repo_data(org, repo, RepoNetworkData.name)
         if data is None:
             return DataloaderState(
-                is_success=False, data=None, desc="Cannot find data for this indicator"
+                is_success=False,
+                data=None,
+                desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
@@ -67,7 +73,9 @@ class ProjectOpenRankNetworkRepoDataloader(
         data = get_repo_data(org, repo, ProjectOpenRankNetworkData.name, date)
         if data is None:
             return DataloaderState(
-                is_success=False, data=None, desc="Cannot find data for this indicator"
+                is_success=False,
+                data=None,
+                desc="Cannot find data for this indicator",
             )
         year, month = date.split("-")[:2]
         return DataloaderState(
@@ -92,7 +100,9 @@ class DeveloperNetworkUserDataloader(BaseUserDataloader[DeveloperNetworkData]):
         data = get_developer_data(username, DeveloperNetworkData.name)
         if data is None:
             return DataloaderState(
-                is_success=False, data=None, desc="Cannot find data for this indicator"
+                is_success=False,
+                data=None,
+                desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
@@ -110,7 +120,9 @@ class RepoNetworkUserDataloader(BaseUserDataloader[RepoNetworkData]):
         data = get_developer_data(username, RepoNetworkData.name)
         if data is None:
             return DataloaderState(
-                is_success=False, data=None, desc="Cannot find data for this indicator"
+                is_success=False,
+                data=None,
+                desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,

@@ -4,14 +4,12 @@ from typing import (
     Any,
     Callable,
     Dict,
-    List,
-    Tuple,
-    Optional,
     Generic,
-    TypeVar,
-    Callable,
+    List,
     Literal,
-    overload,
+    Optional,
+    Tuple,
+    TypeVar,
 )
 
 import requests
@@ -19,11 +17,11 @@ import requests
 from opendigger_pycli.datatypes import (
     BaseData,
     BaseNetworkData,
-    ProjectOpenRankNetworkNodeDict,
-    ProjectOpenRankNetworkEdgeDict,
     NameAndValue,
     NameNameAndValue,
     NonTrivialMetricDict,
+    ProjectOpenRankNetworkEdgeDict,
+    ProjectOpenRankNetworkNodeDict,
 )
 
 DATALOADERS = {}
@@ -54,7 +52,9 @@ def get_developer_data(username: str, metric_name: str) -> Optional[Dict]:
     return r.json()
 
 
-def load_base_data(data: Dict[str, Any], load_value: Callable) -> List[BaseData]:
+def load_base_data(
+    data: Dict[str, Any], load_value: Callable
+) -> List[BaseData]:
     base_data_list = []
 
     for date, value in data.items():
@@ -64,17 +64,22 @@ def load_base_data(data: Dict[str, Any], load_value: Callable) -> List[BaseData]
             date.replace("-raw", "")
         try:
             year, month = date.split("-")[:2]
-            year, month = int(year), int(month)
         except Exception:
             # TODO(chenjunjie): add warning
             year, month = (
-                0,
-                0,
+                "0",
+                "0",
             )  # If the date is not in the correct format, set it to 0
 
-        # value has different types, you need to pass in a function to handle it
+        # value has different types,
+        # you need to pass in a function to handle it
         base_data_list.append(
-            BaseData(year=year, month=month, is_raw=is_raw, value=load_value(value))
+            BaseData(
+                year=int(year),
+                month=int(month),
+                is_raw=is_raw,
+                value=load_value(value),
+            )
         )
 
     return base_data_list
@@ -116,7 +121,9 @@ def load_non_trival_metric_data(data: Dict[str, Any]) -> NonTrivialMetricDict:
 
 def load_openrank_network_data(
     data: Dict[str, List],
-) -> BaseNetworkData[ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict]:
+) -> BaseNetworkData[
+    ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict
+]:
     nodes = data["nodes"]
     edges = data["links"]
     return BaseNetworkData(nodes=nodes, edges=edges)
@@ -149,7 +156,9 @@ class DataloaderState(Generic[T]):
 
 
 class BaseRepoDataloader(abc.ABC, Generic[T]):
-    name: str  # Specify the name of the indicator, which is different from the name field in datatypes
+    # Specify the name of the indicator,
+    # which is different from the name field in datatypes
+    name: str
     metric_type: Literal[
         "index", "metric", "network"
     ]  # Specifies the type of indicator
@@ -163,7 +172,9 @@ class BaseRepoDataloader(abc.ABC, Generic[T]):
 
 
 class BaseOpenRankNetworkDataloader(abc.ABC, Generic[T]):
-    name: str  # Specify the name of the indicator, which is different from the name field in datatypes
+    # Specify the name of the indicator,
+    # which is different from the name field in datatypes
+    name: str
     metric_type: Literal["network"]  # Specifies the type of indicator
 
     def __init__(self) -> None:
@@ -175,9 +186,11 @@ class BaseOpenRankNetworkDataloader(abc.ABC, Generic[T]):
 
 
 class BaseUserDataloader(abc.ABC, Generic[T]):
-    name: str  # Specify the name of the indicator, which is different from the name field in datatypes
+    # Specify the name of the indicator,
+    # which is different from the name field in datatypes
+    name: str
     metric_type: Literal["index", "network"]  # Specifies the type of indicator
 
     @abc.abstractmethod
-    def load(self, org: str, repo: str) -> DataloaderState[T]:
+    def load(self, username: str) -> DataloaderState[T]:
         pass

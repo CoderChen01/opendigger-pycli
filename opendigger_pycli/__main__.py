@@ -3,4 +3,4 @@
 from opendigger_pycli.cli import opendigger  # pragma: no cover
 
 if __name__ == "__main__":  # pragma: no cover
-    opendigger()
+    opendigger()  # type: ignore

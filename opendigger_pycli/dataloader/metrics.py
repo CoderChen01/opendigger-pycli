@@ -21,23 +21,28 @@ from opendigger_pycli.datatypes import (
     StarData,
     TechnicalForkData,
 )
+
 from .base import (
     BaseRepoDataloader,
     DataloaderState,
-    register_dataloader,
     get_repo_data,
     load_base_data,
     load_name_and_value,
     load_non_trival_metric_data,
+    register_dataloader,
 )
 
 
 @register_dataloader
-class ActiveDateAndTimeRepoDataloader(BaseRepoDataloader[ActiveDateAndTimeData]):
+class ActiveDateAndTimeRepoDataloader(
+    BaseRepoDataloader[ActiveDateAndTimeData]
+):
     name = "active_date_and_time"
     metric_type = "metric"
 
-    def load(self, org: str, repo: str) -> DataloaderState[ActiveDateAndTimeData]:
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderState[ActiveDateAndTimeData]:
         data = get_repo_data(org, repo, ActiveDateAndTimeData.name)
         if data is None:
             return DataloaderState(
@@ -138,11 +143,15 @@ class NewContributorRepoDataloader(BaseRepoDataloader[NewContributorData]):
 
 
 @register_dataloader
-class InactiveContributorRepoDataloader(BaseRepoDataloader[InactiveContributorData]):
+class InactiveContributorRepoDataloader(
+    BaseRepoDataloader[InactiveContributorData]
+):
     name = "inactive_contributor"
     metric_type = "metric"
 
-    def load(self, org: str, repo: str) -> DataloaderState[InactiveContributorData]:
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderState[InactiveContributorData]:
         data = get_repo_data(org, repo, InactiveContributorData.name)
         if data is None:
             return DataloaderState(
@@ -247,11 +256,15 @@ class IssueCommentRepoDataloader(BaseRepoDataloader[IssueCommentData]):
 
 
 @register_dataloader
-class IssueResponseTimeRepoDataloader(BaseRepoDataloader[IssueResponseTimeData]):
+class IssueResponseTimeRepoDataloader(
+    BaseRepoDataloader[IssueResponseTimeData]
+):
     name = "issue_response_time"
     metric_type = "metric"
 
-    def load(self, org: str, repo: str) -> DataloaderState[IssueResponseTimeData]:
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderState[IssueResponseTimeData]:
         data = get_repo_data(org, repo, IssueResponseTimeData.name)
         if data is None:
             return DataloaderState(
@@ -262,7 +275,9 @@ class IssueResponseTimeRepoDataloader(BaseRepoDataloader[IssueResponseTimeData])
 
         return DataloaderState(
             is_success=True,
-            data=IssueResponseTimeData(value=load_non_trival_metric_data(data)),
+            data=IssueResponseTimeData(
+                value=load_non_trival_metric_data(data)
+            ),
             desc="",
         )
 
@@ -274,7 +289,9 @@ class IssueResolutionDurationRepoDataloader(
     name = "issue_resolution_duration"
     metric_type = "metric"
 
-    def load(self, org: str, repo: str) -> DataloaderState[IssueResolutionDurationData]:
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderState[IssueResolutionDurationData]:
         data = get_repo_data(org, repo, IssueResolutionDurationData.name)
         if data is None:
             return DataloaderState(
@@ -285,7 +302,9 @@ class IssueResolutionDurationRepoDataloader(
 
         return DataloaderState(
             is_success=True,
-            data=IssueResolutionDurationData(value=load_non_trival_metric_data(data)),
+            data=IssueResolutionDurationData(
+                value=load_non_trival_metric_data(data)
+            ),
             desc="",
         )
 
@@ -314,11 +333,15 @@ class IssueAgeRepoDataloader(BaseRepoDataloader[IssueAgeData]):
 
 
 @register_dataloader
-class AddedCodeChangeLineRepoDataloader(BaseRepoDataloader[AddedCodeChangeLineData]):
+class AddedCodeChangeLineRepoDataloader(
+    BaseRepoDataloader[AddedCodeChangeLineData]
+):
     name = "added_code_change_line"
     metric_type = "metric"
 
-    def load(self, org: str, repo: str) -> DataloaderState[AddedCodeChangeLineData]:
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderState[AddedCodeChangeLineData]:
         data = get_repo_data(org, repo, AddedCodeChangeLineData.name)
         if data is None:
             return DataloaderState(
@@ -343,11 +366,15 @@ class RemovedCodeChangeLineRepoDataloader(
     name = "removed_code_change_line"
     metric_type = "metric"
 
-    def load(self, org: str, repo: str) -> DataloaderState[RemovedCodeChangeLineData]:
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderState[RemovedCodeChangeLineData]:
         data = get_repo_data(org, repo, RemovedCodeChangeLineData.name)
         if data is None:
             return DataloaderState(
-                is_success=False, data=None, desc="Cannot find data for this indicator"
+                is_success=False,
+                data=None,
+                desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
@@ -368,7 +395,9 @@ class ChangeRequestRepoDataloader(BaseRepoDataloader[ChangeRequestData]):
         data = get_repo_data(org, repo, ChangeRequestData.name)
         if data is None:
             return DataloaderState(
-                is_success=False, data=None, desc="Cannot find data for this indicator"
+                is_success=False,
+                data=None,
+                desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
@@ -387,11 +416,15 @@ class AcceptedChangeRequestRepoDataloader(
     name = "accepted_change_request"
     metric_type = "metric"
 
-    def load(self, org: str, repo: str) -> DataloaderState[AcceptedChangeRequestData]:
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderState[AcceptedChangeRequestData]:
         data = get_repo_data(org, repo, AcceptedChangeRequestData.name)
         if data is None:
             return DataloaderState(
-                is_success=False, data=None, desc="Cannot find data for this indicator"
+                is_success=False,
+                data=None,
+                desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
@@ -404,15 +437,21 @@ class AcceptedChangeRequestRepoDataloader(
 
 
 @register_dataloader
-class ChangeRequestReviewRepoDataloader(BaseRepoDataloader[ChangeRequestReviewData]):
+class ChangeRequestReviewRepoDataloader(
+    BaseRepoDataloader[ChangeRequestReviewData]
+):
     name = "change_request_review"
     metric_type = "metric"
 
-    def load(self, org: str, repo: str) -> DataloaderState[ChangeRequestReviewData]:
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderState[ChangeRequestReviewData]:
         data = get_repo_data(org, repo, ChangeRequestReviewData.name)
         if data is None:
             return DataloaderState(
-                is_success=False, data=None, desc="Cannot find data for this indicator"
+                is_success=False,
+                data=None,
+                desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
@@ -437,7 +476,9 @@ class ChangeRequestResponseTimeRepoDataloader(
         data = get_repo_data(org, repo, ChangeRequestResponseTimeData.name)
         if data is None:
             return DataloaderState(
-                is_success=False, data=None, desc="Cannot find data for this indicator"
+                is_success=False,
+                data=None,
+                desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
@@ -459,10 +500,14 @@ class ChangeRequestResolutionDurationRepoDataloader(
     def load(
         self, org: str, repo: str
     ) -> DataloaderState[ChangeRequestResolutionDurationData]:
-        data = get_repo_data(org, repo, ChangeRequestResolutionDurationData.name)
+        data = get_repo_data(
+            org, repo, ChangeRequestResolutionDurationData.name
+        )
         if data is None:
             return DataloaderState(
-                is_success=False, data=None, desc="Cannot find data for this indicator"
+                is_success=False,
+                data=None,
+                desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
@@ -479,11 +524,15 @@ class ChangeRequestAgeRepoDataloader(BaseRepoDataloader[ChangeRequestAgeData]):
     name = "change_request_age"
     metric_type = "metric"
 
-    def load(self, org: str, repo: str) -> DataloaderState[ChangeRequestAgeData]:
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderState[ChangeRequestAgeData]:
         data = get_repo_data(org, repo, ChangeRequestAgeData.name)
         if data is None:
             return DataloaderState(
-                is_success=False, data=None, desc="Cannot find data for this indicator"
+                is_success=False,
+                data=None,
+                desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(

@@ -1,13 +1,18 @@
-from opendigger_pycli.datatypes import OpenRankData, ActivityData, AttentionData
+from opendigger_pycli.datatypes import (
+    ActivityData,
+    AttentionData,
+    OpenRankData,
+)
+
 from .base import (
     BaseRepoDataloader,
     BaseUserDataloader,
     DataloaderState,
-    register_dataloader,
-    get_repo_data,
     get_developer_data,
+    get_repo_data,
     load_base_data,
     load_name_and_value,
+    register_dataloader,
 )
 
 
