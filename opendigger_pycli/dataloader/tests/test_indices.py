@@ -2,10 +2,11 @@ from opendigger_pycli.dataloader.indices import (
     ActivityRepoDataloader,
     OpenRankRepoDataloader,
     AttentionRepoDataloader,
+    ActivityUserDataLoader,
+    OpenRankUserDataLoader,
 )
 
-TEST_ORG = "X-lab2017"
-TEST_REPO = "open-digger"
+from . import TEST_ORG, TEST_REPO, TEST_USER_NAME
 
 
 def test_openrank():
@@ -16,10 +17,34 @@ def test_openrank():
     fail_data = openrank_dataloader.load(TEST_ORG, "not-exist-repo")
     assert not fail_data.is_success
 
+    openrank_user_dataloader = OpenRankUserDataLoader()
+    success_data = openrank_user_dataloader.load(TEST_USER_NAME)
+    assert success_data.is_success
+
+    fail_data = openrank_user_dataloader.load("not-exist-user")
+    assert not fail_data.is_success
+
 
 def test_activity():
-    pass
+    activity_dataloader = ActivityRepoDataloader()
+    success_data = activity_dataloader.load(TEST_ORG, TEST_REPO)
+    assert success_data.is_success
+
+    fail_data = activity_dataloader.load(TEST_ORG, "not-exist-repo")
+    assert not fail_data.is_success
+
+    activity_user_dataloader = ActivityUserDataLoader()
+    success_data = activity_user_dataloader.load(TEST_USER_NAME)
+    assert success_data.is_success
+
+    fail_data = activity_user_dataloader.load("not-exist-user")
+    assert not fail_data.is_success
 
 
 def test_attention():
-    pass
+    attention_dataloader = AttentionRepoDataloader()
+    success_data = attention_dataloader.load(TEST_ORG, TEST_REPO)
+    assert success_data.is_success
+
+    fail_data = attention_dataloader.load(TEST_ORG, "not-exist-repo")
+    assert not fail_data.is_success
