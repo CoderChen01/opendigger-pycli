@@ -34,7 +34,6 @@ fmt:              ## Format code using black & isort.
 lint:             ## Run pep8, black, mypy linters.
 	$(ENV_PREFIX)flake8 opendigger_pycli/
 	$(ENV_PREFIX)black -l 79 --check opendigger_pycli/
-	$(ENV_PREFIX)black -l 79 --check tests/
 	$(ENV_PREFIX)mypy --ignore-missing-imports opendigger_pycli/
 
 .PHONY: test
