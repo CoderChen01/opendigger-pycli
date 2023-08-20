@@ -151,6 +151,15 @@ def test_new_contributor():
     assert not fail_data.is_success
 
 
+def test_change_request_age():
+    change_request_age_dataloader = ChangeRequestAgeRepoDataloader()
+    success_data = change_request_age_dataloader.load(TEST_ORG, TEST_REPO)
+    assert success_data.is_success
+
+    fail_data = change_request_age_dataloader.load(TEST_ORG, "non-exist-repo")
+    assert not fail_data.is_success
+
+
 def test_issue_response_time():
     issue_response_time_dataloader = IssueResponseTimeRepoDataloader()
     success_data = issue_response_time_dataloader.load(TEST_ORG, TEST_REPO)
