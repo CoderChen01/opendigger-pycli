@@ -10,6 +10,7 @@ class BaseData(Generic[T]):
     year: int
     month: int
     value: T
+    is_raw: bool = False
 
 
 class NameAndValue(NamedTuple):
