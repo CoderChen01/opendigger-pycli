@@ -28,7 +28,7 @@ from .metrics import (
     NewContributorData,
     NewIssueData,
     ParticipantData,
-    RemoveddCodeChangeLineData,
+    RemovedCodeChangeLineData,
     StarData,
     TechnicalForkData,
 )

@@ -62,7 +62,7 @@ class BusFactorData:
     ref: https://chaoss.community/metric-bus-factor/
     """
 
-    name: ClassVar[str] = "bus_factor"
+    name: ClassVar[str] = "bus_factor_detail"
     value: List[BaseData[List[NameAndValue]]]
 
 
@@ -133,7 +133,7 @@ class AddedCodeChangeLineData:
 
 
 @dataclass
-class RemoveddCodeChangeLineData:
+class RemovedCodeChangeLineData:
     """
     ref: https://chaoss.community/metric-code-changes-lines/
     """
