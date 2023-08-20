@@ -11,6 +11,7 @@ from typing import (
     TypeVar,
     Callable,
     Literal,
+    overload,
 )
 
 import requests
@@ -157,9 +158,19 @@ class BaseRepoDataloader(abc.ABC, Generic[T]):
         super().__init__()
 
     @abc.abstractmethod
-    def load(
-        self, org: str, repo: str, date: Optional[str] = None
-    ) -> DataloaderState[T]:
+    def load(self, org: str, repo: str) -> DataloaderState[T]:
+        pass
+
+
+class BaseOpenRankNetworkDataloader(abc.ABC, Generic[T]):
+    name: str  # Specify the name of the indicator, which is different from the name field in datatypes
+    metric_type: Literal["network"]  # Specifies the type of indicator
+
+    def __init__(self) -> None:
+        super().__init__()
+
+    @abc.abstractmethod
+    def load(self, org: str, repo: str, date: str) -> DataloaderState[T]:
         pass
 
 

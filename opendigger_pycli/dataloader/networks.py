@@ -8,6 +8,7 @@ from opendigger_pycli.datatypes import (
 from .base import (
     BaseRepoDataloader,
     BaseUserDataloader,
+    BaseOpenRankNetworkDataloader,
     DataloaderState,
     register_dataloader,
     get_repo_data,
@@ -55,7 +56,7 @@ class RepoNetworkRepoDataloader(BaseRepoDataloader[RepoNetworkData]):
 
 @register_dataloader
 class ProjectOpenRankNetworkRepoDataloader(
-    BaseRepoDataloader[ProjectOpenRankNetworkData]
+    BaseOpenRankNetworkDataloader[ProjectOpenRankNetworkData]
 ):
     name = "project_openrank_detail"
     metric_type = "network"
