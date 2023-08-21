@@ -6,9 +6,9 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -50,8 +50,9 @@ jobs:
         run: make test
       - name: "Upload coverage to Codecov"
         uses: codecov/codecov-action@v3
-        # with:
-        #   fail_ci_if_error: true
+        with:
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   tests_mac:
     needs: linter
@@ -89,4 +90,4 @@ jobs:
       - name: Install project
         run: pip install -e .[test]
       - name: run tests
-        run: pytest -s -vvvv -l --tb=long tests
+        run: pytest -s -vvvv -l --tb=long opendigger_pycli

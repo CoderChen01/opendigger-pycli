@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from typing import TypedDict, ClassVar
-
+from typing import ClassVar, TypedDict
 
 from .base import BaseData, BaseNetworkData, NameAndValue, NameNameAndValue
 
@@ -48,5 +47,7 @@ class ProjectOpenRankNetworkData:
 
     name: ClassVar[str] = "project_openrank_detail"
     value: BaseData[
-        BaseNetworkData[ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict]
+        BaseNetworkData[
+            ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict
+        ]
     ]

@@ -34,18 +34,17 @@ fmt:              ## Format code using black & isort.
 lint:             ## Run pep8, black, mypy linters.
 	$(ENV_PREFIX)flake8 opendigger_pycli/
 	$(ENV_PREFIX)black -l 79 --check opendigger_pycli/
-	$(ENV_PREFIX)black -l 79 --check tests/
 	$(ENV_PREFIX)mypy --ignore-missing-imports opendigger_pycli/
 
 .PHONY: test
 test: lint        ## Run tests and generate coverage report.
-	$(ENV_PREFIX)pytest -v --cov-config .coveragerc --cov=opendigger_pycli -l --tb=short --maxfail=1 tests/
+	$(ENV_PREFIX)pytest -v --cov-config .coveragerc --cov=opendigger_pycli -l --tb=short --maxfail=1 opendigger_pycli/
 	$(ENV_PREFIX)coverage xml
 	$(ENV_PREFIX)coverage html
 
 .PHONY: watch
 watch:            ## Run tests on every change.
-	ls **/**.py | entr $(ENV_PREFIX)pytest -s -vvv -l --tb=long --maxfail=1 tests/
+	ls **/**.py | entr $(ENV_PREFIX)pytest -s -vvv -l --tb=long --maxfail=1 opendigger_pycli/
 
 .PHONY: clean
 clean:            ## Clean unused files.
@@ -110,13 +109,3 @@ switch-to-poetry: ## Switch to poetry package manager.
 	@mv setup.py .github/backup
 	@echo "You have switched to https://python-poetry.org/ package manager."
 	@echo "Please run 'poetry shell' or 'poetry run opendigger_pycli'"
-
-.PHONY: init
-init:             ## Initialize the project based on an application template.
-	@./.github/init.sh
-
-
-# This project has been generated from rochacbruno/python-project-template
-# __author__ = 'rochacbruno'
-# __repo__ = https://github.com/rochacbruno/python-project-template
-# __sponsor__ = https://github.com/sponsors/rochacbruno/

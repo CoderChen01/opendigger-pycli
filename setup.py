@@ -40,7 +40,7 @@ setup(
     packages=find_packages(exclude=["tests", ".github"]),
     install_requires=read_requirements("requirements.txt"),
     entry_points={
-        "console_scripts": ["opendigger_pycli = opendigger_pycli.__main__:main"]
+        "console_scripts": ["opendigger = opendigger_pycli.__main__:opendigger"]
     },
     extras_require={"test": read_requirements("requirements-test.txt")},
 )

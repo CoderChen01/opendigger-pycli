@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from typing import TypedDict, List, TypeVar, Generic, NamedTuple
-
+from typing import Generic, List, NamedTuple, TypedDict, TypeVar
 
 T = TypeVar("T")
 S = TypeVar("S")
@@ -11,6 +10,7 @@ class BaseData(Generic[T]):
     year: int
     month: int
     value: T
+    is_raw: bool = False
 
 
 class NameAndValue(NamedTuple):

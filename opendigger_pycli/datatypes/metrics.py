@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from typing import List, ClassVar
+from typing import ClassVar, List
 
-
-from .base import BaseData, NonTrivialMetricDict, NameAndValue
+from .base import BaseData, NameAndValue, NonTrivialMetricDict
 
 
 @dataclass
@@ -63,7 +62,7 @@ class BusFactorData:
     ref: https://chaoss.community/metric-bus-factor/
     """
 
-    name: ClassVar[str] = "bus_factor"
+    name: ClassVar[str] = "bus_factor_detail"
     value: List[BaseData[List[NameAndValue]]]
 
 
@@ -134,7 +133,7 @@ class AddedCodeChangeLineData:
 
 
 @dataclass
-class RemoveddCodeChangeLineData:
+class RemovedCodeChangeLineData:
     """
     ref: https://chaoss.community/metric-code-changes-lines/
     """
