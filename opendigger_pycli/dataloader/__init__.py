@@ -1,4 +1,3 @@
-from .base import DATALOADERS
 from .indices import (
     ActivityRepoDataloader,
     ActivityUserDataLoader,
@@ -36,3 +35,4 @@ from .networks import (
     RepoNetworkRepoDataloader,
     RepoNetworkUserDataloader,
 )
+from .base import DATALOADERS

@@ -10,6 +10,9 @@ from typing import (
     Optional,
     Tuple,
     TypeVar,
+    TypedDict,
+    Type,
+    Union,
 )
 
 import requests
@@ -24,7 +27,9 @@ from opendigger_pycli.datatypes import (
     ProjectOpenRankNetworkNodeDict,
 )
 
-DATALOADERS = {}
+DATALOADERS = TypedDict("DATALOADERS", index=dict, metric=dict, network=dict)(
+    index={}, metric={}, network={}
+)
 
 BASE_API_URL = "https://oss.x-lab.info/open_digger/github/"
 
@@ -143,8 +148,10 @@ def load_network_data(
     )
 
 
-def register_dataloader(cls):
-    DATALOADERS[cls.name] = cls
+def register_dataloader(
+    cls: Union[Type["BaseRepoDataloader"], Type["BaseUserDataloader"]]
+):
+    DATALOADERS[cls.metric_type][cls.name] = cls
     return cls
 
 
