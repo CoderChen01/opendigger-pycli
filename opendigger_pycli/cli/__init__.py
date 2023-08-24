@@ -1,6 +1,1 @@
-import click
-
-
-@click.group()
-def opendigger():
-    pass
+from .base import opendigger
