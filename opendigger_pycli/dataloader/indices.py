@@ -18,10 +18,23 @@ from .base import (
 
 @register_dataloader
 class OpenRankRepoDataloader(BaseRepoDataloader[OpenRankData]):
+    '''
+    Data loader for the OpenRank repository metric.
+    '''
     name = "openrank"
     metric_type = "index"
 
     def load(self, org: str, repo: str) -> DataloaderState[OpenRankData]:
+        '''
+        Load OpenRank repository data for the given organization and repository.
+
+        Args:
+            org (str): The organization name.
+            repo (str): The repository name.
+
+        Returns:
+            DataloaderState[OpenRankData]: The state of the data loading operation.
+        '''
         data = get_repo_data(org, repo, OpenRankData.name)
         if data is None:
             return DataloaderState(
@@ -38,10 +51,23 @@ class OpenRankRepoDataloader(BaseRepoDataloader[OpenRankData]):
 
 @register_dataloader
 class ActivityRepoDataloader(BaseRepoDataloader[ActivityData]):
+    '''
+    Data loader for the Activity repository metric.
+    '''
     name = "activity"
     metric_type = "index"
 
     def load(self, org: str, repo: str) -> DataloaderState[ActivityData]:
+        '''
+        Load Activity repository data for the given organization and repository.
+
+        Args:
+            org (str): The organization name.
+            repo (str): The repository name.
+
+        Returns:
+            DataloaderState[ActivityData]: The state of the data loading operation.
+        '''
         data = get_repo_data(org, repo, ActivityData.name)
         if data is None:
             return DataloaderState(
@@ -60,12 +86,26 @@ class ActivityRepoDataloader(BaseRepoDataloader[ActivityData]):
         )
 
 
+
 @register_dataloader
 class AttentionRepoDataloader(BaseRepoDataloader[AttentionData]):
+    '''
+    Data loader for the Attention repository metric.
+    '''
     name = "attention"
     metric_type = "index"
 
     def load(self, org: str, repo: str) -> DataloaderState[AttentionData]:
+        '''
+        Load Attention repository data for the given organization and repository.
+
+        Args:
+            org (str): The organization name.
+            repo (str): The repository name.
+
+        Returns:
+            DataloaderState[AttentionData]: The state of the data loading operation.
+        '''
         data = get_repo_data(org, repo, AttentionData.name)
         if data is None:
             return DataloaderState(
@@ -82,12 +122,25 @@ class AttentionRepoDataloader(BaseRepoDataloader[AttentionData]):
         )
 
 
+
 @register_dataloader
 class OpenRankUserDataLoader(BaseUserDataloader[OpenRankData]):
+    '''
+    Data loader for OpenRank user data.
+    '''
     name = "openrank"
     metric_type = "index"
 
     def load(self, username: str) -> DataloaderState[OpenRankData]:
+        '''
+        Load OpenRank user data for the given username.
+
+        Args:
+            username (str): The username of the user.
+
+        Returns:
+            DataloaderState[OpenRankData]: The state of the data loading operation.
+        '''
         data = get_developer_data(username, OpenRankData.name)
         if data is None:
             return DataloaderState(
@@ -104,10 +157,22 @@ class OpenRankUserDataLoader(BaseUserDataloader[OpenRankData]):
 
 @register_dataloader
 class ActivityUserDataLoader(BaseUserDataloader[ActivityData]):
+    '''
+    Data loader for Activity user data.
+    '''
     name = "activity"
     metric_type = "index"
 
     def load(self, username: str) -> DataloaderState[ActivityData]:
+        '''
+        Load Activity user data for the given username.
+
+        Args:
+            username (str): The username of the user.
+
+        Returns:
+            DataloaderState[ActivityData]: The state of the data loading operation.
+        '''
         data = get_developer_data(username, ActivityData.name)
         if data is None:
             return DataloaderState(
