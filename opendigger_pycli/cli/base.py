@@ -7,7 +7,8 @@ from opendigger_pycli.console.print_base_info import (
     print_user_info,
 )
 from opendigger_pycli.config.cli_config import OpenDiggerCliConfig
-from .custom_types import REPO_NAME_TYPE
+from opendigger_pycli.console import CONSOLE
+from .custom_types import GH_REPO_NAME_TYPE, GH_USERNAME_TYPE
 
 
 pass_config = click.make_pass_decorator(OpenDiggerCliConfig, ensure=True)
@@ -27,6 +28,7 @@ def opendigger(config: OpenDiggerCliConfig, debug: bool):
     "--username",
     "-u",
     "usernames",
+    type=GH_USERNAME_TYPE,
     multiple=True,
     help="GitHub username",
 )
@@ -36,7 +38,8 @@ def user(config: OpenDiggerCliConfig, usernames: t.List[str]):
     Operate on user metrics
     """
     if click.get_current_context().invoked_subcommand is None:
-        print_user_info(usernames)
+        with CONSOLE.status("[bold green]requesting users info..."):
+            print_user_info(usernames)
 
 
 @opendigger.group(chain=True, invoke_without_command=True)
@@ -44,7 +47,7 @@ def user(config: OpenDiggerCliConfig, usernames: t.List[str]):
     "--repo",
     "-r",
     "repos",
-    type=REPO_NAME_TYPE,
+    type=GH_REPO_NAME_TYPE,
     multiple=True,
     help="GitHub repository, e.g. X-lab2017/open-digger",
     metavar="<org>/<repo>",
@@ -55,4 +58,5 @@ def repo(config: OpenDiggerCliConfig, repos: t.List[t.Tuple[str, str]]):
     Operate on repository metrics
     """
     if click.get_current_context().invoked_subcommand is None:
-        print_repo_info(repos, config.github_pat)
+        with CONSOLE.status("[bold green]fetching repos info..."):
+            print_repo_info(repos, config.github_pat)
