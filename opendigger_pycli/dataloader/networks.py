@@ -10,11 +10,13 @@ from .base import (
     BaseRepoDataloader,
     BaseUserDataloader,
     DataloaderState,
+    register_dataloader,
+)
+from .utils import (
     get_developer_data,
     get_repo_data,
     load_network_data,
     load_openrank_network_data,
-    register_dataloader,
 )
 
 

@@ -8,11 +8,13 @@ from .base import (
     BaseRepoDataloader,
     BaseUserDataloader,
     DataloaderState,
+    register_dataloader,
+)
+from .utils import (
     get_developer_data,
     get_repo_data,
     load_base_data,
     load_name_and_value,
-    register_dataloader,
 )
 
 

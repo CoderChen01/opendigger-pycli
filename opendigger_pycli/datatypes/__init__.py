@@ -40,3 +40,4 @@ from .networks import (
     RepoNetworkData,
 )
 from .result import BaseUserResult, BaseRepoResult
+from .dataloader import DataloaderProto, DataloaderState

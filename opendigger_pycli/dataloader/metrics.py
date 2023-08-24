@@ -25,11 +25,13 @@ from opendigger_pycli.datatypes import (
 from .base import (
     BaseRepoDataloader,
     DataloaderState,
+    register_dataloader,
+)
+from .utils import (
     get_repo_data,
     load_base_data,
     load_name_and_value,
     load_non_trival_metric_data,
-    register_dataloader,
 )
 
 

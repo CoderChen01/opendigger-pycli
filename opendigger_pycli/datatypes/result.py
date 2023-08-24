@@ -22,3 +22,6 @@ class BaseRepoResult:
 
     def __post_init__(self) -> None:
         self.org_name, self.repo_name = self.repo.split("/")
+
+    def add_metric_names(self, metric_names: t.List[str]):
+        self.retrival_metric_names.extend(metric_names)
