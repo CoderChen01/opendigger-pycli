@@ -9,6 +9,7 @@ from opendigger_pycli.console.print_base_info import (
 from .custom_types import REPO_NAME_TYPE
 
 
+# OpenDiggerCliConfig 类，用于存储配置信息
 class OpenDiggerCliConfig:
     def __init__(self):
         self.debug = False
@@ -18,9 +19,11 @@ class OpenDiggerCliConfig:
         self.debug = debug
 
 
+# 使用 click 的 make_pass_decorator 创建 config 的装饰器
 pass_config = click.make_pass_decorator(OpenDiggerCliConfig, ensure=True)
 
 
+# 创建一个命令组 opendigger
 @click.group()
 @click.option(
     "--debug/--no-debug", default=False, help="Enable or disable debug mode"
@@ -30,6 +33,7 @@ def opendigger(config: OpenDiggerCliConfig, debug: bool):
     config.debug = debug
 
 
+# 在 opendigger 命令组中创建子命令 user
 @opendigger.group(chain=True, invoke_without_command=True)
 @click.option(
     "--username",
@@ -43,10 +47,12 @@ def user(config: OpenDiggerCliConfig, usernames: t.List[str]):
     """
     Operate on user metrics
     """
+    # 如果没有子命令，调用 print_user_info 函数打印用户信息
     if click.get_current_context().invoked_subcommand is None:
         print_user_info(usernames)
 
 
+# 在 opendigger 命令组中创建子命令 repo
 @opendigger.group(chain=True, invoke_without_command=True)
 @click.option(
     "--repo",
@@ -62,5 +68,6 @@ def repo(config: OpenDiggerCliConfig, repos: t.List[t.Tuple[str, str]]):
     """
     Operate on repository metrics
     """
+    # 如果没有子命令，调用 print_repo_info 函数打印仓库信息，传入 github_pat
     if click.get_current_context().invoked_subcommand is None:
         print_repo_info(repos, config.github_pat)
