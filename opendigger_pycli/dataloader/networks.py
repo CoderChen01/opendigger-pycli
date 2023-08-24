@@ -22,6 +22,7 @@ from .base import (
 class DeveloperNetworkRepoDataloader(BaseRepoDataloader[DeveloperNetworkData]):
     name = "developer_network"
     metric_type = "network"
+    introducer = "X-lab"
 
     def load(
         self, org: str, repo: str
@@ -44,6 +45,7 @@ class DeveloperNetworkRepoDataloader(BaseRepoDataloader[DeveloperNetworkData]):
 class RepoNetworkRepoDataloader(BaseRepoDataloader[RepoNetworkData]):
     name = "repo_network"
     metric_type = "network"
+    introducer = "X-lab"
 
     def load(self, org: str, repo: str) -> DataloaderState[RepoNetworkData]:
         data = get_repo_data(org, repo, RepoNetworkData.name)
@@ -66,6 +68,8 @@ class ProjectOpenRankNetworkRepoDataloader(
 ):
     name = "project_openrank_detail"
     metric_type = "network"
+    type = "repo"
+    introducer = "X-lab"
 
     def load(
         self, org: str, repo: str, date: str
@@ -95,6 +99,7 @@ class ProjectOpenRankNetworkRepoDataloader(
 class DeveloperNetworkUserDataloader(BaseUserDataloader[DeveloperNetworkData]):
     name = "developer_network"
     metric_type = "network"
+    introducer = "X-lab"
 
     def load(self, username: str) -> DataloaderState[DeveloperNetworkData]:
         data = get_developer_data(username, DeveloperNetworkData.name)
@@ -115,6 +120,7 @@ class DeveloperNetworkUserDataloader(BaseUserDataloader[DeveloperNetworkData]):
 class RepoNetworkUserDataloader(BaseUserDataloader[RepoNetworkData]):
     name = "repo_network"
     metric_type = "network"
+    introducer = "X-lab"
 
     def load(self, username: str) -> DataloaderState[RepoNetworkData]:
         data = get_developer_data(username, RepoNetworkData.name)

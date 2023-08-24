@@ -39,6 +39,7 @@ class ActiveDateAndTimeRepoDataloader(
 ):
     name = "active_date_and_time"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(
         self, org: str, repo: str
@@ -63,6 +64,7 @@ class ActiveDateAndTimeRepoDataloader(
 class StarRepoDataloader(BaseRepoDataloader[StarData]):
     name = "star"
     metric_type = "metric"
+    introducer = "X-lab"
 
     def load(self, org: str, repo: str) -> DataloaderState[StarData]:
         data = get_repo_data(org, repo, StarData.name)
@@ -83,6 +85,7 @@ class StarRepoDataloader(BaseRepoDataloader[StarData]):
 class TechnicalForkRepoDataloader(BaseRepoDataloader[TechnicalForkData]):
     name = "technical_fork"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(self, org: str, repo: str) -> DataloaderState[TechnicalForkData]:
         data = get_repo_data(org, repo, TechnicalForkData.name)
@@ -103,6 +106,7 @@ class TechnicalForkRepoDataloader(BaseRepoDataloader[TechnicalForkData]):
 class ParticipantRepoDataloader(BaseRepoDataloader[ParticipantData]):
     name = "participant"
     metric_type = "metric"
+    introducer = "X-lab"
 
     def load(self, org: str, repo: str) -> DataloaderState[ParticipantData]:
         data = get_repo_data(org, repo, ParticipantData.name)
@@ -123,6 +127,7 @@ class ParticipantRepoDataloader(BaseRepoDataloader[ParticipantData]):
 class NewContributorRepoDataloader(BaseRepoDataloader[NewContributorData]):
     name = "new_contributor"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(self, org: str, repo: str) -> DataloaderState[NewContributorData]:
         data = get_repo_data(org, repo, NewContributorData.name)
@@ -148,6 +153,7 @@ class InactiveContributorRepoDataloader(
 ):
     name = "inactive_contributor"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(
         self, org: str, repo: str
@@ -171,6 +177,7 @@ class InactiveContributorRepoDataloader(
 class BusFactorRepoDataloader(BaseRepoDataloader[BusFactorData]):
     name = "bus_factor"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(self, org: str, repo: str) -> DataloaderState[BusFactorData]:
         data = get_repo_data(org, repo, BusFactorData.name)
@@ -196,6 +203,7 @@ class BusFactorRepoDataloader(BaseRepoDataloader[BusFactorData]):
 class NewIssueRepoDataloader(BaseRepoDataloader[NewIssueData]):
     name = "new_issue"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(self, org: str, repo: str) -> DataloaderState[NewIssueData]:
         data = get_repo_data(org, repo, NewIssueData.name)
@@ -217,6 +225,7 @@ class NewIssueRepoDataloader(BaseRepoDataloader[NewIssueData]):
 class ClosedIssueRepoDataloader(BaseRepoDataloader[ClosedIssueData]):
     name = "closed_issue"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(self, org: str, repo: str) -> DataloaderState[ClosedIssueData]:
         data = get_repo_data(org, repo, ClosedIssueData.name)
@@ -238,6 +247,7 @@ class ClosedIssueRepoDataloader(BaseRepoDataloader[ClosedIssueData]):
 class IssueCommentRepoDataloader(BaseRepoDataloader[IssueCommentData]):
     name = "issue_comment"
     metric_type = "metric"
+    introducer = "X-lab"
 
     def load(self, org: str, repo: str) -> DataloaderState[IssueCommentData]:
         data = get_repo_data(org, repo, IssueCommentData.name)
@@ -261,6 +271,7 @@ class IssueResponseTimeRepoDataloader(
 ):
     name = "issue_response_time"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(
         self, org: str, repo: str
@@ -288,6 +299,7 @@ class IssueResolutionDurationRepoDataloader(
 ):
     name = "issue_resolution_duration"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(
         self, org: str, repo: str
@@ -313,6 +325,7 @@ class IssueResolutionDurationRepoDataloader(
 class IssueAgeRepoDataloader(BaseRepoDataloader[IssueAgeData]):
     name = "issue_age"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(self, org: str, repo: str) -> DataloaderState[IssueAgeData]:
         data = get_repo_data(org, repo, IssueAgeData.name)
@@ -338,6 +351,7 @@ class AddedCodeChangeLineRepoDataloader(
 ):
     name = "added_code_change_line"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(
         self, org: str, repo: str
@@ -365,6 +379,7 @@ class RemovedCodeChangeLineRepoDataloader(
 ):
     name = "removed_code_change_line"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(
         self, org: str, repo: str
@@ -390,6 +405,7 @@ class RemovedCodeChangeLineRepoDataloader(
 class ChangeRequestRepoDataloader(BaseRepoDataloader[ChangeRequestData]):
     name = "change_request"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(self, org: str, repo: str) -> DataloaderState[ChangeRequestData]:
         data = get_repo_data(org, repo, ChangeRequestData.name)
@@ -415,6 +431,7 @@ class AcceptedChangeRequestRepoDataloader(
 ):
     name = "accepted_change_request"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(
         self, org: str, repo: str
@@ -442,6 +459,7 @@ class ChangeRequestReviewRepoDataloader(
 ):
     name = "change_request_review"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(
         self, org: str, repo: str
@@ -469,6 +487,7 @@ class ChangeRequestResponseTimeRepoDataloader(
 ):
     name = "change_request_response_time"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(
         self, org: str, repo: str
@@ -496,6 +515,7 @@ class ChangeRequestResolutionDurationRepoDataloader(
 ):
     name = "change_request_resolution_duration"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(
         self, org: str, repo: str
@@ -523,6 +543,7 @@ class ChangeRequestResolutionDurationRepoDataloader(
 class ChangeRequestAgeRepoDataloader(BaseRepoDataloader[ChangeRequestAgeData]):
     name = "change_request_age"
     metric_type = "metric"
+    introducer = "CHAOSS"
 
     def load(
         self, org: str, repo: str

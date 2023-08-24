@@ -20,6 +20,7 @@ from .base import (
 class OpenRankRepoDataloader(BaseRepoDataloader[OpenRankData]):
     name = "openrank"
     metric_type = "index"
+    introducer = "X-lab"
 
     def load(self, org: str, repo: str) -> DataloaderState[OpenRankData]:
         data = get_repo_data(org, repo, OpenRankData.name)
@@ -40,6 +41,7 @@ class OpenRankRepoDataloader(BaseRepoDataloader[OpenRankData]):
 class ActivityRepoDataloader(BaseRepoDataloader[ActivityData]):
     name = "activity"
     metric_type = "index"
+    introducer = "X-lab"
 
     def load(self, org: str, repo: str) -> DataloaderState[ActivityData]:
         data = get_repo_data(org, repo, ActivityData.name)
@@ -64,6 +66,7 @@ class ActivityRepoDataloader(BaseRepoDataloader[ActivityData]):
 class AttentionRepoDataloader(BaseRepoDataloader[AttentionData]):
     name = "attention"
     metric_type = "index"
+    introducer = "X-lab"
 
     def load(self, org: str, repo: str) -> DataloaderState[AttentionData]:
         data = get_repo_data(org, repo, AttentionData.name)
@@ -86,6 +89,7 @@ class AttentionRepoDataloader(BaseRepoDataloader[AttentionData]):
 class OpenRankUserDataLoader(BaseUserDataloader[OpenRankData]):
     name = "openrank"
     metric_type = "index"
+    introducer = "X-lab"
 
     def load(self, username: str) -> DataloaderState[OpenRankData]:
         data = get_developer_data(username, OpenRankData.name)
@@ -106,6 +110,7 @@ class OpenRankUserDataLoader(BaseUserDataloader[OpenRankData]):
 class ActivityUserDataLoader(BaseUserDataloader[ActivityData]):
     name = "activity"
     metric_type = "index"
+    introducer = "X-lab"
 
     def load(self, username: str) -> DataloaderState[ActivityData]:
         data = get_developer_data(username, ActivityData.name)

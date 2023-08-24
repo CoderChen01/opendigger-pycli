@@ -149,7 +149,11 @@ def load_network_data(
 
 
 def register_dataloader(
-    cls: Union[Type["BaseRepoDataloader"], Type["BaseUserDataloader"]]
+    cls: Union[
+        Type["BaseRepoDataloader"],
+        Type["BaseUserDataloader"],
+        Type["BaseOpenRankNetworkDataloader"],
+    ]
 ):
     DATALOADERS[cls.metric_type][cls.name] = cls
     return cls
@@ -169,6 +173,8 @@ class BaseRepoDataloader(abc.ABC, Generic[T]):
     metric_type: Literal[
         "index", "metric", "network"
     ]  # Specifies the type of indicator
+    introducer: str
+    type: str = "repo"
 
     def __init__(self) -> None:
         super().__init__()
@@ -183,6 +189,8 @@ class BaseOpenRankNetworkDataloader(abc.ABC, Generic[T]):
     # which is different from the name field in datatypes
     name: str
     metric_type: Literal["network"]  # Specifies the type of indicator
+    introducer: str
+    type: str
 
     def __init__(self) -> None:
         super().__init__()
@@ -197,6 +205,8 @@ class BaseUserDataloader(abc.ABC, Generic[T]):
     # which is different from the name field in datatypes
     name: str
     metric_type: Literal["index", "network"]  # Specifies the type of indicator
+    introducer: str
+    type: str = "user"
 
     @abc.abstractmethod
     def load(self, username: str) -> DataloaderState[T]:
