@@ -20,5 +20,5 @@ class DataloaderProto(t.Protocol):
     introducer: t.ClassVar[t.Literal["X-lab", "CHAOSS"]]
     type: t.ClassVar[t.Literal["repo", "user"]]
 
-    def load(self):
+    def load(self, *args, **kwargs) -> DataloaderState:
         ...

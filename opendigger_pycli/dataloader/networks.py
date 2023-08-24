@@ -21,7 +21,7 @@ from .utils import (
 
 
 @register_dataloader
-class DeveloperNetworkRepoDataloader(BaseRepoDataloader[DeveloperNetworkData]):
+class DeveloperNetworkRepoDataloader(BaseRepoDataloader):
     name = "developer_network"
     metric_type = "network"
     introducer = "X-lab"
@@ -44,7 +44,7 @@ class DeveloperNetworkRepoDataloader(BaseRepoDataloader[DeveloperNetworkData]):
 
 
 @register_dataloader
-class RepoNetworkRepoDataloader(BaseRepoDataloader[RepoNetworkData]):
+class RepoNetworkRepoDataloader(BaseRepoDataloader):
     name = "repo_network"
     metric_type = "network"
     introducer = "X-lab"
@@ -65,9 +65,7 @@ class RepoNetworkRepoDataloader(BaseRepoDataloader[RepoNetworkData]):
 
 
 @register_dataloader
-class ProjectOpenRankNetworkRepoDataloader(
-    BaseOpenRankNetworkDataloader[ProjectOpenRankNetworkData]
-):
+class ProjectOpenRankNetworkRepoDataloader(BaseOpenRankNetworkDataloader):
     name = "project_openrank_detail"
     metric_type = "network"
     type = "repo"
@@ -98,7 +96,7 @@ class ProjectOpenRankNetworkRepoDataloader(
 
 
 @register_dataloader
-class DeveloperNetworkUserDataloader(BaseUserDataloader[DeveloperNetworkData]):
+class DeveloperNetworkUserDataloader(BaseUserDataloader):
     name = "developer_network"
     metric_type = "network"
     introducer = "X-lab"
@@ -119,7 +117,7 @@ class DeveloperNetworkUserDataloader(BaseUserDataloader[DeveloperNetworkData]):
 
 
 @register_dataloader
-class RepoNetworkUserDataloader(BaseUserDataloader[RepoNetworkData]):
+class RepoNetworkUserDataloader(BaseUserDataloader):
     name = "repo_network"
     metric_type = "network"
     introducer = "X-lab"

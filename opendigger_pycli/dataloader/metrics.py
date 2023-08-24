@@ -36,9 +36,7 @@ from .utils import (
 
 
 @register_dataloader
-class ActiveDateAndTimeRepoDataloader(
-    BaseRepoDataloader[ActiveDateAndTimeData]
-):
+class ActiveDateAndTimeRepoDataloader(BaseRepoDataloader):
     name = "active_date_and_time"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -63,7 +61,7 @@ class ActiveDateAndTimeRepoDataloader(
 
 
 @register_dataloader
-class StarRepoDataloader(BaseRepoDataloader[StarData]):
+class StarRepoDataloader(BaseRepoDataloader):
     name = "star"
     metric_type = "metric"
     introducer = "X-lab"
@@ -84,7 +82,7 @@ class StarRepoDataloader(BaseRepoDataloader[StarData]):
 
 
 @register_dataloader
-class TechnicalForkRepoDataloader(BaseRepoDataloader[TechnicalForkData]):
+class TechnicalForkRepoDataloader(BaseRepoDataloader):
     name = "technical_fork"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -105,7 +103,7 @@ class TechnicalForkRepoDataloader(BaseRepoDataloader[TechnicalForkData]):
 
 
 @register_dataloader
-class ParticipantRepoDataloader(BaseRepoDataloader[ParticipantData]):
+class ParticipantRepoDataloader(BaseRepoDataloader):
     name = "participant"
     metric_type = "metric"
     introducer = "X-lab"
@@ -126,7 +124,7 @@ class ParticipantRepoDataloader(BaseRepoDataloader[ParticipantData]):
 
 
 @register_dataloader
-class NewContributorRepoDataloader(BaseRepoDataloader[NewContributorData]):
+class NewContributorRepoDataloader(BaseRepoDataloader):
     name = "new_contributor"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -150,9 +148,7 @@ class NewContributorRepoDataloader(BaseRepoDataloader[NewContributorData]):
 
 
 @register_dataloader
-class InactiveContributorRepoDataloader(
-    BaseRepoDataloader[InactiveContributorData]
-):
+class InactiveContributorRepoDataloader(BaseRepoDataloader):
     name = "inactive_contributor"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -176,7 +172,7 @@ class InactiveContributorRepoDataloader(
 
 
 @register_dataloader
-class BusFactorRepoDataloader(BaseRepoDataloader[BusFactorData]):
+class BusFactorRepoDataloader(BaseRepoDataloader):
     name = "bus_factor"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -202,7 +198,7 @@ class BusFactorRepoDataloader(BaseRepoDataloader[BusFactorData]):
 
 
 @register_dataloader
-class NewIssueRepoDataloader(BaseRepoDataloader[NewIssueData]):
+class NewIssueRepoDataloader(BaseRepoDataloader):
     name = "new_issue"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -224,7 +220,7 @@ class NewIssueRepoDataloader(BaseRepoDataloader[NewIssueData]):
 
 
 @register_dataloader
-class ClosedIssueRepoDataloader(BaseRepoDataloader[ClosedIssueData]):
+class ClosedIssueRepoDataloader(BaseRepoDataloader):
     name = "closed_issue"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -246,7 +242,7 @@ class ClosedIssueRepoDataloader(BaseRepoDataloader[ClosedIssueData]):
 
 
 @register_dataloader
-class IssueCommentRepoDataloader(BaseRepoDataloader[IssueCommentData]):
+class IssueCommentRepoDataloader(BaseRepoDataloader):
     name = "issue_comment"
     metric_type = "metric"
     introducer = "X-lab"
@@ -268,9 +264,7 @@ class IssueCommentRepoDataloader(BaseRepoDataloader[IssueCommentData]):
 
 
 @register_dataloader
-class IssueResponseTimeRepoDataloader(
-    BaseRepoDataloader[IssueResponseTimeData]
-):
+class IssueResponseTimeRepoDataloader(BaseRepoDataloader):
     name = "issue_response_time"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -296,9 +290,7 @@ class IssueResponseTimeRepoDataloader(
 
 
 @register_dataloader
-class IssueResolutionDurationRepoDataloader(
-    BaseRepoDataloader[IssueResolutionDurationData]
-):
+class IssueResolutionDurationRepoDataloader(BaseRepoDataloader):
     name = "issue_resolution_duration"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -324,7 +316,7 @@ class IssueResolutionDurationRepoDataloader(
 
 
 @register_dataloader
-class IssueAgeRepoDataloader(BaseRepoDataloader[IssueAgeData]):
+class IssueAgeRepoDataloader(BaseRepoDataloader):
     name = "issue_age"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -348,9 +340,7 @@ class IssueAgeRepoDataloader(BaseRepoDataloader[IssueAgeData]):
 
 
 @register_dataloader
-class AddedCodeChangeLineRepoDataloader(
-    BaseRepoDataloader[AddedCodeChangeLineData]
-):
+class AddedCodeChangeLineRepoDataloader(BaseRepoDataloader):
     name = "added_code_change_line"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -376,9 +366,7 @@ class AddedCodeChangeLineRepoDataloader(
 
 
 @register_dataloader
-class RemovedCodeChangeLineRepoDataloader(
-    BaseRepoDataloader[RemovedCodeChangeLineData]
-):
+class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
     name = "removed_code_change_line"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -404,7 +392,7 @@ class RemovedCodeChangeLineRepoDataloader(
 
 
 @register_dataloader
-class ChangeRequestRepoDataloader(BaseRepoDataloader[ChangeRequestData]):
+class ChangeRequestRepoDataloader(BaseRepoDataloader):
     name = "change_request"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -428,9 +416,7 @@ class ChangeRequestRepoDataloader(BaseRepoDataloader[ChangeRequestData]):
 
 
 @register_dataloader
-class AcceptedChangeRequestRepoDataloader(
-    BaseRepoDataloader[AcceptedChangeRequestData]
-):
+class AcceptedChangeRequestRepoDataloader(BaseRepoDataloader):
     name = "accepted_change_request"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -456,9 +442,7 @@ class AcceptedChangeRequestRepoDataloader(
 
 
 @register_dataloader
-class ChangeRequestReviewRepoDataloader(
-    BaseRepoDataloader[ChangeRequestReviewData]
-):
+class ChangeRequestReviewRepoDataloader(BaseRepoDataloader):
     name = "change_request_review"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -484,9 +468,7 @@ class ChangeRequestReviewRepoDataloader(
 
 
 @register_dataloader
-class ChangeRequestResponseTimeRepoDataloader(
-    BaseRepoDataloader[ChangeRequestResponseTimeData]
-):
+class ChangeRequestResponseTimeRepoDataloader(BaseRepoDataloader):
     name = "change_request_response_time"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -512,9 +494,7 @@ class ChangeRequestResponseTimeRepoDataloader(
 
 
 @register_dataloader
-class ChangeRequestResolutionDurationRepoDataloader(
-    BaseRepoDataloader[ChangeRequestResolutionDurationData]
-):
+class ChangeRequestResolutionDurationRepoDataloader(BaseRepoDataloader):
     name = "change_request_resolution_duration"
     metric_type = "metric"
     introducer = "CHAOSS"
@@ -542,7 +522,7 @@ class ChangeRequestResolutionDurationRepoDataloader(
 
 
 @register_dataloader
-class ChangeRequestAgeRepoDataloader(BaseRepoDataloader[ChangeRequestAgeData]):
+class ChangeRequestAgeRepoDataloader(BaseRepoDataloader):
     name = "change_request_age"
     metric_type = "metric"
     introducer = "CHAOSS"

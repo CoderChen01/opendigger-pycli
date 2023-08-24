@@ -19,7 +19,7 @@ from .utils import (
 
 
 @register_dataloader
-class OpenRankRepoDataloader(BaseRepoDataloader[OpenRankData]):
+class OpenRankRepoDataloader(BaseRepoDataloader):
     name = "openrank"
     metric_type = "index"
     introducer = "X-lab"
@@ -40,7 +40,7 @@ class OpenRankRepoDataloader(BaseRepoDataloader[OpenRankData]):
 
 
 @register_dataloader
-class ActivityRepoDataloader(BaseRepoDataloader[ActivityData]):
+class ActivityRepoDataloader(BaseRepoDataloader):
     name = "activity"
     metric_type = "index"
     introducer = "X-lab"
@@ -65,7 +65,7 @@ class ActivityRepoDataloader(BaseRepoDataloader[ActivityData]):
 
 
 @register_dataloader
-class AttentionRepoDataloader(BaseRepoDataloader[AttentionData]):
+class AttentionRepoDataloader(BaseRepoDataloader):
     name = "attention"
     metric_type = "index"
     introducer = "X-lab"
@@ -88,7 +88,7 @@ class AttentionRepoDataloader(BaseRepoDataloader[AttentionData]):
 
 
 @register_dataloader
-class OpenRankUserDataLoader(BaseUserDataloader[OpenRankData]):
+class OpenRankUserDataLoader(BaseUserDataloader):
     name = "openrank"
     metric_type = "index"
     introducer = "X-lab"
@@ -109,7 +109,7 @@ class OpenRankUserDataLoader(BaseUserDataloader[OpenRankData]):
 
 
 @register_dataloader
-class ActivityUserDataLoader(BaseUserDataloader[ActivityData]):
+class ActivityUserDataLoader(BaseUserDataloader):
     name = "activity"
     metric_type = "index"
     introducer = "X-lab"
