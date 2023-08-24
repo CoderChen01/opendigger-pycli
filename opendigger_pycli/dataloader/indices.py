@@ -23,6 +23,7 @@ class OpenRankRepoDataloader(BaseRepoDataloader):
     name = "openrank"
     metric_type = "index"
     introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/openrank.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[OpenRankData]:
         data = get_repo_data(org, repo, OpenRankData.name)
@@ -44,6 +45,7 @@ class ActivityRepoDataloader(BaseRepoDataloader):
     name = "activity"
     metric_type = "index"
     introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/activity.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[ActivityData]:
         data = get_repo_data(org, repo, ActivityData.name)
@@ -69,6 +71,7 @@ class AttentionRepoDataloader(BaseRepoDataloader):
     name = "attention"
     metric_type = "index"
     introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/attention.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[AttentionData]:
         data = get_repo_data(org, repo, AttentionData.name)
@@ -92,6 +95,9 @@ class OpenRankUserDataLoader(BaseUserDataloader):
     name = "openrank"
     metric_type = "index"
     introducer = "X-lab"
+    demo_url = (
+        "https://oss.x-lab.info/open_digger/github/frank-zsy/openrank.json"
+    )
 
     def load(self, username: str) -> DataloaderState[OpenRankData]:
         data = get_developer_data(username, OpenRankData.name)
@@ -113,6 +119,9 @@ class ActivityUserDataLoader(BaseUserDataloader):
     name = "activity"
     metric_type = "index"
     introducer = "X-lab"
+    demo_url = (
+        "https://oss.x-lab.info/open_digger/github/frank-zsy/activity.json"
+    )
 
     def load(self, username: str) -> DataloaderState[ActivityData]:
         data = get_developer_data(username, ActivityData.name)

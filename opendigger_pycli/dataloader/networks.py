@@ -25,6 +25,7 @@ class DeveloperNetworkRepoDataloader(BaseRepoDataloader):
     name = "developer_network"
     metric_type = "network"
     introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/developer_network.json"
 
     def load(
         self, org: str, repo: str
@@ -48,6 +49,7 @@ class RepoNetworkRepoDataloader(BaseRepoDataloader):
     name = "repo_network"
     metric_type = "network"
     introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/repo_network.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[RepoNetworkData]:
         data = get_repo_data(org, repo, RepoNetworkData.name)
@@ -70,6 +72,7 @@ class ProjectOpenRankNetworkRepoDataloader(BaseOpenRankNetworkDataloader):
     metric_type = "network"
     type = "repo"
     introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/project_openrank_detail/2022-12.json"
 
     def load(
         self, org: str, repo: str, date: str
@@ -100,6 +103,7 @@ class DeveloperNetworkUserDataloader(BaseUserDataloader):
     name = "developer_network"
     metric_type = "network"
     introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/frank-zsy/developer_network.json"
 
     def load(self, username: str) -> DataloaderState[DeveloperNetworkData]:
         data = get_developer_data(username, DeveloperNetworkData.name)
@@ -121,6 +125,9 @@ class RepoNetworkUserDataloader(BaseUserDataloader):
     name = "repo_network"
     metric_type = "network"
     introducer = "X-lab"
+    demo_url = (
+        "https://oss.x-lab.info/open_digger/github/frank-zsy/repo_network.json"
+    )
 
     def load(self, username: str) -> DataloaderState[RepoNetworkData]:
         data = get_developer_data(username, RepoNetworkData.name)

@@ -60,6 +60,7 @@ class BaseRepoDataloader(abc.ABC):
     ]  # Specifies the type of indicator
     introducer: t.ClassVar[t.Literal["X-lab", "CHAOSS"]]
     type: t.ClassVar[t.Literal["repo", "user"]] = "repo"
+    demo_url: t.ClassVar[str]
 
     def __init__(self) -> None:
         super().__init__()
@@ -78,6 +79,7 @@ class BaseOpenRankNetworkDataloader(abc.ABC):
     ] = "network"  # Specifies the type of indicator
     introducer: t.ClassVar[t.Literal["X-lab", "CHAOSS"]]
     type: t.ClassVar[t.Literal["repo", "user"]]
+    demo_url: t.ClassVar[str]
 
     def __init__(self) -> None:
         super().__init__()
@@ -96,6 +98,7 @@ class BaseUserDataloader(abc.ABC):
     ]  # Specifies the type of indicator
     introducer: t.ClassVar[t.Literal["X-lab", "CHAOSS"]]
     type: t.ClassVar[t.Literal["repo", "user"]] = "user"
+    demo_url: t.ClassVar[str]
 
     @abc.abstractmethod
     def load(self, username: str):

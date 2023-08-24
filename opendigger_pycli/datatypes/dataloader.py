@@ -19,6 +19,7 @@ class DataloaderProto(t.Protocol):
     ]  # Specifies the type of indicator
     introducer: t.ClassVar[t.Literal["X-lab", "CHAOSS"]]
     type: t.ClassVar[t.Literal["repo", "user"]]
+    demo_url: t.ClassVar[str]
 
     def load(self, *args, **kwargs) -> DataloaderState:
         ...

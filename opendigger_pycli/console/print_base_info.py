@@ -67,23 +67,27 @@ def print_repo_info(
 
 
 def print_metric_info(
-    types: t.Set[t.Literal["repo", "user"]],
+    mode: t.Literal["user", "repo"],
     metric_types: t.Set[t.Literal["index", "metric", "network"]],
     introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
 ):
-    table = Table(show_lines=True)
-    table.add_column("For", overflow="fold")
-    table.add_column("Name", overflow="fold")
+    table = Table(
+        title="[green]Current Query Supporting Indicators[/]",
+        show_lines=True,
+    )
+    table.add_column("Type/Name", overflow="fold")
     table.add_column("Introducer", overflow="fold")
-    table.add_column("Type", overflow="fold")
+    table.add_column("Demo URL", overflow="fold")
 
-    metric_dataloaders = filter_dataloader(types, metric_types, introducers)
+    metric_dataloaders = filter_dataloader({mode}, metric_types, introducers)
     for metric_dataloader in metric_dataloaders:
         table.add_row(
-            metric_dataloader.type,
-            metric_dataloader.name,
+            f"{metric_dataloader.metric_type}/{metric_dataloader.name}",
             metric_dataloader.introducer,
-            metric_dataloader.metric_type,
+            metric_dataloader.demo_url,
         )
 
-    CONSOLE.print(table)
+    if table.rows:
+        CONSOLE.print(table)
+    else:
+        CONSOLE.print("[red i]No filtered indicators...[/]")

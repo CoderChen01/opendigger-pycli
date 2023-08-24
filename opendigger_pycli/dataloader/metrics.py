@@ -40,6 +40,7 @@ class ActiveDateAndTimeRepoDataloader(BaseRepoDataloader):
     name = "active_date_and_time"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/active_dates_and_times.json"
 
     def load(
         self, org: str, repo: str
@@ -65,6 +66,7 @@ class StarRepoDataloader(BaseRepoDataloader):
     name = "star"
     metric_type = "metric"
     introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/stars.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[StarData]:
         data = get_repo_data(org, repo, StarData.name)
@@ -86,6 +88,7 @@ class TechnicalForkRepoDataloader(BaseRepoDataloader):
     name = "technical_fork"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/technical_fork.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[TechnicalForkData]:
         data = get_repo_data(org, repo, TechnicalForkData.name)
@@ -107,6 +110,7 @@ class ParticipantRepoDataloader(BaseRepoDataloader):
     name = "participant"
     metric_type = "metric"
     introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/participants.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[ParticipantData]:
         data = get_repo_data(org, repo, ParticipantData.name)
@@ -128,6 +132,7 @@ class NewContributorRepoDataloader(BaseRepoDataloader):
     name = "new_contributor"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/new_contributors_detail.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[NewContributorData]:
         data = get_repo_data(org, repo, NewContributorData.name)
@@ -152,6 +157,7 @@ class InactiveContributorRepoDataloader(BaseRepoDataloader):
     name = "inactive_contributor"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/inactive_contributors.json"
 
     def load(
         self, org: str, repo: str
@@ -176,6 +182,7 @@ class BusFactorRepoDataloader(BaseRepoDataloader):
     name = "bus_factor"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/bus_factor_detail.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[BusFactorData]:
         data = get_repo_data(org, repo, BusFactorData.name)
@@ -202,6 +209,7 @@ class NewIssueRepoDataloader(BaseRepoDataloader):
     name = "new_issue"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issues_new.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[NewIssueData]:
         data = get_repo_data(org, repo, NewIssueData.name)
@@ -224,6 +232,7 @@ class ClosedIssueRepoDataloader(BaseRepoDataloader):
     name = "closed_issue"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issues_closed.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[ClosedIssueData]:
         data = get_repo_data(org, repo, ClosedIssueData.name)
@@ -246,6 +255,7 @@ class IssueCommentRepoDataloader(BaseRepoDataloader):
     name = "issue_comment"
     metric_type = "metric"
     introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_comments.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[IssueCommentData]:
         data = get_repo_data(org, repo, IssueCommentData.name)
@@ -268,6 +278,7 @@ class IssueResponseTimeRepoDataloader(BaseRepoDataloader):
     name = "issue_response_time"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_response_time.json"
 
     def load(
         self, org: str, repo: str
@@ -294,6 +305,7 @@ class IssueResolutionDurationRepoDataloader(BaseRepoDataloader):
     name = "issue_resolution_duration"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_resolution_duration.json"
 
     def load(
         self, org: str, repo: str
@@ -320,6 +332,7 @@ class IssueAgeRepoDataloader(BaseRepoDataloader):
     name = "issue_age"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_age.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[IssueAgeData]:
         data = get_repo_data(org, repo, IssueAgeData.name)
@@ -344,6 +357,7 @@ class AddedCodeChangeLineRepoDataloader(BaseRepoDataloader):
     name = "added_code_change_line"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/code_change_lines_add.json"
 
     def load(
         self, org: str, repo: str
@@ -370,6 +384,7 @@ class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
     name = "removed_code_change_line"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/code_change_lines_remove.json"
 
     def load(
         self, org: str, repo: str
@@ -396,6 +411,7 @@ class ChangeRequestRepoDataloader(BaseRepoDataloader):
     name = "change_request"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_requests.json"
 
     def load(self, org: str, repo: str) -> DataloaderState[ChangeRequestData]:
         data = get_repo_data(org, repo, ChangeRequestData.name)
@@ -420,6 +436,7 @@ class AcceptedChangeRequestRepoDataloader(BaseRepoDataloader):
     name = "accepted_change_request"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_requests_accepted.json"
 
     def load(
         self, org: str, repo: str
@@ -446,6 +463,7 @@ class ChangeRequestReviewRepoDataloader(BaseRepoDataloader):
     name = "change_request_review"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_requests_reviews.json"
 
     def load(
         self, org: str, repo: str
@@ -472,6 +490,7 @@ class ChangeRequestResponseTimeRepoDataloader(BaseRepoDataloader):
     name = "change_request_response_time"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_request_response_time.json"
 
     def load(
         self, org: str, repo: str
@@ -498,6 +517,7 @@ class ChangeRequestResolutionDurationRepoDataloader(BaseRepoDataloader):
     name = "change_request_resolution_duration"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_request_resolution_duration.json"
 
     def load(
         self, org: str, repo: str
@@ -526,6 +546,7 @@ class ChangeRequestAgeRepoDataloader(BaseRepoDataloader):
     name = "change_request_age"
     metric_type = "metric"
     introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_request_age.json"
 
     def load(
         self, org: str, repo: str
