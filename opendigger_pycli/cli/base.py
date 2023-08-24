@@ -6,24 +6,30 @@ from opendigger_pycli.console.print_base_info import (
     print_repo_info,
     print_user_info,
 )
-from opendigger_pycli.config.cli_config import OpenDiggerCliConfig
 from opendigger_pycli.console import CONSOLE
+
+from .env import Environment
 from .custom_types import GH_REPO_NAME_TYPE, GH_USERNAME_TYPE
 
 
-pass_config = click.make_pass_decorator(OpenDiggerCliConfig, ensure=True)
+pass_environment = click.make_pass_decorator(Environment, ensure=True)
 
 
 @click.group()
 @click.option(
-    "--debug/--no-debug", default=False, help="Enable or disable debug mode"
+    "--verbose",
+    "-v",
+    is_flag=True,
+    default=False,
+    help="Enables verbose mode.",
 )
-@pass_config
-def opendigger(config: OpenDiggerCliConfig, debug: bool):
-    config.debug = debug
+@pass_environment
+def opendigger(env: Environment, verbose: bool):
+    """Open Digger CLI"""
+    env.verbose = verbose
 
 
-@opendigger.group(chain=True, invoke_without_command=True)
+@opendigger.group(invoke_without_command=True)
 @click.option(
     "--username",
     "-u",
@@ -32,17 +38,20 @@ def opendigger(config: OpenDiggerCliConfig, debug: bool):
     multiple=True,
     help="GitHub username",
 )
-@pass_config
-def user(config: OpenDiggerCliConfig, usernames: t.List[str]):
+@pass_environment
+def user(env: Environment, usernames: t.List[str]):
     """
     Operate on user metrics
     """
     if click.get_current_context().invoked_subcommand is None:
         with CONSOLE.status("[bold green]requesting users info..."):
-            print_user_info(usernames)
+            print_user_info(usernames, env.cli_config.github_pat)
+    else:
+        env.set_mode("user")
+        env.set_params(usernames)
 
 
-@opendigger.group(chain=True, invoke_without_command=True)
+@opendigger.group(invoke_without_command=True)
 @click.option(
     "--repo",
     "-r",
@@ -52,11 +61,14 @@ def user(config: OpenDiggerCliConfig, usernames: t.List[str]):
     help="GitHub repository, e.g. X-lab2017/open-digger",
     metavar="<org>/<repo>",
 )
-@pass_config
-def repo(config: OpenDiggerCliConfig, repos: t.List[t.Tuple[str, str]]):
+@pass_environment
+def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
     """
     Operate on repository metrics
     """
     if click.get_current_context().invoked_subcommand is None:
         with CONSOLE.status("[bold green]fetching repos info..."):
-            print_repo_info(repos, config.github_pat)
+            print_repo_info(repos, env.cli_config.github_pat)
+    else:
+        env.set_mode("repo")
+        env.set_params(repos)

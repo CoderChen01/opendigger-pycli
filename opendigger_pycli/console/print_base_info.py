@@ -1,4 +1,5 @@
 import typing as t
+import itertools
 
 from rich.table import Table
 
@@ -8,6 +9,7 @@ from opendigger_pycli.utils.gtihub_api import (
     get_repo_info,
     get_user_info,
 )
+from opendigger_pycli.dataloader import filter_dataloader
 from opendigger_pycli.utils import THREAD_POOL
 from . import CONSOLE
 
@@ -60,5 +62,28 @@ def print_repo_info(
                 f"[red]fail to request repo [green]{repo_info['repository']}[/] [red]info![/]"
             )
         table.add_row(*[str(repo_info[name_map[key]]) for key in name_map])
+
+    CONSOLE.print(table)
+
+
+def print_metric_info(
+    types: t.Set[t.Literal["repo", "user"]],
+    metric_types: t.Set[t.Literal["index", "metric", "network"]],
+    introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
+):
+    table = Table(show_lines=True)
+    table.add_column("For", overflow="fold")
+    table.add_column("Name", overflow="fold")
+    table.add_column("Introducer", overflow="fold")
+    table.add_column("Type", overflow="fold")
+
+    metric_dataloaders = filter_dataloader(types, metric_types, introducers)
+    for metric_dataloader in metric_dataloaders:
+        table.add_row(
+            metric_dataloader.type,
+            metric_dataloader.name,
+            metric_dataloader.introducer,
+            metric_dataloader.metric_type,
+        )
 
     CONSOLE.print(table)
