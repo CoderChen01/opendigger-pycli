@@ -1,5 +1,6 @@
+import typing as t
 from dataclasses import dataclass
-from typing import ClassVar, TypedDict
+
 
 from .base import BaseData, BaseNetworkData, NameAndValue, NameNameAndValue
 
@@ -10,7 +11,7 @@ class DeveloperNetworkData:
     ref: https://blog.frankzhao.cn/github_activity_with_wpr/
     """
 
-    name: ClassVar[str] = "developer_network"
+    name: t.ClassVar[str] = "developer_network"
     value: BaseNetworkData[NameAndValue, NameNameAndValue]
 
 
@@ -20,11 +21,11 @@ class RepoNetworkData:
     ref: https://blog.frankzhao.cn/github_activity_with_wpr/
     """
 
-    name: ClassVar[str] = "repo_network"
+    name: t.ClassVar[str] = "repo_network"
     value: BaseNetworkData[NameAndValue, NameNameAndValue]
 
 
-class ProjectOpenRankNetworkNodeDict(TypedDict):
+class ProjectOpenRankNetworkNodeDict(t.TypedDict):
     id: str
     n: str
     c: str
@@ -33,7 +34,7 @@ class ProjectOpenRankNetworkNodeDict(TypedDict):
     v: float
 
 
-class ProjectOpenRankNetworkEdgeDict(TypedDict):
+class ProjectOpenRankNetworkEdgeDict(t.TypedDict):
     s: str
     t: str
     w: float
@@ -45,9 +46,11 @@ class ProjectOpenRankNetworkData:
     ref: https://blog.frankzhao.cn/how_to_measure_open_source_3/
     """
 
-    name: ClassVar[str] = "project_openrank_detail"
-    value: BaseData[
-        BaseNetworkData[
-            ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict
+    name: t.ClassVar[str] = "project_openrank_detail"
+    value: t.List[
+        BaseData[
+            BaseNetworkData[
+                ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict
+            ]
         ]
     ]

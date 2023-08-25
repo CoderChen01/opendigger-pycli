@@ -1,3 +1,5 @@
+import typing as t
+
 from opendigger_pycli.datatypes import (
     BaseData,
     DeveloperNetworkData,
@@ -73,27 +75,33 @@ class ProjectOpenRankNetworkRepoDataloader(BaseOpenRankNetworkDataloader):
     type = "repo"
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/project_openrank_detail/2022-12.json"
+    pass_date = True
 
     def load(
-        self, org: str, repo: str, date: str
+        self, org: str, repo: str, dates: t.List[str]
     ) -> DataloaderState[ProjectOpenRankNetworkData]:
-        data = get_repo_data(org, repo, ProjectOpenRankNetworkData.name, date)
-        if data is None:
-            return DataloaderState(
-                is_success=False,
-                data=None,
-                desc="Cannot find data for this indicator",
+        values = []
+        for date in dates:
+            data = get_repo_data(
+                org, repo, ProjectOpenRankNetworkData.name, date
             )
-        year, month = date.split("-")[:2]
-        return DataloaderState(
-            is_success=True,
-            data=ProjectOpenRankNetworkData(
-                value=BaseData(
+            if data is None:
+                return DataloaderState(
+                    is_success=False,
+                    data=None,
+                    desc="Cannot find data for this indicator",
+                )
+            year, month = date.split("-")[:2]
+            values.append(
+                BaseData(
                     year=int(year),
                     month=int(month),
                     value=load_openrank_network_data(data),
                 )
-            ),
+            )
+        return DataloaderState(
+            is_success=True,
+            data=ProjectOpenRankNetworkData(value=values),
             desc="",
         )
 

@@ -14,6 +14,7 @@ class DataloaderState(t.Generic[T]):
 @t.runtime_checkable
 class DataloaderProto(t.Protocol):
     name: t.ClassVar[str]
+    pass_date: t.ClassVar[bool] = False
     metric_type: t.ClassVar[
         t.Literal["index", "metric", "network"]
     ]  # Specifies the type of indicator
