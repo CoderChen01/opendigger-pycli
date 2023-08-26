@@ -17,7 +17,7 @@ USER_INFO_DICT = t.TypedDict(
     username=str,
     name=str,
     email=str,
-    github_homepage=str,
+    github_homepage_url=str,
     created_at=str,
     updated_at=str,
 )
@@ -77,7 +77,7 @@ def get_user_info(
             username=username,
             name="null",
             email="null",
-            github_homepage=f"https://www.github.com/{username}",
+            github_homepage_url=f"https://www.github.com/{username}",
             created_at="null",
             updated_at="null",
         )
@@ -87,7 +87,7 @@ def get_user_info(
         username=username,
         name=data["name"],
         email=data["email"] if data["email"] is not None else "null",
-        github_homepage=data["html_url"],
+        github_homepage_url=data["html_url"],
         created_at=data["created_at"],
         updated_at=data["updated_at"],
     )
