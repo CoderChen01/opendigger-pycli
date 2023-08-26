@@ -7,7 +7,7 @@ from opendigger_pycli.datatypes import (
     BaseNetworkData,
     NameAndValue,
     NameNameAndValue,
-    NonTrivialMetricDict,
+    NonTrivialIndicatorDict,
     ProjectOpenRankNetworkEdgeDict,
     ProjectOpenRankNetworkNodeDict,
 )
@@ -104,8 +104,8 @@ def load_quantile_data(data: t.Dict[str, t.Any]) -> t.List[BaseData[float]]:
 
 def load_non_trival_indicator_data(
     data: t.Dict[str, t.Any]
-) -> NonTrivialMetricDict:
-    return NonTrivialMetricDict(
+) -> NonTrivialIndicatorDict:
+    return NonTrivialIndicatorDict(
         avg=load_avg_data(data["avg"]),
         levels=load_level_data(data["levels"]),
         quantile0=load_quantile_data(data["quantile_0"]),

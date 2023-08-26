@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import ClassVar, List
 
-from .base import BaseData, NameAndValue, NonTrivialMetricDict
+from .base import BaseData, NameAndValue, NonTrivialIndicatorDict
 
 
 @dataclass
@@ -99,7 +99,7 @@ class IssueResponseTimeData:
     """
 
     name: ClassVar[str] = "issue_response_time"
-    value: NonTrivialMetricDict
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
@@ -109,7 +109,7 @@ class IssueResolutionDurationData:
     """
 
     name: ClassVar[str] = "issue_resolution_duration"
-    value: NonTrivialMetricDict
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
@@ -119,7 +119,7 @@ class IssueAgeData:
     """
 
     name: ClassVar[str] = "issue_age"
-    value: NonTrivialMetricDict
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
@@ -179,7 +179,7 @@ class ChangeRequestResponseTimeData:
     """
 
     name: ClassVar[str] = "change_request_response_time"
-    value: NonTrivialMetricDict
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
@@ -189,7 +189,7 @@ class ChangeRequestResolutionDurationData:
     """
 
     name: ClassVar[str] = "change_request_resolution_duration"
-    value: NonTrivialMetricDict
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
@@ -199,4 +199,4 @@ class ChangeRequestAgeData:
     """
 
     name: ClassVar[str] = "change_request_age"
-    value: NonTrivialMetricDict
+    value: NonTrivialIndicatorDict

@@ -29,7 +29,7 @@ LevelData = BaseData[List[int]]
 QuantileData = BaseData[float]
 
 
-class NonTrivialMetricDict(TypedDict):
+class NonTrivialIndicatorDict(TypedDict):
     avg: List[AvgData]
     levels: List[LevelData]
     quantile0: List[QuantileData]

@@ -5,7 +5,7 @@ from .base import (
     LevelData,
     NameAndValue,
     NameNameAndValue,
-    NonTrivialMetricDict,
+    NonTrivialIndicatorDict,
     QuantileData,
 )
 from .indices import ActivityData, AttentionData, OpenRankData
