@@ -299,12 +299,6 @@ def process_query_results(
 
     env.vlog("Query Results:", results)
 
-    # add result to context
-    env.add_query_results(results)
-    env.vlog(
-        f"Save Query Results to Context Meta: {'[green]Success[/]' if env.get_query_results() is not None else '[red]Error[/]'}"
-    )
-
     return process_commands(processors, results)
 
 

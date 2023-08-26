@@ -1,14 +1,12 @@
 import datetime
 import typing as t
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from rich.progress import track
 
-from opendigger_pycli.datatypes import BaseRepoResult, BaseUserResult
-
 
 if t.TYPE_CHECKING:
-    from opendigger_pycli.datatypes import IndicatorQuery
+    from opendigger_pycli.datatypes import IndicatorQuery, DataloaderProto
 
 
 @t.overload
@@ -69,18 +67,29 @@ def run_dataloader(result) -> None:
 
 
 @dataclass
-class QueryRepoResult(BaseRepoResult):
+class BaseQueryResult:
+    type: t.ClassVar[t.Literal["user", "repo"]]
+    dataloaders: t.List[DataloaderProto]
+    data: t.Dict[str, t.Any] = field(default_factory=dict, init=False)
+
+
+@dataclass
+class QueryRepoResult(BaseQueryResult):
+    type: t.ClassVar[t.Literal["repo"]] = "repo"
+    repo: t.Tuple[str, str]
+    org_name: str = field(init=False)
+    repo_name: str = field(init=False)
     indicator_queries: t.List[t.Tuple[str, t.Optional["IndicatorQuery"]]]
 
     def __post_init__(self) -> None:
-        super().__post_init__()
         run_dataloader(self)
 
 
 @dataclass
-class QueryUserResult(BaseUserResult):
+class QueryUserResult(BaseQueryResult):
+    type: t.ClassVar[t.Literal["user"]] = "user"
+    username: str
     indicator_queries: t.List[t.Tuple[str, t.Optional["IndicatorQuery"]]]
 
     def __post_init__(self) -> None:
-        super().__post_init__()
         run_dataloader(self)
