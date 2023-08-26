@@ -69,6 +69,7 @@ def user(env: Environment, usernames: t.List[str]):
     """
     Operate on user indicators
     """
+    usernames = list(set(usernames))
     if click.get_current_context().invoked_subcommand is None:
         with CONSOLE.status("[bold green]requesting users info..."):
             print_user_info(usernames, env.cli_config.github_pat)
@@ -92,6 +93,7 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
     """
     Operate on repository indicators
     """
+    repos = list(set(repos))
     if click.get_current_context().invoked_subcommand is None:
         with CONSOLE.status("[bold green]fetching repos info..."):
             print_repo_info(repos, env.cli_config.github_pat)
