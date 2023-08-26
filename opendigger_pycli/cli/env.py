@@ -16,7 +16,6 @@ RICH_LOGGER_HANDLER = RichHandler(
     rich_tracebacks=True, tracebacks_suppress=[click]
 )
 logging.basicConfig(
-    level="NOTSET",
     format=FORMAT,
     datefmt="[%X]",
     handlers=[RICH_LOGGER_HANDLER],
