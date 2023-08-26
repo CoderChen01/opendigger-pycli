@@ -38,18 +38,29 @@ if t.TYPE_CHECKING:
 pass_environment = click.make_pass_decorator(Environment, ensure=True)
 
 
-@click.group()
+@click.group(
+    context_settings={
+        "help_option_names": ["-h", "--help"],
+    }
+)
 @click.option(
-    "--verbose",
-    "-v",
-    is_flag=True,
-    default=False,
+    "--log-level",
+    "-L",
+    "log_level",
+    type=click.Choice(
+        ["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+    ),
     help="Enables verbose mode.",
 )
 @pass_environment
-def opendigger(env: Environment, verbose: bool):
+def opendigger(
+    env: Environment,
+    log_level: t.Literal[
+        "NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
+    ],
+):
     """Open Digger CLI"""
-    env.verbose = verbose
+    env.set_log_level(log_level)
 
 
 opendigger_cmd = t.cast("Group", opendigger)
@@ -69,13 +80,25 @@ def user(env: Environment, usernames: t.List[str]):
     """
     Operate on user indicators
     """
+    env.vlog(f"indicator mode: [green]USER")
+
     usernames = list(set(usernames))
+    env.dlog("usernames:", usernames)
+
     if click.get_current_context().invoked_subcommand is None:
+        env.vlog("[bold green]requesting users info...")
         with CONSOLE.status("[bold green]requesting users info..."):
-            print_user_info(usernames, env.cli_config.github_pat)
-    else:
-        env.set_mode("user")
-        env.set_params(usernames)
+            env.dlog(print_user_info(usernames, env.cli_config.github_pat))
+            env.vlog("[bold green]end requesting users info...")
+            return
+
+    if not usernames:
+        env.elog("You must specify the username.")
+        raise click.UsageError("You must specify the username.")
+
+    env.set_mode("user")
+    env.set_params(usernames)
+    env.dlog("Set params to env")
 
 
 @opendigger_cmd.group(invoke_without_command=True)
@@ -93,13 +116,25 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
     """
     Operate on repository indicators
     """
+    env.vlog("indicator mode: [green]REPO")
+
     repos = list(set(repos))
+    env.dlog("repos:", repos)
+
     if click.get_current_context().invoked_subcommand is None:
+        env.vlog("[bold green]fetching repos info...")
         with CONSOLE.status("[bold green]fetching repos info..."):
-            print_repo_info(repos, env.cli_config.github_pat)
-    else:
-        env.set_mode("repo")
-        env.set_params(repos)
+            env.dlog(print_repo_info(repos, env.cli_config.github_pat))
+            env.vlog("[bold green]end fetching repos info...")
+        return
+
+    if not repos:
+        env.elog("You must specify the repository.")
+        raise click.UsageError("You must specify the repository.")
+
+    env.set_mode("repo")
+    env.set_params(repos)
+    env.vlog("Set params to env")
 
 
 @click.group(
@@ -234,7 +269,8 @@ def process_query_results(
         indicator_types = {"index", "metric", "network"}
         introducers = {"X-lab", "CHAOSS"}
 
-    env.vlog(
+    env.vlog("Start to query indicators...")
+    env.dlog(
         f"""Parameters:
         indicator_types: {indicator_types},
         introducers: {introducers}, 
@@ -246,22 +282,27 @@ def process_query_results(
 
     # If the subcommand is not called, then print the filtered indicators information
     if click.get_current_context().invoked_subcommand is None:
+        env.vlog("Loading indicators info...")
         with CONSOLE.status("Loading indicators info..."):
-            print_indicator_info(
-                mode=env.mode,
-                indicator_types=t.cast(
-                    t.Set[t.Literal["index", "metric", "network"]],
-                    indicator_types,
-                ),
-                introducers=t.cast(
-                    t.Set[t.Literal["X-lab", "CHAOSS"]], introducers
-                ),
+            env.dlog(
+                print_indicator_info(
+                    mode=env.mode,
+                    indicator_types=t.cast(
+                        t.Set[t.Literal["index", "metric", "network"]],
+                        indicator_types,
+                    ),
+                    introducers=t.cast(
+                        t.Set[t.Literal["X-lab", "CHAOSS"]], introducers
+                    ),
+                )
             )
+            env.vlog("End loading indicators info...")
             return
 
     # Query only selected indicators
     if is_only_select:
         if not selected_indicator_queries:
+            env.elog("You must specify the indicators you want to query.")
             raise click.UsageError(
                 "You must specify the indicators you want to query."
             )
@@ -278,6 +319,7 @@ def process_query_results(
     if mode == "user":
         usernames = t.cast(t.List[str], env.params)
         # build result
+        env.vlog("Fetching user indicators data...")
         results = [
             UserQueryResult(
                 username=username,
@@ -290,6 +332,7 @@ def process_query_results(
     # repo mode
     repos = t.cast(t.List[t.Tuple[str, str]], env.params)
     # build result
+    env.vlog("Fetching repo indicators data...")
     results = [
         RepoQueryResult(
             repo=repo,
@@ -299,7 +342,8 @@ def process_query_results(
         for repo in repos
     ]
 
-    env.vlog("Query Results:", results)
+    env.vlog("End fetching indicators data...")
+    env.dlog("Query Results:", results)
 
     return process_commands(processors, results)
 

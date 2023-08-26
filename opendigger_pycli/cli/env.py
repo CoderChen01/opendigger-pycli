@@ -1,15 +1,26 @@
 import os
+import sys
 import textwrap
 import typing as t
+import logging
 
 import click
+from rich.logging import RichHandler
 
 from opendigger_pycli.config.cli_config import OpenDiggerCliConfig
 from opendigger_pycli.console import CONSOLE
 
 
-if t.TYPE_CHECKING:
-    from opendigger_pycli.datatypes.dataloader import DataloaderProto
+FORMAT = "%(message)s"
+RICH_LOGGER_HANDLER = RichHandler(
+    rich_tracebacks=True, tracebacks_suppress=[click]
+)
+logging.basicConfig(
+    level="NOTSET",
+    format=FORMAT,
+    datefmt="[%X]",
+    handlers=[RICH_LOGGER_HANDLER],
+)
 
 
 class Environment:
@@ -26,19 +37,48 @@ class Environment:
 
         self.load_configs()
 
-    def log(self, msg):
+    def log(
+        self,
+        msg,
+        mode: t.Literal["info", "warn", "debug", "error"] = "info",
+    ):
         """Logs a message"""
         if isinstance(msg, str):
             msg = textwrap.dedent(msg)
-        CONSOLE.log(msg)
+
+        if mode == "info":
+            self.logger.info(msg, extra={"markup": True})
+        elif mode == "warn":
+            self.logger.warning(msg, extra={"markup": True})
+        elif mode == "debug":
+            self.logger.debug(msg, extra={"markup": True})
+        else:
+            self.logger.error(msg, extra={"markup": True})
 
     def vlog(self, *msgs):
         """Logs a message only if verbose is enabled."""
         if not self.verbose:
             return
-
         for msg in msgs:
             self.log(msg)
+
+    def elog(self, *msg):
+        if not self.verbose:
+            return
+        for m in msg:
+            self.log(m, "error")
+
+    def wlog(self, *msg):
+        if not self.verbose:
+            return
+        for m in msg:
+            self.log(m, "warn")
+
+    def dlog(self, *msg):
+        if not self.verbose:
+            return
+        for m in msg:
+            self.log(m, "debug")
 
     def load_configs(self) -> bool:
         try:
@@ -60,3 +100,21 @@ class Environment:
         self, params: t.Union[t.List[t.Tuple[str, str]], t.List[str]]
     ) -> None:
         self.params = params
+
+    def set_log_level(
+        self,
+        log_level: t.Optional[
+            t.Literal[
+                "NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
+            ]
+        ] = None,
+    ) -> None:
+        if log_level is None:
+            self.verbose = False
+        else:
+            self.verbose = True
+            self.logger = logging.getLogger("opendigger-pycli")
+            self.logger.setLevel(log_level)
+            RICH_LOGGER_HANDLER.setLevel(log_level)
+            CONSOLE.quiet = True
+            self.log("[bold green]verbose mode enabled")

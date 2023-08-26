@@ -1,13 +1,18 @@
+import typing as t
+
 from opendigger_pycli.console import CONSOLE
 
+if t.TYPE_CHECKING:
+    from opendigger_pycli.results.query import QueryResults
 
-class QueryResultPrinter(object):
-    """Prints the result of a query to the console."""
 
-    def __init__(self, query_result):
-        self.query_result = query_result
+def print_query_results_to_table(query_results: "QueryResults"):
+    CONSOLE.print("call print_query_results_to_table")
 
-    def print_result(self):
-        """Prints the result of a query to the console."""
-        CONSOLE.print("Query result:")
-        CONSOLE.print(self.query_result)
+
+def print_query_results_to_json(query_results: "QueryResults"):
+    CONSOLE.print("call print_query_results_to_json")
+
+
+def print_query_results_to_object(query_results: "QueryResults"):
+    CONSOLE.print("call print_query_results_to_object")

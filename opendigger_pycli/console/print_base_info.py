@@ -16,7 +16,7 @@ from . import CONSOLE
 
 def print_user_info(
     usernames: t.List[str], github_pat: t.Optional[str] = None
-):
+) -> Table:
     table = Table(box=box.HORIZONTALS)
 
     name_map = {}
@@ -52,14 +52,15 @@ def print_user_info(
 
     if not table.rows:
         CONSOLE.print("[red i]No users info...[/]")
-        return
+        return table
 
     CONSOLE.print(table)
+    return table
 
 
 def print_repo_info(
     repos: t.List[t.Tuple[str, str]], github_pat: t.Optional[str] = None
-):
+) -> Table:
     table = Table(box=box.HORIZONTALS)
 
     name_map = {}
@@ -95,16 +96,17 @@ def print_repo_info(
 
     if not table.rows:
         CONSOLE.print("[red i]No repos info...[/]")
-        return
+        return table
 
     CONSOLE.print(table)
+    return table
 
 
 def print_indicator_info(
     mode: t.Literal["user", "repo"],
     indicator_types: t.Set[t.Literal["index", "metric", "network"]],
     introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
-):
+) -> Table:
     table = Table(
         title="[green]Current Query Supporting Indicators[/]",
         box=box.HORIZONTALS,
@@ -125,5 +127,7 @@ def print_indicator_info(
 
     if table.rows:
         CONSOLE.print(table)
-    else:
-        CONSOLE.print("[red i]No filtered indicators...[/]")
+        return table
+
+    CONSOLE.print("[red i]No filtered indicators...[/]")
+    return table
