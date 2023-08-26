@@ -193,12 +193,7 @@ class FilteredMetricQueryType(click.ParamType):
         ctx: "Context",
     ) -> t.Tuple[str, t.Optional[IndicatorQuery]]:
         indicator_name, indicator_query_str = self._try_split_value(value)
-        if (
-            indicator_name
-            not in ctx.meta[
-                f"opendigger_pycli.cli.query_cmd.filtered_dataloaders"
-            ]
-        ):
+        if indicator_name not in ctx.meta["filtered_dataloaders"]:
             self.fail(
                 f"{indicator_name} is not a valid indicator name for filtered indicator info, \
                 METRIC_TYPES: {ctx.params['indicator_types']}, \
@@ -221,19 +216,18 @@ class FilteredMetricQueryType(click.ParamType):
     def shell_complete(
         self, ctx: "Context", param: "Parameter", incomplete: str
     ) -> t.List[CompletionItem]:
+        print(ctx)  # TODO: Why does autocompletion work after adding this?
         incomplete, query_str = self._try_split_value(incomplete)
         return [
             CompletionItem(
                 name if query_str is None else f"{name}:{query_str}"
             )
-            for name in ctx.meta[
-                f"opendigger_pycli.cli.query_cmd.filtered_dataloaders"
-            ]
+            for name in ctx.meta["filtered_dataloaders"]
             if name.startswith(incomplete)
         ]
 
 
-class IgnoredMetricNameType(click.ParamType):
+class IgnoredIndicatorNameType(click.ParamType):
     name: t.ClassVar[str] = "ignored_indicator_names"
 
     def convert(
@@ -243,12 +237,7 @@ class IgnoredMetricNameType(click.ParamType):
         ctx: "Context",
     ) -> str:
         indicator_name = value
-        if (
-            indicator_name
-            not in ctx.meta[
-                f"opendigger_pycli.cli.query_cmd.filtered_dataloaders"
-            ]
-        ):
+        if indicator_name not in ctx.meta["filtered_dataloaders"]:
             self.fail(
                 f"{indicator_name} is not a valid indicator name for filtered indicator info, \
                 METRIC_TYPES: {ctx.params['indicator_types']}, \
@@ -260,11 +249,10 @@ class IgnoredMetricNameType(click.ParamType):
     def shell_complete(
         self, ctx: "Context", param: "Parameter", incomplete: str
     ) -> t.List[CompletionItem]:
+        print(ctx)  # TODO: Why does autocompletion work after adding this?
         return [
             CompletionItem(name)
-            for name in ctx.meta[
-                f"opendigger_pycli.cli.query_cmd.filtered_dataloaders"
-            ]
+            for name in ctx.meta["filtered_dataloaders"]
             if name.startswith(incomplete)
         ]
 
@@ -273,4 +261,4 @@ GH_REPO_NAME_TYPE = GhRepoNameType()
 GH_USERNAME_TYPE = GhUserNameType()
 
 FILTERED_METRIC_QUERY_TYPE = FilteredMetricQueryType()
-IGNORED_METRIC_NAME_TYPE = IgnoredMetricNameType()
+IGNORED_METRIC_NAME_TYPE = IgnoredIndicatorNameType()
