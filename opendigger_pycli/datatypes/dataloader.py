@@ -1,14 +1,27 @@
 import typing as t
 from dataclasses import dataclass
 
+
 T = t.TypeVar("T")
 
 
 @dataclass
 class DataloaderState(t.Generic[T]):
     is_success: bool
+    dataloader: "DataloaderProto"
     desc: str
     data: t.Optional[T] = None
+
+    def __repr__(self) -> str:
+        data_class_name = (
+            "None" if self.data is None else self.data.__class__.__name__
+        )
+        return (
+            f"{self.dataloader.__class__.__name__}State("
+            f"is_success={self.is_success}, "
+            f"desc='{self.desc}', "
+            f"data={data_class_name})"
+        )
 
 
 @t.runtime_checkable

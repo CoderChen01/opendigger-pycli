@@ -1,3 +1,5 @@
+import typing as t
+
 from opendigger_pycli.datatypes import (
     AcceptedChangeRequestData,
     ActiveDateAndTimeData,
@@ -34,6 +36,9 @@ from .utils import (
     load_non_trival_metric_data,
 )
 
+if t.TYPE_CHECKING:
+    from opendigger_pycli.datatypes.dataloader import DataloaderProto
+
 
 @register_dataloader
 class ActiveDateAndTimeRepoDataloader(BaseRepoDataloader):
@@ -49,13 +54,13 @@ class ActiveDateAndTimeRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=ActiveDateAndTimeData(
                 value=load_base_data(data, lambda x: [int(i) for i in x]),
             ),
@@ -75,13 +80,13 @@ class StarRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=StarData(value=load_base_data(data, int)),
             desc="",
         )
@@ -99,13 +104,13 @@ class TechnicalForkRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=TechnicalForkData(value=load_base_data(data, int)),
             desc="",
         )
@@ -123,13 +128,13 @@ class ParticipantRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=ParticipantData(value=load_base_data(data, int)),
             desc="",
         )
@@ -147,14 +152,14 @@ class NewContributorRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=NewContributorData(
                 value=load_base_data(data, lambda x: [str(i) for i in x]),
             ),
@@ -176,14 +181,14 @@ class InactiveContributorRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=InactiveContributorData(value=load_base_data(data, int)),
             desc="",
         )
@@ -201,14 +206,14 @@ class BusFactorRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=BusFactorData(
                 value=load_base_data(
                     data, lambda x: [load_name_and_value(i) for i in x]
@@ -230,14 +235,14 @@ class NewIssueRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=NewIssueData(value=load_base_data(data, int)),
             desc="",
         )
@@ -255,14 +260,14 @@ class ClosedIssueRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=ClosedIssueData(value=load_base_data(data, int)),
             desc="",
         )
@@ -280,14 +285,14 @@ class IssueCommentRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=IssueCommentData(value=load_base_data(data, int)),
             desc="",
         )
@@ -307,14 +312,14 @@ class IssueResponseTimeRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=IssueResponseTimeData(
                 value=load_non_trival_metric_data(data)
             ),
@@ -336,14 +341,14 @@ class IssueResolutionDurationRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=IssueResolutionDurationData(
                 value=load_non_trival_metric_data(data)
             ),
@@ -363,14 +368,14 @@ class IssueAgeRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=IssueAgeData(
                 value=load_non_trival_metric_data(data),
             ),
@@ -392,14 +397,14 @@ class AddedCodeChangeLineRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=AddedCodeChangeLineData(
                 value=load_base_data(data, int),
             ),
@@ -421,14 +426,14 @@ class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=RemovedCodeChangeLineData(
                 value=load_base_data(data, int),
             ),
@@ -448,14 +453,14 @@ class ChangeRequestRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestData(
                 value=load_base_data(data, int),
             ),
@@ -477,14 +482,14 @@ class AcceptedChangeRequestRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=AcceptedChangeRequestData(
                 value=load_base_data(data, int),
             ),
@@ -506,14 +511,14 @@ class ChangeRequestReviewRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestReviewData(
                 value=load_base_data(data, int),
             ),
@@ -535,14 +540,14 @@ class ChangeRequestResponseTimeRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestResponseTimeData(
                 value=load_non_trival_metric_data(data),
             ),
@@ -566,14 +571,14 @@ class ChangeRequestResolutionDurationRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestResolutionDurationData(
                 value=load_non_trival_metric_data(data),
             ),
@@ -595,14 +600,14 @@ class ChangeRequestAgeRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestAgeData(
                 value=load_non_trival_metric_data(data),
             ),

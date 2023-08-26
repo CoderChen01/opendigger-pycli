@@ -1,3 +1,5 @@
+import typing as t
+
 from opendigger_pycli.datatypes import (
     ActivityData,
     AttentionData,
@@ -16,6 +18,9 @@ from .utils import (
     load_name_and_value,
 )
 
+if t.TYPE_CHECKING:
+    from opendigger_pycli.datatypes.dataloader import DataloaderProto
+
 
 @register_dataloader
 class OpenRankRepoDataloader(BaseRepoDataloader):
@@ -29,13 +34,13 @@ class OpenRankRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=OpenRankData(value=load_base_data(data, float)),
             desc="",
         )
@@ -53,13 +58,13 @@ class ActivityRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=ActivityData(
                 value=load_base_data(
                     data, lambda x: [load_name_and_value(i) for i in x]
@@ -81,13 +86,13 @@ class AttentionRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=AttentionData(
                 value=load_base_data(data, int),
             ),
@@ -109,13 +114,13 @@ class OpenRankUserDataLoader(BaseUserDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=OpenRankData(value=load_base_data(data, float)),
             desc="",
         )
@@ -135,13 +140,13 @@ class ActivityUserDataLoader(BaseUserDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=ActivityData(
                 value=load_base_data(
                     data, lambda x: [load_name_and_value(i) for i in x]

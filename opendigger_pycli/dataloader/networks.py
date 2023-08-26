@@ -21,6 +21,9 @@ from .utils import (
     load_openrank_network_data,
 )
 
+if t.TYPE_CHECKING:
+    from opendigger_pycli.datatypes.dataloader import DataloaderProto
+
 
 @register_dataloader
 class DeveloperNetworkRepoDataloader(BaseRepoDataloader):
@@ -36,13 +39,13 @@ class DeveloperNetworkRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=DeveloperNetworkData(value=load_network_data(data)),
             desc="",
         )
@@ -60,13 +63,13 @@ class RepoNetworkRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=RepoNetworkData(value=load_network_data(data)),
             desc="",
         )
@@ -92,7 +95,7 @@ class ProjectOpenRankNetworkRepoDataloader(BaseOpenRankNetworkDataloader):
             if data is None:
                 return DataloaderState(
                     is_success=False,
-                    dataloader_name=self.__class__.__name__,
+                    dataloader=t.cast("DataloaderProto", self),
                     data=None,
                     desc="Cannot find data for this indicator",
                 )
@@ -106,7 +109,7 @@ class ProjectOpenRankNetworkRepoDataloader(BaseOpenRankNetworkDataloader):
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=ProjectOpenRankNetworkData(value=values),
             desc="",
         )
@@ -124,13 +127,13 @@ class DeveloperNetworkUserDataloader(BaseUserDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=DeveloperNetworkData(value=load_network_data(data)),
             desc="",
         )
@@ -150,13 +153,13 @@ class RepoNetworkUserDataloader(BaseUserDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
-                dataloader_name=self.__class__.__name__,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
-            dataloader_name=self.__class__.__name__,
+            dataloader=t.cast("DataloaderProto", self),
             data=RepoNetworkData(value=load_network_data(data)),
             desc="",
         )
