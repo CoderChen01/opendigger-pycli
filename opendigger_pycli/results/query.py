@@ -25,9 +25,12 @@ def run_dataloader(result) -> None:
     ):
         raise TypeError("result must be RepoQueryResult or UserQueryResult")
 
-    for dataloader in track(
-        result.dataloaders, description="Fecthing data..."
-    ):
+    process_desc = (
+        f"Fetching data for {result.type} {result.username}"
+        if isinstance(result, UserQueryResult)
+        else f"Fetching data for {result.type} {result.org_name}/{result.repo_name}"
+    )
+    for dataloader in track(result.dataloaders, description=process_desc):
         if not dataloader.pass_date:
             result.data[dataloader.name] = (
                 dataloader.load(
@@ -94,3 +97,6 @@ class UserQueryResult(BaseQueryResult):
 
     def __post_init__(self) -> None:
         run_dataloader(self)
+
+
+QueryResults = t.Union[t.List["RepoQueryResult"], t.List["UserQueryResult"]]
