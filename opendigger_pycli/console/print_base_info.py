@@ -49,6 +49,11 @@ def print_user_info(
                 if "url" in key
             ]
         )
+
+    if not table.rows:
+        CONSOLE.print("[red i]No users info...[/]")
+        return
+
     CONSOLE.print(table)
 
 
@@ -87,6 +92,10 @@ def print_repo_info(
                 if "url" in key
             ]
         )
+
+    if not table.rows:
+        CONSOLE.print("[red i]No repos info...[/]")
+        return
 
     CONSOLE.print(table)
 
