@@ -5,7 +5,11 @@ from click.core import Context, Parameter
 from click.shell_completion import CompletionItem
 
 from opendigger_pycli.utils.checkers import exist_gh_repo, exist_gh_user
-from opendigger_pycli.dataloader import ProjectOpenRankNetworkRepoDataloader
+from opendigger_pycli.dataloader import (
+    ProjectOpenRankNetworkRepoDataloader,
+    DeveloperNetworkRepoDataloader,
+    RepoNetworkRepoDataloader,
+)
 from opendigger_pycli.datatypes import IndicatorQuery
 
 
@@ -195,17 +199,25 @@ class FilteredMetricQueryType(click.ParamType):
         indicator_name, indicator_query_str = self._try_split_value(value)
         if indicator_name not in ctx.meta["filtered_dataloaders"]:
             self.fail(
-                f"{indicator_name} is not a valid indicator name for filtered indicator info, \
-                METRIC_TYPES: {ctx.params['indicator_types']}, \
-                INTRODUCERS: {ctx.params['introducers']}"
+                f"{indicator_name} is not a valid indicator name for filtered indicator info, "
+                f"METRIC_TYPES: {ctx.params['indicator_types']}, "
+                f"INTRODUCERS: {ctx.params['introducers']}"
             )
         if indicator_query_str is None:
             if indicator_name == ProjectOpenRankNetworkRepoDataloader.name:
                 self.fail(
-                    f"{indicator_name} requires indicator query, \
-                    please use {indicator_name}:<indicator-queries>"
+                    f"{indicator_name} requires indicator query, "
+                    f"please use {indicator_name}:<indicator-queries>"
                 )
             return indicator_name, None
+        elif (
+            indicator_name == DeveloperNetworkRepoDataloader.name
+            or indicator_name == RepoNetworkRepoDataloader.name
+        ):
+            self.fail(
+                f"{indicator_name} does not support indicator query, "
+                f"please use {indicator_name} directly"
+            )
 
         indicator_query = self._try_parse_indicator_query(indicator_query_str)
         if indicator_query is None:
@@ -216,7 +228,6 @@ class FilteredMetricQueryType(click.ParamType):
     def shell_complete(
         self, ctx: "Context", param: "Parameter", incomplete: str
     ) -> t.List[CompletionItem]:
-        print(ctx)  # TODO: Why does autocompletion work after adding this?
         incomplete, query_str = self._try_split_value(incomplete)
         return [
             CompletionItem(
@@ -239,9 +250,9 @@ class IgnoredIndicatorNameType(click.ParamType):
         indicator_name = value
         if indicator_name not in ctx.meta["filtered_dataloaders"]:
             self.fail(
-                f"{indicator_name} is not a valid indicator name for filtered indicator info, \
-                METRIC_TYPES: {ctx.params['indicator_types']}, \
-                INTRODUCERS: {ctx.params['introducers']}"
+                f"{indicator_name} is not a valid indicator name for filtered indicator info, "
+                f"METRIC_TYPES: {ctx.params['indicator_types']}, "
+                f"INTRODUCERS: {ctx.params['introducers']}"
             )
 
         return indicator_name
@@ -249,7 +260,6 @@ class IgnoredIndicatorNameType(click.ParamType):
     def shell_complete(
         self, ctx: "Context", param: "Parameter", incomplete: str
     ) -> t.List[CompletionItem]:
-        print(ctx)  # TODO: Why does autocompletion work after adding this?
         return [
             CompletionItem(name)
             for name in ctx.meta["filtered_dataloaders"]
