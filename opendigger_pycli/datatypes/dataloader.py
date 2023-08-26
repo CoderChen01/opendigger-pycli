@@ -28,7 +28,7 @@ class DataloaderState(t.Generic[T]):
 class DataloaderProto(t.Protocol):
     name: t.ClassVar[str]
     pass_date: t.ClassVar[bool] = False
-    metric_type: t.ClassVar[
+    indicator_type: t.ClassVar[
         t.Literal["index", "metric", "network"]
     ]  # Specifies the type of indicator
     introducer: t.ClassVar[t.Literal["X-lab", "CHAOSS"]]

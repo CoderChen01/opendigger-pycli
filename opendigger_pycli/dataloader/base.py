@@ -13,7 +13,11 @@ DATALOADERS = t.TypedDict(
     index=t.Dict[str, t.List[t.Type["DataloaderProto"]]],
     metric=t.Dict[str, t.List[t.Type["DataloaderProto"]]],
     network=t.Dict[str, t.List[t.Type["DataloaderProto"]]],
-)(index=defaultdict(list), metric=defaultdict(list), network=defaultdict(list))
+)(
+    index=defaultdict(list),
+    metric=defaultdict(list),
+    network=defaultdict(list),
+)
 
 
 T = t.TypeVar("T")
@@ -26,7 +30,7 @@ def register_dataloader(
         t.Type["BaseOpenRankNetworkDataloader"],
     ]
 ):
-    DATALOADERS[cls.metric_type][cls.name].append(
+    DATALOADERS[cls.indicator_type][cls.name].append(
         t.cast(t.Type["DataloaderProto"], cls)
     )
     return cls
@@ -34,10 +38,10 @@ def register_dataloader(
 
 def filter_dataloader(
     types: t.Set[t.Literal["repo", "user"]],
-    metric_types: t.Set[t.Literal["index", "metric", "network"]],
+    indicator_types: t.Set[t.Literal["index", "metric", "network"]],
     introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
 ) -> t.Iterator["DataloaderProto"]:
-    metric_dicts: t.List[
+    indicator_dicts: t.List[
         t.Dict[str, t.List[t.Type["DataloaderProto"]]]
     ] = list(
         t.cast(
@@ -45,34 +49,36 @@ def filter_dataloader(
             DATALOADERS.values(),
         )
     )
-    metric_dataloaders = itertools.chain.from_iterable(
+    indicator_dataloaders = itertools.chain.from_iterable(
         itertools.chain.from_iterable(
             [
                 [
-                    metric_dataloader()
-                    for metric_dataloader in metric_dataloaders
+                    indicator_dataloader()
+                    for indicator_dataloader in indicator_dataloaders
                     if (
-                        metric_dataloader.type in types
-                        and not metric_types
-                        and metric_dataloader.introducer in introducers
+                        indicator_dataloader.type in types
+                        and not indicator_types
+                        and indicator_dataloader.introducer in introducers
                     )
                     or (
-                        metric_dataloader.type in types
-                        and metric_dataloader.metric_type in metric_types
+                        indicator_dataloader.type in types
+                        and indicator_dataloader.indicator_type
+                        in indicator_types
                         and not introducers
                     )
                     or (
-                        metric_dataloader.type in types
-                        and metric_dataloader.metric_type in metric_types
-                        and metric_dataloader.introducer in introducers
+                        indicator_dataloader.type in types
+                        and indicator_dataloader.indicator_type
+                        in indicator_types
+                        and indicator_dataloader.introducer in introducers
                     )
                 ]
-                for metric_dataloaders in metric_dict.values()
+                for indicator_dataloaders in indicator_dict.values()
             ]
-            for metric_dict in metric_dicts
+            for indicator_dict in indicator_dicts
         )
     )
-    return metric_dataloaders
+    return indicator_dataloaders
 
 
 class BaseRepoDataloader(abc.ABC):
@@ -80,7 +86,7 @@ class BaseRepoDataloader(abc.ABC):
     # which is different from the name field in datatypes
     name: t.ClassVar[str]
     pass_date: t.ClassVar[bool] = False
-    metric_type: t.ClassVar[
+    indicator_type: t.ClassVar[
         t.Literal["index", "metric", "network"]
     ]  # Specifies the type of indicator
     introducer: t.ClassVar[t.Literal["X-lab", "CHAOSS"]]
@@ -103,7 +109,7 @@ class BaseOpenRankNetworkDataloader(abc.ABC):
     # which is different from the name field in datatypes
     name: t.ClassVar[str]
     pass_date: t.ClassVar[bool] = False
-    metric_type: t.ClassVar[
+    indicator_type: t.ClassVar[
         t.Literal["network"]
     ] = "network"  # Specifies the type of indicator
     introducer: t.ClassVar[t.Literal["X-lab", "CHAOSS"]]
@@ -126,7 +132,7 @@ class BaseUserDataloader(abc.ABC):
     # which is different from the name field in datatypes
     name: t.ClassVar[str]
     pass_date: t.ClassVar[bool] = False
-    metric_type: t.ClassVar[
+    indicator_type: t.ClassVar[
         t.Literal["index", "network"]
     ]  # Specifies the type of indicator
     introducer: t.ClassVar[t.Literal["X-lab", "CHAOSS"]]

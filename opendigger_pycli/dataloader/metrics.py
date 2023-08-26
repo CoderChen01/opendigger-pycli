@@ -33,7 +33,7 @@ from .utils import (
     get_repo_data,
     load_base_data,
     load_name_and_value,
-    load_non_trival_metric_data,
+    load_non_trival_indicator_data,
 )
 
 if t.TYPE_CHECKING:
@@ -43,7 +43,7 @@ if t.TYPE_CHECKING:
 @register_dataloader
 class ActiveDateAndTimeRepoDataloader(BaseRepoDataloader):
     name = "active_date_and_time"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/active_dates_and_times.json"
 
@@ -71,7 +71,7 @@ class ActiveDateAndTimeRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class StarRepoDataloader(BaseRepoDataloader):
     name = "star"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/stars.json"
 
@@ -95,7 +95,7 @@ class StarRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class TechnicalForkRepoDataloader(BaseRepoDataloader):
     name = "technical_fork"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/technical_fork.json"
 
@@ -119,7 +119,7 @@ class TechnicalForkRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class ParticipantRepoDataloader(BaseRepoDataloader):
     name = "participant"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/participants.json"
 
@@ -143,7 +143,7 @@ class ParticipantRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class NewContributorRepoDataloader(BaseRepoDataloader):
     name = "new_contributor"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/new_contributors_detail.json"
 
@@ -170,7 +170,7 @@ class NewContributorRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class InactiveContributorRepoDataloader(BaseRepoDataloader):
     name = "inactive_contributor"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/inactive_contributors.json"
 
@@ -197,7 +197,7 @@ class InactiveContributorRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class BusFactorRepoDataloader(BaseRepoDataloader):
     name = "bus_factor"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/bus_factor_detail.json"
 
@@ -226,7 +226,7 @@ class BusFactorRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class NewIssueRepoDataloader(BaseRepoDataloader):
     name = "new_issue"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issues_new.json"
 
@@ -251,7 +251,7 @@ class NewIssueRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class ClosedIssueRepoDataloader(BaseRepoDataloader):
     name = "closed_issue"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issues_closed.json"
 
@@ -276,7 +276,7 @@ class ClosedIssueRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class IssueCommentRepoDataloader(BaseRepoDataloader):
     name = "issue_comment"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_comments.json"
 
@@ -301,7 +301,7 @@ class IssueCommentRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class IssueResponseTimeRepoDataloader(BaseRepoDataloader):
     name = "issue_response_time"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_response_time.json"
 
@@ -321,7 +321,7 @@ class IssueResponseTimeRepoDataloader(BaseRepoDataloader):
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=IssueResponseTimeData(
-                value=load_non_trival_metric_data(data)
+                value=load_non_trival_indicator_data(data)
             ),
             desc="",
         )
@@ -330,7 +330,7 @@ class IssueResponseTimeRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class IssueResolutionDurationRepoDataloader(BaseRepoDataloader):
     name = "issue_resolution_duration"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_resolution_duration.json"
 
@@ -350,7 +350,7 @@ class IssueResolutionDurationRepoDataloader(BaseRepoDataloader):
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=IssueResolutionDurationData(
-                value=load_non_trival_metric_data(data)
+                value=load_non_trival_indicator_data(data)
             ),
             desc="",
         )
@@ -359,7 +359,7 @@ class IssueResolutionDurationRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class IssueAgeRepoDataloader(BaseRepoDataloader):
     name = "issue_age"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_age.json"
 
@@ -377,7 +377,7 @@ class IssueAgeRepoDataloader(BaseRepoDataloader):
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=IssueAgeData(
-                value=load_non_trival_metric_data(data),
+                value=load_non_trival_indicator_data(data),
             ),
             desc="",
         )
@@ -386,7 +386,7 @@ class IssueAgeRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class AddedCodeChangeLineRepoDataloader(BaseRepoDataloader):
     name = "added_code_change_line"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/code_change_lines_add.json"
 
@@ -415,7 +415,7 @@ class AddedCodeChangeLineRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
     name = "removed_code_change_line"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/code_change_lines_remove.json"
 
@@ -444,7 +444,7 @@ class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class ChangeRequestRepoDataloader(BaseRepoDataloader):
     name = "change_request"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_requests.json"
 
@@ -471,7 +471,7 @@ class ChangeRequestRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class AcceptedChangeRequestRepoDataloader(BaseRepoDataloader):
     name = "accepted_change_request"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_requests_accepted.json"
 
@@ -500,7 +500,7 @@ class AcceptedChangeRequestRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class ChangeRequestReviewRepoDataloader(BaseRepoDataloader):
     name = "change_request_review"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_requests_reviews.json"
 
@@ -529,7 +529,7 @@ class ChangeRequestReviewRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class ChangeRequestResponseTimeRepoDataloader(BaseRepoDataloader):
     name = "change_request_response_time"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_request_response_time.json"
 
@@ -549,7 +549,7 @@ class ChangeRequestResponseTimeRepoDataloader(BaseRepoDataloader):
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestResponseTimeData(
-                value=load_non_trival_metric_data(data),
+                value=load_non_trival_indicator_data(data),
             ),
             desc="",
         )
@@ -558,7 +558,7 @@ class ChangeRequestResponseTimeRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class ChangeRequestResolutionDurationRepoDataloader(BaseRepoDataloader):
     name = "change_request_resolution_duration"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_request_resolution_duration.json"
 
@@ -580,7 +580,7 @@ class ChangeRequestResolutionDurationRepoDataloader(BaseRepoDataloader):
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestResolutionDurationData(
-                value=load_non_trival_metric_data(data),
+                value=load_non_trival_indicator_data(data),
             ),
             desc="",
         )
@@ -589,7 +589,7 @@ class ChangeRequestResolutionDurationRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class ChangeRequestAgeRepoDataloader(BaseRepoDataloader):
     name = "change_request_age"
-    metric_type = "metric"
+    indicator_type = "metric"
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_request_age.json"
 
@@ -609,7 +609,7 @@ class ChangeRequestAgeRepoDataloader(BaseRepoDataloader):
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestAgeData(
-                value=load_non_trival_metric_data(data),
+                value=load_non_trival_indicator_data(data),
             ),
             desc="",
         )

@@ -8,7 +8,7 @@ from opendigger_pycli.datatypes import BaseRepoResult, BaseUserResult
 
 
 if t.TYPE_CHECKING:
-    from opendigger_pycli.datatypes import MetricQuery
+    from opendigger_pycli.datatypes import IndicatorQuery
 
 
 @t.overload
@@ -40,19 +40,19 @@ def run_dataloader(result) -> None:
                 else dataloader.load(result.username)
             )
             continue
-        current_metric_queries = [
-            metric_query[1]
-            for metric_query in result.metric_queries
-            if metric_query[0] == dataloader.name
-            and metric_query[1] is not None
+        current_indicator_queries = [
+            indicator_query[1]
+            for indicator_query in result.indicator_queries
+            if indicator_query[0] == dataloader.name
+            and indicator_query[1] is not None
         ]
         # For indicators that do not specify a query and need to pass in a date query, ignore it directly
-        if not current_metric_queries:
+        if not current_indicator_queries:
             continue
 
         current_year = datetime.date.today().year
         dates = set()
-        for query in current_metric_queries:
+        for query in current_indicator_queries:
             for month in query.months:
                 dates.add((current_year, month))
             for year in query.years:
@@ -70,7 +70,7 @@ def run_dataloader(result) -> None:
 
 @dataclass
 class QueryRepoResult(BaseRepoResult):
-    metric_queries: t.List[t.Tuple[str, t.Optional["MetricQuery"]]]
+    indicator_queries: t.List[t.Tuple[str, t.Optional["IndicatorQuery"]]]
 
     def __post_init__(self) -> None:
         super().__post_init__()
@@ -79,7 +79,7 @@ class QueryRepoResult(BaseRepoResult):
 
 @dataclass
 class QueryUserResult(BaseUserResult):
-    metric_queries: t.List[t.Tuple[str, t.Optional["MetricQuery"]]]
+    indicator_queries: t.List[t.Tuple[str, t.Optional["IndicatorQuery"]]]
 
     def __post_init__(self) -> None:
         super().__post_init__()

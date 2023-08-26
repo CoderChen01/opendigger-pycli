@@ -25,7 +25,7 @@ if t.TYPE_CHECKING:
 @register_dataloader
 class OpenRankRepoDataloader(BaseRepoDataloader):
     name = "openrank"
-    metric_type = "index"
+    indicator_type = "index"
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/openrank.json"
 
@@ -49,7 +49,7 @@ class OpenRankRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class ActivityRepoDataloader(BaseRepoDataloader):
     name = "activity"
-    metric_type = "index"
+    indicator_type = "index"
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/activity.json"
 
@@ -77,7 +77,7 @@ class ActivityRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class AttentionRepoDataloader(BaseRepoDataloader):
     name = "attention"
-    metric_type = "index"
+    indicator_type = "index"
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/attention.json"
 
@@ -103,7 +103,7 @@ class AttentionRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class OpenRankUserDataLoader(BaseUserDataloader):
     name = "openrank"
-    metric_type = "index"
+    indicator_type = "index"
     introducer = "X-lab"
     demo_url = (
         "https://oss.x-lab.info/open_digger/github/frank-zsy/openrank.json"
@@ -129,7 +129,7 @@ class OpenRankUserDataLoader(BaseUserDataloader):
 @register_dataloader
 class ActivityUserDataLoader(BaseUserDataloader):
     name = "activity"
-    metric_type = "index"
+    indicator_type = "index"
     introducer = "X-lab"
     demo_url = (
         "https://oss.x-lab.info/open_digger/github/frank-zsy/activity.json"

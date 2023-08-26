@@ -9,7 +9,7 @@ from opendigger_pycli.console import CONSOLE
 
 
 if t.TYPE_CHECKING:
-    from opendigger_pycli.results.query import QueryRepoResult, QueryUserResult
+    from opendigger_pycli.datatypes.dataloader import DataloaderProto
 
 
 class Environment:
@@ -60,35 +60,3 @@ class Environment:
         self, params: t.Union[t.List[t.Tuple[str, str]], t.List[str]]
     ) -> None:
         self.params = params
-
-    def add_query_results(
-        self,
-        results: t.Union[t.List["QueryRepoResult"], t.List["QueryUserResult"]],
-    ) -> None:
-        """
-        Use Context's meta to share Query Result data between different commands
-        """
-        if not results:
-            return
-        if results[0].type == "repo":
-            click.get_current_context().meta[
-                "opendigger.repo.query.results"
-            ] = results
-        else:
-            click.get_current_context().meta[
-                "opendigger.user.query.results"
-            ] = results
-
-    def get_query_results(
-        self,
-    ) -> t.Optional[
-        t.Union[t.List["QueryRepoResult"], t.List["QueryUserResult"]]
-    ]:
-        """
-        Get Query Result data from Context's meta
-        """
-        return click.get_current_context().meta.get(
-            "opendigger.repo.query.results"
-        ) or click.get_current_context().meta.get(
-            "opendigger.user.query.results"
-        )

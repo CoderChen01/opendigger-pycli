@@ -3,7 +3,7 @@ import typing as t
 
 
 @dataclass(frozen=True)
-class MetricQuery:
+class IndicatorQuery:
     months: t.FrozenSet[int] = field(default_factory=frozenset)
     years: t.FrozenSet[int] = field(default_factory=frozenset)
     year_months: t.FrozenSet[t.Tuple[int, int]] = field(

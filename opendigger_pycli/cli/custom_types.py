@@ -6,7 +6,7 @@ from click.shell_completion import CompletionItem
 
 from opendigger_pycli.utils.checkers import exist_gh_repo, exist_gh_user
 from opendigger_pycli.dataloader import ProjectOpenRankNetworkRepoDataloader
-from opendigger_pycli.datatypes import MetricQuery
+from opendigger_pycli.datatypes import IndicatorQuery
 
 
 if t.TYPE_CHECKING:
@@ -51,13 +51,13 @@ class GhUserNameType(click.ParamType):
 
 
 class FilteredMetricQueryType(click.ParamType):
-    name: t.ClassVar[str] = "metric_query"
+    name: t.ClassVar[str] = "indicator_query"
 
     def _try_split_value(self, value: str) -> t.Tuple[str, t.Optional[str]]:
         value = value.strip()
         try:
-            metric_name, metric_query = value.split(":", 1)
-            return metric_name.strip(), metric_query.strip()
+            indicator_name, indicator_query = value.split(":", 1)
+            return indicator_name.strip(), indicator_query.strip()
         except ValueError:
             return value, None
 
@@ -152,15 +152,15 @@ class FilteredMetricQueryType(click.ParamType):
             except ValueError:
                 return None
 
-    def _try_parse_metric_query(
-        self, metric_query: str
-    ) -> t.Optional[MetricQuery]:
+    def _try_parse_indicator_query(
+        self, indicator_query: str
+    ) -> t.Optional[IndicatorQuery]:
         all_months = set()
         all_years = set()
         all_year_months = set()
 
-        metric_query = metric_query.strip()
-        items = metric_query.split(",")
+        indicator_query = indicator_query.strip()
+        items = indicator_query.split(",")
         for item in items:
             months = self._try_parse_month(item)
             if months is not None:
@@ -175,12 +175,12 @@ class FilteredMetricQueryType(click.ParamType):
                 all_year_months.update(year_months)
                 continue
             if not months and not years and not year_months:
-                self.fail(f"{item} is not a valid metric query")
+                self.fail(f"{item} is not a valid indicator query")
 
         if not all_months and not all_years and not all_year_months:
             return None
 
-        return MetricQuery(
+        return IndicatorQuery(
             months=frozenset(all_months),
             years=frozenset(all_years),
             year_months=frozenset(all_year_months),
@@ -191,32 +191,32 @@ class FilteredMetricQueryType(click.ParamType):
         value: str,
         param: "Parameter",
         ctx: "Context",
-    ) -> t.Tuple[str, t.Optional[MetricQuery]]:
-        metric_name, metric_query_str = self._try_split_value(value)
+    ) -> t.Tuple[str, t.Optional[IndicatorQuery]]:
+        indicator_name, indicator_query_str = self._try_split_value(value)
         if (
-            metric_name
+            indicator_name
             not in ctx.meta[
                 f"opendigger_pycli.cli.query_cmd.filtered_dataloaders"
             ]
         ):
             self.fail(
-                f"{metric_name} is not a valid metric name for filtered metric info, \
-                METRIC_TYPES: {ctx.params['metric_types']}, \
+                f"{indicator_name} is not a valid indicator name for filtered indicator info, \
+                METRIC_TYPES: {ctx.params['indicator_types']}, \
                 INTRODUCERS: {ctx.params['introducers']}"
             )
-        if metric_query_str is None:
-            if metric_name == ProjectOpenRankNetworkRepoDataloader.name:
+        if indicator_query_str is None:
+            if indicator_name == ProjectOpenRankNetworkRepoDataloader.name:
                 self.fail(
-                    f"{metric_name} requires metric query, \
-                    please use {metric_name}:<metric-queries>"
+                    f"{indicator_name} requires indicator query, \
+                    please use {indicator_name}:<indicator-queries>"
                 )
-            return metric_name, None
+            return indicator_name, None
 
-        metric_query = self._try_parse_metric_query(metric_query_str)
-        if metric_query is None:
-            self.fail(f"{metric_query_str} is not a valid metric query")
+        indicator_query = self._try_parse_indicator_query(indicator_query_str)
+        if indicator_query is None:
+            self.fail(f"{indicator_query_str} is not a valid indicator query")
 
-        return metric_name, metric_query
+        return indicator_name, indicator_query
 
     def shell_complete(
         self, ctx: "Context", param: "Parameter", incomplete: str
@@ -234,7 +234,7 @@ class FilteredMetricQueryType(click.ParamType):
 
 
 class IgnoredMetricNameType(click.ParamType):
-    name: t.ClassVar[str] = "ignored_metric_names"
+    name: t.ClassVar[str] = "ignored_indicator_names"
 
     def convert(
         self,
@@ -242,20 +242,20 @@ class IgnoredMetricNameType(click.ParamType):
         param: "Parameter",
         ctx: "Context",
     ) -> str:
-        metric_name = value
+        indicator_name = value
         if (
-            metric_name
+            indicator_name
             not in ctx.meta[
                 f"opendigger_pycli.cli.query_cmd.filtered_dataloaders"
             ]
         ):
             self.fail(
-                f"{metric_name} is not a valid metric name for filtered metric info, \
-                METRIC_TYPES: {ctx.params['metric_types']}, \
+                f"{indicator_name} is not a valid indicator name for filtered indicator info, \
+                METRIC_TYPES: {ctx.params['indicator_types']}, \
                 INTRODUCERS: {ctx.params['introducers']}"
             )
 
-        return metric_name
+        return indicator_name
 
     def shell_complete(
         self, ctx: "Context", param: "Parameter", incomplete: str

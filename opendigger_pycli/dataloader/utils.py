@@ -21,24 +21,24 @@ T = t.TypeVar("T")
 def get_repo_data(
     org: str,
     repo: str,
-    metric_name: str,
+    indicator_name: str,
     date: t.Optional[t.Tuple[int, int]] = None,
 ) -> t.Optional[t.Dict]:
     if date is not None:
         year, month = date
-        url = (
-            f"{BASE_API_URL}{org}/{repo}/{metric_name}/{year}-{month:02}.json"
-        )
+        url = f"{BASE_API_URL}{org}/{repo}/{indicator_name}/{year}-{month:02}.json"
     else:
-        url = f"{BASE_API_URL}{org}/{repo}/{metric_name}.json"
+        url = f"{BASE_API_URL}{org}/{repo}/{indicator_name}.json"
     r = requests.get(url)
     if r.status_code != 200:
         return None
     return r.json()
 
 
-def get_developer_data(username: str, metric_name: str) -> t.Optional[t.Dict]:
-    url = f"{BASE_API_URL}{username}/{metric_name}.json"
+def get_developer_data(
+    username: str, indicator_name: str
+) -> t.Optional[t.Dict]:
+    url = f"{BASE_API_URL}{username}/{indicator_name}.json"
     r = requests.get(url)
     if r.status_code != 200:
         return None
@@ -102,7 +102,7 @@ def load_quantile_data(data: t.Dict[str, t.Any]) -> t.List[BaseData[float]]:
     return load_base_data(data, float)
 
 
-def load_non_trival_metric_data(
+def load_non_trival_indicator_data(
     data: t.Dict[str, t.Any]
 ) -> NonTrivialMetricDict:
     return NonTrivialMetricDict(

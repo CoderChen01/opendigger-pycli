@@ -28,7 +28,7 @@ if t.TYPE_CHECKING:
 @register_dataloader
 class DeveloperNetworkRepoDataloader(BaseRepoDataloader):
     name = "developer_network"
-    metric_type = "network"
+    indicator_type = "network"
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/developer_network.json"
 
@@ -54,7 +54,7 @@ class DeveloperNetworkRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class RepoNetworkRepoDataloader(BaseRepoDataloader):
     name = "repo_network"
-    metric_type = "network"
+    indicator_type = "network"
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/repo_network.json"
 
@@ -78,7 +78,7 @@ class RepoNetworkRepoDataloader(BaseRepoDataloader):
 @register_dataloader
 class ProjectOpenRankNetworkRepoDataloader(BaseOpenRankNetworkDataloader):
     name = "project_openrank_detail"
-    metric_type = "network"
+    indicator_type = "network"
     type = "repo"
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/project_openrank_detail/2022-12.json"
@@ -118,7 +118,7 @@ class ProjectOpenRankNetworkRepoDataloader(BaseOpenRankNetworkDataloader):
 @register_dataloader
 class DeveloperNetworkUserDataloader(BaseUserDataloader):
     name = "developer_network"
-    metric_type = "network"
+    indicator_type = "network"
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/frank-zsy/developer_network.json"
 
@@ -142,7 +142,7 @@ class DeveloperNetworkUserDataloader(BaseUserDataloader):
 @register_dataloader
 class RepoNetworkUserDataloader(BaseUserDataloader):
     name = "repo_network"
-    metric_type = "network"
+    indicator_type = "network"
     introducer = "X-lab"
     demo_url = (
         "https://oss.x-lab.info/open_digger/github/frank-zsy/repo_network.json"

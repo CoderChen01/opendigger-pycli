@@ -91,9 +91,9 @@ def print_repo_info(
     CONSOLE.print(table)
 
 
-def print_metric_info(
+def print_indicator_info(
     mode: t.Literal["user", "repo"],
-    metric_types: t.Set[t.Literal["index", "metric", "network"]],
+    indicator_types: t.Set[t.Literal["index", "metric", "network"]],
     introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
 ):
     table = Table(
@@ -104,12 +104,14 @@ def print_metric_info(
     table.add_column("Introducer", overflow="fold")
     table.add_column("Demo URL", overflow="fold")
 
-    metric_dataloaders = filter_dataloader({mode}, metric_types, introducers)
-    for metric_dataloader in metric_dataloaders:
+    indicator_dataloaders = filter_dataloader(
+        {mode}, indicator_types, introducers
+    )
+    for indicator_dataloader in indicator_dataloaders:
         table.add_row(
-            f"{metric_dataloader.metric_type}/{metric_dataloader.name}",
-            metric_dataloader.introducer,
-            f"[link={metric_dataloader.demo_url}]{metric_dataloader.demo_url}[/link]",
+            f"{indicator_dataloader.indicator_type}/{indicator_dataloader.name}",
+            indicator_dataloader.introducer,
+            f"[link={indicator_dataloader.demo_url}]{indicator_dataloader.demo_url}[/link]",
         )
 
     if table.rows:

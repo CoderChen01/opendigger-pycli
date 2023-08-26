@@ -41,4 +41,4 @@ from .networks import (
 )
 from .result import BaseUserResult, BaseRepoResult
 from .dataloader import DataloaderProto, DataloaderState
-from .query import MetricQuery
+from .query import IndicatorQuery
