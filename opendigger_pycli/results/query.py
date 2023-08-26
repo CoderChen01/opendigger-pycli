@@ -10,20 +10,20 @@ if t.TYPE_CHECKING:
 
 
 @t.overload
-def run_dataloader(result: "QueryRepoResult") -> None:
+def run_dataloader(result: "RepoQueryResult") -> None:
     ...
 
 
 @t.overload
-def run_dataloader(result: "QueryUserResult") -> None:
+def run_dataloader(result: "UserQueryResult") -> None:
     ...
 
 
 def run_dataloader(result) -> None:
-    if not isinstance(result, QueryRepoResult) and not isinstance(
-        result, QueryUserResult
+    if not isinstance(result, RepoQueryResult) and not isinstance(
+        result, UserQueryResult
     ):
-        raise TypeError("result must be QueryRepoResult or QueryUserResult")
+        raise TypeError("result must be RepoQueryResult or UserQueryResult")
 
     for dataloader in track(
         result.dataloaders, description="Fecthing data..."
@@ -34,7 +34,7 @@ def run_dataloader(result) -> None:
                     result.org_name,
                     result.repo_name,
                 )
-                if isinstance(result, QueryRepoResult)
+                if isinstance(result, RepoQueryResult)
                 else dataloader.load(result.username)
             )
             continue
@@ -61,7 +61,7 @@ def run_dataloader(result) -> None:
 
         result.data[dataloader.name] = (
             dataloader.load(result.org_name, result.repo_name, list(dates))
-            if isinstance(result, "QueryRepoResult")
+            if isinstance(result, "RepoQueryResult")
             else dataloader.load(result.username, list(dates))
         )
 
@@ -69,12 +69,12 @@ def run_dataloader(result) -> None:
 @dataclass
 class BaseQueryResult:
     type: t.ClassVar[t.Literal["user", "repo"]]
-    dataloaders: t.List[DataloaderProto]
+    dataloaders: t.List["DataloaderProto"]
     data: t.Dict[str, t.Any] = field(default_factory=dict, init=False)
 
 
 @dataclass
-class QueryRepoResult(BaseQueryResult):
+class RepoQueryResult(BaseQueryResult):
     type: t.ClassVar[t.Literal["repo"]] = "repo"
     repo: t.Tuple[str, str]
     org_name: str = field(init=False)
@@ -82,11 +82,12 @@ class QueryRepoResult(BaseQueryResult):
     indicator_queries: t.List[t.Tuple[str, t.Optional["IndicatorQuery"]]]
 
     def __post_init__(self) -> None:
+        self.org_name, self.repo_name = self.repo
         run_dataloader(self)
 
 
 @dataclass
-class QueryUserResult(BaseQueryResult):
+class UserQueryResult(BaseQueryResult):
     type: t.ClassVar[t.Literal["user"]] = "user"
     username: str
     indicator_queries: t.List[t.Tuple[str, t.Optional["IndicatorQuery"]]]

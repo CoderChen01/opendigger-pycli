@@ -7,7 +7,7 @@ from opendigger_pycli.console.print_base_info import (
     print_user_info,
 )
 from opendigger_pycli.console import CONSOLE
-from opendigger_pycli.results.query import QueryRepoResult, QueryUserResult
+from opendigger_pycli.results.query import RepoQueryResult, UserQueryResult
 from opendigger_pycli.console.print_base_info import print_indicator_info
 from opendigger_pycli.utils.decorators import (
     process_commands,
@@ -277,7 +277,7 @@ def process_query_results(
         usernames = t.cast(t.List[str], env.params)
         # build result
         results = [
-            QueryUserResult(
+            UserQueryResult(
                 username=username,
                 dataloaders=dataloaders,
                 indicator_queries=selected_indicator_queries,
@@ -289,7 +289,7 @@ def process_query_results(
     repos = t.cast(t.List[t.Tuple[str, str]], env.params)
     # build result
     results = [
-        QueryRepoResult(
+        RepoQueryResult(
             repo=repo,
             dataloaders=dataloaders,
             indicator_queries=selected_indicator_queries,
