@@ -3,14 +3,16 @@ from collections import defaultdict
 import itertools
 import typing as t
 
-from opendigger_pycli.datatypes import DataloaderState, DataloaderProto
+
+if t.TYPE_CHECKING:
+    from opendigger_pycli.datatypes import DataloaderProto
 
 
 DATALOADERS = t.TypedDict(
     "DATALOADERS",
-    index=t.Dict[str, t.List[t.Type[DataloaderProto]]],
-    metric=t.Dict[str, t.List[t.Type[DataloaderProto]]],
-    network=t.Dict[str, t.List[t.Type[DataloaderProto]]],
+    index=t.Dict[str, t.List[t.Type["DataloaderProto"]]],
+    metric=t.Dict[str, t.List[t.Type["DataloaderProto"]]],
+    network=t.Dict[str, t.List[t.Type["DataloaderProto"]]],
 )(index=defaultdict(list), metric=defaultdict(list), network=defaultdict(list))
 
 
@@ -25,7 +27,7 @@ def register_dataloader(
     ]
 ):
     DATALOADERS[cls.metric_type][cls.name].append(
-        t.cast(t.Type[DataloaderProto], cls)
+        t.cast(t.Type["DataloaderProto"], cls)
     )
     return cls
 
@@ -34,8 +36,10 @@ def filter_dataloader(
     types: t.Set[t.Literal["repo", "user"]],
     metric_types: t.Set[t.Literal["index", "metric", "network"]],
     introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
-) -> t.Iterator[DataloaderProto]:
-    metric_dicts: t.List[t.Dict[str, t.List[t.Type[DataloaderProto]]]] = list(
+) -> t.Iterator["DataloaderProto"]:
+    metric_dicts: t.List[
+        t.Dict[str, t.List[t.Type["DataloaderProto"]]]
+    ] = list(
         t.cast(
             t.ValuesView,
             DATALOADERS.values(),
@@ -87,7 +91,7 @@ class BaseRepoDataloader(abc.ABC):
         super().__init__()
 
     @abc.abstractmethod
-    def load(self, org: str, repo: str) -> DataloaderState[T]:
+    def load(self, org: str, repo: str):
         pass
 
     def __repr__(self) -> str:
@@ -110,7 +114,7 @@ class BaseOpenRankNetworkDataloader(abc.ABC):
         super().__init__()
 
     @abc.abstractmethod
-    def load(self, org: str, repo: str, dates: t.List[str]):
+    def load(self, org: str, repo: str, dates: t.List[t.Tuple[int, int]]):
         pass
 
     def __repr__(self) -> str:

@@ -1,13 +1,4 @@
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    List,
-    Optional,
-    Tuple,
-    TypeVar,
-    TypedDict,
-)
+import typing as t
 
 import requests
 
@@ -24,14 +15,20 @@ from opendigger_pycli.datatypes import (
 
 BASE_API_URL = "https://oss.x-lab.info/open_digger/github/"
 
-T = TypeVar("T")
+T = t.TypeVar("T")
 
 
 def get_repo_data(
-    org: str, repo: str, metric_name: str, date: Optional[str] = None
-) -> Optional[Dict]:
+    org: str,
+    repo: str,
+    metric_name: str,
+    date: t.Optional[t.Tuple[int, int]] = None,
+) -> t.Optional[t.Dict]:
     if date is not None:
-        url = f"{BASE_API_URL}{org}/{repo}/{metric_name}/{date}.json"
+        year, month = date
+        url = (
+            f"{BASE_API_URL}{org}/{repo}/{metric_name}/{year}-{month:02}.json"
+        )
     else:
         url = f"{BASE_API_URL}{org}/{repo}/{metric_name}.json"
     r = requests.get(url)
@@ -40,7 +37,7 @@ def get_repo_data(
     return r.json()
 
 
-def get_developer_data(username: str, metric_name: str) -> Optional[Dict]:
+def get_developer_data(username: str, metric_name: str) -> t.Optional[t.Dict]:
     url = f"{BASE_API_URL}{username}/{metric_name}.json"
     r = requests.get(url)
     if r.status_code != 200:
@@ -49,8 +46,8 @@ def get_developer_data(username: str, metric_name: str) -> Optional[Dict]:
 
 
 def load_base_data(
-    data: Dict[str, Any], load_value: Callable
-) -> List[BaseData]:
+    data: t.Dict[str, t.Any], load_value: t.Callable
+) -> t.List[BaseData]:
     base_data_list = []
 
     for date, value in data.items():
@@ -81,29 +78,33 @@ def load_base_data(
     return base_data_list
 
 
-def load_name_and_value(data: Tuple[str, float]) -> NameAndValue:
+def load_name_and_value(data: t.Tuple[str, float]) -> NameAndValue:
     name, value = data
     return NameAndValue(name=name, value=value)
 
 
-def load_name_name_and_value(data: Tuple[str, str, float]) -> NameNameAndValue:
+def load_name_name_and_value(
+    data: t.Tuple[str, str, float]
+) -> NameNameAndValue:
     name0, name1, value = data
     return NameNameAndValue(name0=name0, name1=name1, value=value)
 
 
-def load_avg_data(data: Dict[str, Any]) -> List[BaseData[float]]:
+def load_avg_data(data: t.Dict[str, t.Any]) -> t.List[BaseData[float]]:
     return load_base_data(data, float)
 
 
-def load_level_data(data: Dict[str, Any]) -> List[BaseData[List[int]]]:
+def load_level_data(data: t.Dict[str, t.Any]) -> t.List[BaseData[t.List[int]]]:
     return load_base_data(data, lambda x: [int(i) for i in x])
 
 
-def load_quantile_data(data: Dict[str, Any]) -> List[BaseData[float]]:
+def load_quantile_data(data: t.Dict[str, t.Any]) -> t.List[BaseData[float]]:
     return load_base_data(data, float)
 
 
-def load_non_trival_metric_data(data: Dict[str, Any]) -> NonTrivialMetricDict:
+def load_non_trival_metric_data(
+    data: t.Dict[str, t.Any]
+) -> NonTrivialMetricDict:
     return NonTrivialMetricDict(
         avg=load_avg_data(data["avg"]),
         levels=load_level_data(data["levels"]),
@@ -116,7 +117,7 @@ def load_non_trival_metric_data(data: Dict[str, Any]) -> NonTrivialMetricDict:
 
 
 def load_openrank_network_data(
-    data: Dict[str, List],
+    data: t.Dict[str, t.List],
 ) -> BaseNetworkData[
     ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict
 ]:
@@ -126,7 +127,7 @@ def load_openrank_network_data(
 
 
 def load_network_data(
-    data: Dict[str, List]
+    data: t.Dict[str, t.List]
 ) -> BaseNetworkData[NameAndValue, NameNameAndValue]:
     nodes = data["nodes"]
     edges = data["edges"]

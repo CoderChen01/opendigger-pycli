@@ -5,13 +5,13 @@ from opendigger_pycli.datatypes import (
     DeveloperNetworkData,
     ProjectOpenRankNetworkData,
     RepoNetworkData,
+    DataloaderState,
 )
 
 from .base import (
     BaseOpenRankNetworkDataloader,
     BaseRepoDataloader,
     BaseUserDataloader,
-    DataloaderState,
     register_dataloader,
 )
 from .utils import (
@@ -36,11 +36,13 @@ class DeveloperNetworkRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
+                dataloader_name=self.__class__.__name__,
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
+            dataloader_name=self.__class__.__name__,
             data=DeveloperNetworkData(value=load_network_data(data)),
             desc="",
         )
@@ -58,11 +60,13 @@ class RepoNetworkRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
+                dataloader_name=self.__class__.__name__,
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
+            dataloader_name=self.__class__.__name__,
             data=RepoNetworkData(value=load_network_data(data)),
             desc="",
         )
@@ -78,7 +82,7 @@ class ProjectOpenRankNetworkRepoDataloader(BaseOpenRankNetworkDataloader):
     pass_date = True
 
     def load(
-        self, org: str, repo: str, dates: t.List[str]
+        self, org: str, repo: str, dates: t.List[t.Tuple[int, int]]
     ) -> DataloaderState[ProjectOpenRankNetworkData]:
         values = []
         for date in dates:
@@ -88,10 +92,11 @@ class ProjectOpenRankNetworkRepoDataloader(BaseOpenRankNetworkDataloader):
             if data is None:
                 return DataloaderState(
                     is_success=False,
+                    dataloader_name=self.__class__.__name__,
                     data=None,
                     desc="Cannot find data for this indicator",
                 )
-            year, month = date.split("-")[:2]
+            year, month = date
             values.append(
                 BaseData(
                     year=int(year),
@@ -101,6 +106,7 @@ class ProjectOpenRankNetworkRepoDataloader(BaseOpenRankNetworkDataloader):
             )
         return DataloaderState(
             is_success=True,
+            dataloader_name=self.__class__.__name__,
             data=ProjectOpenRankNetworkData(value=values),
             desc="",
         )
@@ -118,11 +124,13 @@ class DeveloperNetworkUserDataloader(BaseUserDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
+                dataloader_name=self.__class__.__name__,
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
+            dataloader_name=self.__class__.__name__,
             data=DeveloperNetworkData(value=load_network_data(data)),
             desc="",
         )
@@ -142,11 +150,13 @@ class RepoNetworkUserDataloader(BaseUserDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
+                dataloader_name=self.__class__.__name__,
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
+            dataloader_name=self.__class__.__name__,
             data=RepoNetworkData(value=load_network_data(data)),
             desc="",
         )

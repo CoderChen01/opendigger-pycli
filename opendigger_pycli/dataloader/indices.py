@@ -2,12 +2,11 @@ from opendigger_pycli.datatypes import (
     ActivityData,
     AttentionData,
     OpenRankData,
+    DataloaderState,
 )
-
 from .base import (
     BaseRepoDataloader,
     BaseUserDataloader,
-    DataloaderState,
     register_dataloader,
 )
 from .utils import (
@@ -30,11 +29,13 @@ class OpenRankRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
+                dataloader_name=self.__class__.__name__,
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
+            dataloader_name=self.__class__.__name__,
             data=OpenRankData(value=load_base_data(data, float)),
             desc="",
         )
@@ -52,11 +53,13 @@ class ActivityRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
+                dataloader_name=self.__class__.__name__,
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
+            dataloader_name=self.__class__.__name__,
             data=ActivityData(
                 value=load_base_data(
                     data, lambda x: [load_name_and_value(i) for i in x]
@@ -78,11 +81,13 @@ class AttentionRepoDataloader(BaseRepoDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
+                dataloader_name=self.__class__.__name__,
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
+            dataloader_name=self.__class__.__name__,
             data=AttentionData(
                 value=load_base_data(data, int),
             ),
@@ -104,11 +109,13 @@ class OpenRankUserDataLoader(BaseUserDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
+                dataloader_name=self.__class__.__name__,
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
+            dataloader_name=self.__class__.__name__,
             data=OpenRankData(value=load_base_data(data, float)),
             desc="",
         )
@@ -128,11 +135,13 @@ class ActivityUserDataLoader(BaseUserDataloader):
         if data is None:
             return DataloaderState(
                 is_success=False,
+                dataloader_name=self.__class__.__name__,
                 data=None,
                 desc="Cannot find data for this indicator",
             )
         return DataloaderState(
             is_success=True,
+            dataloader_name=self.__class__.__name__,
             data=ActivityData(
                 value=load_base_data(
                     data, lambda x: [load_name_and_value(i) for i in x]
