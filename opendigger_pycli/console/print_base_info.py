@@ -1,7 +1,7 @@
 import typing as t
-import itertools
 
 from rich.table import Table
+from rich import box
 
 from opendigger_pycli.utils.gtihub_api import (
     REPO_INFO_DICT,
@@ -17,7 +17,7 @@ from . import CONSOLE
 def print_user_info(
     usernames: t.List[str], github_pat: t.Optional[str] = None
 ):
-    table = Table(show_lines=True)
+    table = Table(box=box.HORIZONTALS)
 
     name_map = {}
     for key in USER_INFO_DICT.__annotations__.keys():
@@ -35,15 +35,27 @@ def print_user_info(
             CONSOLE.print(
                 f"[red]fail to request user [green]{user_info['username']}[/] [red]info![/]"
             )
-        table.add_row(*[str(user_info[name_map[key]]) for key in name_map])
-
+        table.add_row(
+            *[
+                str(user_info[name_map[key]])
+                for key in name_map
+                if "url" not in key
+            ]
+        )
+        table.add_row(
+            *[
+                f"[link={user_info[name_map[key]]}]{user_info[name_map[key]]}[/link]"
+                for key in name_map
+                if "url" in key
+            ]
+        )
     CONSOLE.print(table)
 
 
 def print_repo_info(
     repos: t.List[t.Tuple[str, str]], github_pat: t.Optional[str] = None
 ):
-    table = Table(show_lines=True)
+    table = Table(box=box.HORIZONTALS)
 
     name_map = {}
     for key in REPO_INFO_DICT.__annotations__.keys():
@@ -61,7 +73,20 @@ def print_repo_info(
             CONSOLE.print(
                 f"[red]fail to request repo [green]{repo_info['repository']}[/] [red]info![/]"
             )
-        table.add_row(*[str(repo_info[name_map[key]]) for key in name_map])
+        table.add_row(
+            *[
+                str(repo_info[name_map[key]])
+                for key in name_map
+                if "url" not in key
+            ]
+        )
+        table.add_row(
+            *[
+                f"[link={repo_info[name_map[key]]}]{repo_info[name_map[key]]}[/link]"
+                for key in name_map
+                if "url" in key
+            ]
+        )
 
     CONSOLE.print(table)
 
@@ -73,7 +98,7 @@ def print_metric_info(
 ):
     table = Table(
         title="[green]Current Query Supporting Indicators[/]",
-        show_lines=True,
+        box=box.HORIZONTALS,
     )
     table.add_column("Type/Name", overflow="fold")
     table.add_column("Introducer", overflow="fold")
@@ -84,7 +109,7 @@ def print_metric_info(
         table.add_row(
             f"{metric_dataloader.metric_type}/{metric_dataloader.name}",
             metric_dataloader.introducer,
-            metric_dataloader.demo_url,
+            f"[link={metric_dataloader.demo_url}]{metric_dataloader.demo_url}[/link]",
         )
 
     if table.rows:
