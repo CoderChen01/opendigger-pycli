@@ -1,12 +1,20 @@
 from .base import (
-    AvgData,
+    AvgDataType,
     BaseData,
     BaseNetworkData,
-    LevelData,
+    LevelDataType,
     NameAndValue,
     NameNameAndValue,
     NonTrivialIndicatorDict,
-    QuantileData,
+    QuantileDataType,
+    NON_TRIVAL_NETWORK_INDICATOR_DATA,
+    NON_TRIVIAL_INDICATOR_DATA,
+    TRIVIAL_NETWORK_INDICATOR_DATA,
+    TRIVIAL_INDICATOR_DATA,
+    TrivialIndicatorData,
+    NonTrivalIndicatorData,
+    TrivialNetworkIndicatorData,
+    NonTrivalNetworkInciatorData,
 )
 from .indices import ActivityData, AttentionData, OpenRankData
 from .metrics import (
@@ -39,5 +47,5 @@ from .networks import (
     ProjectOpenRankNetworkNodeDict,
     RepoNetworkData,
 )
-from .dataloader import DataloaderProto, DataloaderState
+from .dataloader import DataloaderProto, DataloaderResult
 from .query import IndicatorQuery

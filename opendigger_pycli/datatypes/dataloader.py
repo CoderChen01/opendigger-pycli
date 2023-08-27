@@ -6,7 +6,7 @@ T = t.TypeVar("T")
 
 
 @dataclass
-class DataloaderState(t.Generic[T]):
+class DataloaderResult(t.Generic[T]):
     is_success: bool
     dataloader: "DataloaderProto"
     desc: str
@@ -35,5 +35,5 @@ class DataloaderProto(t.Protocol):
     type: t.ClassVar[t.Literal["repo", "user"]]
     demo_url: t.ClassVar[str]
 
-    def load(self, *args, **kwargs) -> DataloaderState:
+    def load(self, *args, **kwargs) -> DataloaderResult:
         ...

@@ -2,11 +2,20 @@ import typing as t
 from dataclasses import dataclass
 
 
-from .base import BaseData, BaseNetworkData, NameAndValue, NameNameAndValue
+from .base import (
+    BaseData,
+    BaseNetworkData,
+    NameAndValue,
+    NameNameAndValue,
+    ProjectOpenRankNetworkEdgeDict,
+    ProjectOpenRankNetworkNodeDict,
+    TrivialNetworkIndicatorData,
+    NonTrivalNetworkInciatorData,
+)
 
 
 @dataclass
-class DeveloperNetworkData:
+class DeveloperNetworkData(TrivialNetworkIndicatorData):
     """
     ref: https://blog.frankzhao.cn/github_activity_with_wpr/
     """
@@ -16,7 +25,7 @@ class DeveloperNetworkData:
 
 
 @dataclass
-class RepoNetworkData:
+class RepoNetworkData(TrivialNetworkIndicatorData):
     """
     ref: https://blog.frankzhao.cn/github_activity_with_wpr/
     """
@@ -25,23 +34,8 @@ class RepoNetworkData:
     value: BaseNetworkData[NameAndValue, NameNameAndValue]
 
 
-class ProjectOpenRankNetworkNodeDict(t.TypedDict):
-    id: str
-    n: str
-    c: str
-    i: float
-    r: float
-    v: float
-
-
-class ProjectOpenRankNetworkEdgeDict(t.TypedDict):
-    s: str
-    t: str
-    w: float
-
-
 @dataclass
-class ProjectOpenRankNetworkData:
+class ProjectOpenRankNetworkData(NonTrivalNetworkInciatorData):
     """
     ref: https://blog.frankzhao.cn/how_to_measure_open_source_3/
     """

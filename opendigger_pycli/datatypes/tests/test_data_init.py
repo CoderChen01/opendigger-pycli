@@ -1,4 +1,4 @@
-from opendigger_pycli.datatypes.base import AvgData, BaseData
+from opendigger_pycli.datatypes.base import AvgDataType, BaseData
 from opendigger_pycli.datatypes.indices import OpenRankData
 from opendigger_pycli.datatypes.metrics import IssueResponseTimeData
 
@@ -8,7 +8,7 @@ def test_init_data():
     assert data is not None
     issue_response_time = IssueResponseTimeData(
         value={
-            "avg": [AvgData(year=2023, month=1, value=1.0)],
+            "avg": [AvgDataType(year=2023, month=1, value=1.0)],
             "levels": [BaseData(year=2023, month=1, value=[1])],
             "quantile0": [BaseData(year=2023, month=1, value=1)],
             "quantile1": [BaseData(year=2023, month=1, value=1)],
