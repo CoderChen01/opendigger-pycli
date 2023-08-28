@@ -135,12 +135,12 @@ class DisplyCMDResult:
                 self.save_path
                 / f"{query_result.org_name}-{query_result.repo_name}-{self.mode}.html"
             )
-            return save_path
         else:
             query_result = t.cast(UserQueryResult, query_result)
             save_path = str(
                 self.save_path / f"{query_result.username}-{self.mode}.html"
             )
+        return save_path
 
     def display(self) -> None:
         if not self.query_results:
