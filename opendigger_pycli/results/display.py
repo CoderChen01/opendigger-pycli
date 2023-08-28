@@ -66,6 +66,7 @@ class DisplyCMDResult:
             indicator_data_class = indicator_dataloder_result.data.data_class
             if indicator_data_class == TRIVIAL_NETWORK_INDICATOR_DATA:
                 print_trivial_network_indicator(
+                    indicator_name,
                     indicator_dataloder_result.data,
                     t.cast(
                         "t.Optional[IndicatorQuery]",
@@ -75,6 +76,7 @@ class DisplyCMDResult:
                 )
             elif indicator_data_class == NON_TRIVAL_NETWORK_INDICATOR_DATA:
                 print_non_trivial_network_indciator(
+                    indicator_name,
                     indicator_dataloder_result.data,
                     t.cast(
                         "t.Optional[IndicatorQuery]",
@@ -84,6 +86,7 @@ class DisplyCMDResult:
                 )
             elif indicator_data_class == TRIVIAL_INDICATOR_DATA:
                 print_trivial_indicator(
+                    indicator_name,
                     indicator_dataloder_result.data,
                     t.cast(
                         "t.Optional[IndicatorQuery]",
@@ -94,6 +97,7 @@ class DisplyCMDResult:
             elif indicator_data_class == NON_TRIVIAL_INDICATOR_DATA:
                 failed_queries[indicator_name]
                 print_non_trivial_indicator(
+                    indicator_name,
                     indicator_dataloder_result.data,
                     t.cast(
                         "t.Dict[str, IndicatorQuery]",
