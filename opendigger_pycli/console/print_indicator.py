@@ -74,7 +74,7 @@ def print_trivial_indicator(
         return
     indicator_name = format_indicator_name(indicator_name)
     title = f"[green]{indicator_name} Indicator Data: "
-    CONSOLE.print(title)
+    CONSOLE.print(title, end="\n\n")
     print_failed_query(indicator_name, failed_query)
     print_func(indicator_data.value)
 
@@ -99,7 +99,7 @@ def print_non_trivial_indicator(
 
     indicator_name_formated = format_indicator_name(indicator_name)
     title = f"[green]{indicator_name_formated} Indicator Data: "
-    CONSOLE.print(title)
+    CONSOLE.print(title, end="\n\n")
     for key, base_data_list in indicator_data.value.items():
         if failed_queries is not None:
             print_failed_query(f"{indicator_name}.{key}", failed_queries[key])
@@ -127,7 +127,7 @@ def print_trivial_network_indicator(
 
     indicator_name = format_indicator_name(indicator_name)
     title = f"[green]{indicator_name} Indicator Data: "
-    CONSOLE.print(title)
+    CONSOLE.print(title, end="\n\n")
     print_failed_query(indicator_name, failed_query)
     print_func(indicator_data.value)
 

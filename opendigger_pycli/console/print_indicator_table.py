@@ -22,9 +22,9 @@ def print_table(table: "Table"):
     CONSOLE.print()
 
 
-def print_base_data_table(base_data_list: t.List["BaseData"], *args, **kwarg):
-    title = kwarg.pop("title", None)
-    caption = kwarg.pop("caption", None)
+def print_base_data_table(base_data_list: t.List["BaseData"], *args, **kwargs):
+    title = kwargs.pop("title", None)
+    caption = kwargs.pop("caption", None)
 
     table = Table(
         box=box.HORIZONTALS,
@@ -52,10 +52,10 @@ def print_base_data_table(base_data_list: t.List["BaseData"], *args, **kwarg):
 
 
 def print_base_network_data_table(
-    network_data: "BaseNetworkData", *args, **kwargs
+    network_data: "BaseNetworkData", *args, **kwargss
 ):
-    title = kwargs.pop("title", None)
-    caption = kwargs.pop("caption", None)
+    title = kwargss.pop("title", None)
+    caption = kwargss.pop("caption", None)
     table = Table(
         box=box.HORIZONTALS,
         title=title,
