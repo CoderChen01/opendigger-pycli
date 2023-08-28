@@ -22,6 +22,7 @@ from .metrics import (
     AcceptedChangeRequestData,
     ActiveDateAndTimeData,
     AddedCodeChangeLineData,
+    SumCodeChangeLineData,
     BusFactorData,
     ChangeRequestAgeData,
     ChangeRequestData,
