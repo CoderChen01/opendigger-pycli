@@ -5,7 +5,7 @@ from .base import (
     BaseData,
     NameAndValue,
     NonTrivialIndicatorDict,
-    NonTrivalIndicatorData,
+    NonTrivialIndicatorData,
     TrivialIndicatorData,
 )
 
@@ -99,7 +99,7 @@ class IssueCommentData(TrivialIndicatorData):
 
 
 @dataclass
-class IssueResponseTimeData(NonTrivalIndicatorData):
+class IssueResponseTimeData(NonTrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issue-response-time/
     """
@@ -109,7 +109,7 @@ class IssueResponseTimeData(NonTrivalIndicatorData):
 
 
 @dataclass
-class IssueResolutionDurationData(NonTrivalIndicatorData):
+class IssueResolutionDurationData(NonTrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issue-resolution-duration/
     """
@@ -119,7 +119,7 @@ class IssueResolutionDurationData(NonTrivalIndicatorData):
 
 
 @dataclass
-class IssueAgeData(NonTrivalIndicatorData):
+class IssueAgeData(NonTrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issue-age/
     """
@@ -179,7 +179,7 @@ class ChangeRequestReviewData(TrivialIndicatorData):
 
 
 @dataclass
-class ChangeRequestResponseTimeData(NonTrivalIndicatorData):
+class ChangeRequestResponseTimeData(NonTrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issue-response-time/
     """
@@ -189,7 +189,7 @@ class ChangeRequestResponseTimeData(NonTrivalIndicatorData):
 
 
 @dataclass
-class ChangeRequestResolutionDurationData(NonTrivalIndicatorData):
+class ChangeRequestResolutionDurationData(NonTrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issue-resolution-duration/
     """
@@ -199,7 +199,7 @@ class ChangeRequestResolutionDurationData(NonTrivalIndicatorData):
 
 
 @dataclass
-class ChangeRequestAgeData(NonTrivalIndicatorData):
+class ChangeRequestAgeData(NonTrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issue-age/
     """

@@ -10,12 +10,12 @@ from opendigger_pycli.dataloader import (
     DeveloperNetworkRepoDataloader,
     RepoNetworkRepoDataloader,
 )
-from opendigger_pycli.datatypes import IndicatorQuery
-
+from .parsers import QueryParser
 
 if t.TYPE_CHECKING:
     from click import Context, Parameter, Command
     from opendigger_pycli.datatypes import DataloaderProto
+    from opendigger_pycli.datatypes import IndicatorQuery
 
 
 class GhRepoNameType(click.ParamType):
@@ -57,6 +57,10 @@ class GhUserNameType(click.ParamType):
 class FilteredMetricQueryType(click.ParamType):
     name: t.ClassVar[str] = "indicator_query"
 
+    def __init__(self) -> None:
+        super().__init__()
+        self.query_parser = QueryParser()
+
     def _try_split_value(self, value: str) -> t.Tuple[str, t.Optional[str]]:
         value = value.strip()
         try:
@@ -65,137 +69,12 @@ class FilteredMetricQueryType(click.ParamType):
         except ValueError:
             return value, None
 
-    def _try_parse_month(self, item: str) -> t.Optional[t.Set[int]]:
-        if "~" in item:
-            try:
-                start, end = item.split("~", 1)
-                start = int(start)
-                end = int(end)
-                if start > end:
-                    return None
-                if start < 1 or end > 12:
-                    return None
-                return set(range(start, end + 1))
-            except ValueError:
-                return None
-        else:
-            try:
-                month = int(item)
-                if month < 1 or month > 12:
-                    return None
-                return {month}
-            except ValueError:
-                return None
-
-    def _try_parse_year(self, item: str) -> t.Optional[t.Set[int]]:
-        if "~" in item:
-            try:
-                start, end = item.split("~", 1)
-                start = int(start)
-                end = int(end)
-                if start > end:
-                    return None
-                if start < 1970 or end > 2100:
-                    return None
-                return set(range(start, end + 1))
-            except ValueError:
-                return None
-        else:
-            try:
-                year = int(item)
-                if year < 1970 or year > 2100:
-                    return None
-                return {year}
-            except ValueError:
-                return None
-
-    def _try_parse_year_month(
-        self, item: str
-    ) -> t.Optional[t.Set[t.Tuple[int, int]]]:
-        if "~" in item:
-            try:
-                start, end = item.split("~", 1)
-                start_year, start_month = start.split("-", 1)
-                end_year, end_month = end.split("-", 1)
-                start_year = int(start_year)
-                start_month = int(start_month)
-                end_year = int(end_year)
-                end_month = int(end_month)
-                if start_year > end_year:
-                    return None
-                if start_year < 1970 or end_year > 2100:
-                    return None
-                if start_month > end_month:
-                    return None
-                if start_month < 1 or end_month > 12:
-                    return None
-
-                result = set()
-                current_year = start_year
-                current_month = start_month
-                while (current_year, current_month) <= (end_year, end_month):
-                    result.add((current_year, current_month))
-                    current_month += 1
-                    if current_month > 12:
-                        current_month = 1
-                        current_year += 1
-                return result
-
-            except ValueError:
-                return None
-        else:
-            try:
-                year, month = item.split("-", 1)
-                year = int(year)
-                month = int(month)
-                if year < 1970 or year > 2100:
-                    return None
-                if month < 1 or month > 12:
-                    return None
-                return {(year, month)}
-            except ValueError:
-                return None
-
-    def _try_parse_indicator_query(
-        self, indicator_query: str
-    ) -> t.Optional[IndicatorQuery]:
-        all_months = set()
-        all_years = set()
-        all_year_months = set()
-
-        indicator_query = indicator_query.strip()
-        items = indicator_query.split(",")
-        for item in items:
-            months = self._try_parse_month(item)
-            if months is not None:
-                all_months.update(months)
-                continue
-            years = self._try_parse_year(item)
-            if years is not None:
-                all_years.update(years)
-                continue
-            year_months = self._try_parse_year_month(item)
-            if year_months is not None:
-                all_year_months.update(year_months)
-                continue
-            if not months and not years and not year_months:
-                self.fail(f"{item} is not a valid indicator query")
-
-        if not all_months and not all_years and not all_year_months:
-            return None
-
-        return IndicatorQuery(
-            months=frozenset(all_months),
-            years=frozenset(all_years),
-            year_months=frozenset(all_year_months),
-        )
-
     def convert(
         self,
         value: str,
         param: "Parameter",
         ctx: "Context",
-    ) -> t.Tuple[str, t.Optional[IndicatorQuery]]:
+    ) -> t.Tuple[str, t.Optional["IndicatorQuery"]]:
         indicator_name, indicator_query_str = self._try_split_value(value)
         if indicator_name not in ctx.meta["filtered_dataloaders"]:
             self.fail(
@@ -204,7 +83,10 @@ class FilteredMetricQueryType(click.ParamType):
                 f"INTRODUCERS: {ctx.params['introducers']}"
             )
         if indicator_query_str is None:
-            if indicator_name == ProjectOpenRankNetworkRepoDataloader.name:
+            if (
+                indicator_name == ProjectOpenRankNetworkRepoDataloader.name
+                and ctx.params["uniform_query"] is None
+            ):
                 self.fail(
                     f"{indicator_name} requires indicator query, "
                     f"please use {indicator_name}:<indicator-queries>"
@@ -219,7 +101,9 @@ class FilteredMetricQueryType(click.ParamType):
                 f"please use {indicator_name} directly"
             )
 
-        indicator_query = self._try_parse_indicator_query(indicator_query_str)
+        indicator_query = self.query_parser.try_parse_indicator_query(
+            indicator_query_str
+        )
         if indicator_query is None:
             self.fail(f"{indicator_query_str} is not a valid indicator query")
 
@@ -267,8 +151,25 @@ class IgnoredIndicatorNameType(click.ParamType):
         ]
 
 
+class IndicatorQueryType(click.ParamType):
+    name = "indicator_query"
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.query_parser = QueryParser()
+
+    def convert(
+        self, value: str, param: "Parameter", ctx: "Context"
+    ) -> "IndicatorQuery":
+        query = self.query_parser.try_parse_indicator_query(value)
+        if query is None:
+            self.fail(f"{value} is not a valid indicator query")
+        return query
+
+
 GH_REPO_NAME_TYPE = GhRepoNameType()
 GH_USERNAME_TYPE = GhUserNameType()
 
 FILTERED_METRIC_QUERY_TYPE = FilteredMetricQueryType()
 IGNORED_METRIC_NAME_TYPE = IgnoredIndicatorNameType()
+INDICATOR_QUERY_TYPE = IndicatorQueryType()

@@ -20,6 +20,7 @@ from .custom_types import (
     GH_USERNAME_TYPE,
     FILTERED_METRIC_QUERY_TYPE,
     IGNORED_METRIC_NAME_TYPE,
+    INDICATOR_QUERY_TYPE,
 )
 from .utils import (
     add_introducer,
@@ -223,6 +224,15 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
     help="The indicators to ignore.",
     required=False,
 )
+@click.option(
+    "--fileter",
+    "-f",
+    "uniform_query",
+    type=INDICATOR_QUERY_TYPE,
+    required=False,
+    is_eager=True,
+    help="The query applying to all indicators",
+)
 def query(
     indicator_types: t.Set[t.Literal["index", "metric", "network"]],
     introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
@@ -231,6 +241,7 @@ def query(
     ],
     is_only_select: bool,
     ignore_indicator_names: t.List[str],
+    uniform_query: t.Optional["IndicatorQuery"],
 ):
     """
     Query Metrics
@@ -259,6 +270,7 @@ def process_query_results(
     ],
     is_only_select: bool,
     ignore_indicator_names: t.List[str],
+    uniform_query: t.Optional["IndicatorQuery"],
 ):
     # Processing parameters: deduplication and default value processing
     selected_indicator_queries = distinct_indicator_queries(
@@ -276,7 +288,8 @@ def process_query_results(
         introducers: {introducers}, 
         selected_indicator_queries: {selected_indicator_queries}, 
         is_only_select: {is_only_select},
-        ignore_indicator_names: {ignore_indicator_names}
+        ignore_indicator_names: {ignore_indicator_names},
+        uniform_query: {uniform_query}
         """
     )
 
@@ -325,6 +338,7 @@ def process_query_results(
                 username=username,
                 dataloaders=dataloaders,
                 indicator_queries=selected_indicator_queries,
+                uniform_query=uniform_query,
             )
             for username in usernames
         ]
@@ -338,6 +352,7 @@ def process_query_results(
             repo=repo,
             dataloaders=dataloaders,
             indicator_queries=selected_indicator_queries,
+            uniform_query=uniform_query,
         )
         for repo in repos
     ]

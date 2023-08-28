@@ -6,6 +6,7 @@ import logging
 
 import click
 from rich.logging import RichHandler
+from rich.pretty import Pretty
 
 from opendigger_pycli.config.cli_config import OpenDiggerCliConfig
 from opendigger_pycli.console import CONSOLE
@@ -46,13 +47,13 @@ class Environment:
             msg = textwrap.dedent(msg)
 
         if mode == "info":
-            self.logger.info(msg, extra={"markup": True})
+            self.logger.info(msg, extra={"markup": True, "expand": True})
         elif mode == "warn":
-            self.logger.warning(msg, extra={"markup": True})
+            self.logger.warning(msg, extra={"markup": True, "expand": True})
         elif mode == "debug":
-            self.logger.debug(msg, extra={"markup": True})
+            self.logger.debug(msg, extra={"markup": True, "expand": True})
         else:
-            self.logger.error(msg, extra={"markup": True})
+            self.logger.error(msg, extra={"markup": True, "expand": True})
 
     def vlog(self, *msgs):
         """Logs a message only if verbose is enabled."""

@@ -22,7 +22,7 @@ from opendigger_pycli.datatypes import (
     RemovedCodeChangeLineData,
     StarData,
     TechnicalForkData,
-    DataloaderState,
+    DataloaderResult,
 )
 
 from .base import (
@@ -49,16 +49,16 @@ class ActiveDateAndTimeRepoDataloader(BaseRepoDataloader):
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[ActiveDateAndTimeData]:
+    ) -> DataloaderResult[ActiveDateAndTimeData]:
         data = get_repo_data(org, repo, ActiveDateAndTimeData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ActiveDateAndTimeData(
@@ -75,16 +75,16 @@ class StarRepoDataloader(BaseRepoDataloader):
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/stars.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[StarData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[StarData]:
         data = get_repo_data(org, repo, StarData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=StarData(value=load_base_data(data, int)),
@@ -99,16 +99,16 @@ class TechnicalForkRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/technical_fork.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[TechnicalForkData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[TechnicalForkData]:
         data = get_repo_data(org, repo, TechnicalForkData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=TechnicalForkData(value=load_base_data(data, int)),
@@ -123,16 +123,16 @@ class ParticipantRepoDataloader(BaseRepoDataloader):
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/participants.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[ParticipantData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[ParticipantData]:
         data = get_repo_data(org, repo, ParticipantData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ParticipantData(value=load_base_data(data, int)),
@@ -147,17 +147,19 @@ class NewContributorRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/new_contributors_detail.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[NewContributorData]:
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderResult[NewContributorData]:
         data = get_repo_data(org, repo, NewContributorData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=NewContributorData(
@@ -176,17 +178,17 @@ class InactiveContributorRepoDataloader(BaseRepoDataloader):
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[InactiveContributorData]:
+    ) -> DataloaderResult[InactiveContributorData]:
         data = get_repo_data(org, repo, InactiveContributorData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=InactiveContributorData(value=load_base_data(data, int)),
@@ -201,17 +203,17 @@ class BusFactorRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/bus_factor_detail.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[BusFactorData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[BusFactorData]:
         data = get_repo_data(org, repo, BusFactorData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=BusFactorData(
@@ -230,17 +232,17 @@ class NewIssueRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issues_new.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[NewIssueData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[NewIssueData]:
         data = get_repo_data(org, repo, NewIssueData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=NewIssueData(value=load_base_data(data, int)),
@@ -255,17 +257,17 @@ class ClosedIssueRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issues_closed.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[ClosedIssueData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[ClosedIssueData]:
         data = get_repo_data(org, repo, ClosedIssueData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ClosedIssueData(value=load_base_data(data, int)),
@@ -280,17 +282,17 @@ class IssueCommentRepoDataloader(BaseRepoDataloader):
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_comments.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[IssueCommentData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[IssueCommentData]:
         data = get_repo_data(org, repo, IssueCommentData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=IssueCommentData(value=load_base_data(data, int)),
@@ -307,17 +309,17 @@ class IssueResponseTimeRepoDataloader(BaseRepoDataloader):
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[IssueResponseTimeData]:
+    ) -> DataloaderResult[IssueResponseTimeData]:
         data = get_repo_data(org, repo, IssueResponseTimeData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=IssueResponseTimeData(
@@ -336,17 +338,17 @@ class IssueResolutionDurationRepoDataloader(BaseRepoDataloader):
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[IssueResolutionDurationData]:
+    ) -> DataloaderResult[IssueResolutionDurationData]:
         data = get_repo_data(org, repo, IssueResolutionDurationData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=IssueResolutionDurationData(
@@ -363,17 +365,17 @@ class IssueAgeRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_age.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[IssueAgeData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[IssueAgeData]:
         data = get_repo_data(org, repo, IssueAgeData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=IssueAgeData(
@@ -392,17 +394,17 @@ class AddedCodeChangeLineRepoDataloader(BaseRepoDataloader):
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[AddedCodeChangeLineData]:
+    ) -> DataloaderResult[AddedCodeChangeLineData]:
         data = get_repo_data(org, repo, AddedCodeChangeLineData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=AddedCodeChangeLineData(
@@ -421,17 +423,17 @@ class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[RemovedCodeChangeLineData]:
+    ) -> DataloaderResult[RemovedCodeChangeLineData]:
         data = get_repo_data(org, repo, RemovedCodeChangeLineData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=RemovedCodeChangeLineData(
@@ -448,17 +450,17 @@ class ChangeRequestRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_requests.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[ChangeRequestData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[ChangeRequestData]:
         data = get_repo_data(org, repo, ChangeRequestData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestData(
@@ -477,17 +479,17 @@ class AcceptedChangeRequestRepoDataloader(BaseRepoDataloader):
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[AcceptedChangeRequestData]:
+    ) -> DataloaderResult[AcceptedChangeRequestData]:
         data = get_repo_data(org, repo, AcceptedChangeRequestData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=AcceptedChangeRequestData(
@@ -506,17 +508,17 @@ class ChangeRequestReviewRepoDataloader(BaseRepoDataloader):
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[ChangeRequestReviewData]:
+    ) -> DataloaderResult[ChangeRequestReviewData]:
         data = get_repo_data(org, repo, ChangeRequestReviewData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestReviewData(
@@ -535,17 +537,17 @@ class ChangeRequestResponseTimeRepoDataloader(BaseRepoDataloader):
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[ChangeRequestResponseTimeData]:
+    ) -> DataloaderResult[ChangeRequestResponseTimeData]:
         data = get_repo_data(org, repo, ChangeRequestResponseTimeData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestResponseTimeData(
@@ -564,19 +566,19 @@ class ChangeRequestResolutionDurationRepoDataloader(BaseRepoDataloader):
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[ChangeRequestResolutionDurationData]:
+    ) -> DataloaderResult[ChangeRequestResolutionDurationData]:
         data = get_repo_data(
             org, repo, ChangeRequestResolutionDurationData.name
         )
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestResolutionDurationData(
@@ -595,17 +597,17 @@ class ChangeRequestAgeRepoDataloader(BaseRepoDataloader):
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[ChangeRequestAgeData]:
+    ) -> DataloaderResult[ChangeRequestAgeData]:
         data = get_repo_data(org, repo, ChangeRequestAgeData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestAgeData(

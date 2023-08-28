@@ -12,9 +12,10 @@ from .base import (
     TRIVIAL_NETWORK_INDICATOR_DATA,
     TRIVIAL_INDICATOR_DATA,
     TrivialIndicatorData,
-    NonTrivalIndicatorData,
+    NonTrivialIndicatorData,
     TrivialNetworkIndicatorData,
     NonTrivalNetworkInciatorData,
+    BaseDataValueSortableMixin,
 )
 from .indices import ActivityData, AttentionData, OpenRankData
 from .metrics import (

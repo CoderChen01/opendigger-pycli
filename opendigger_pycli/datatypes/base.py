@@ -58,12 +58,25 @@ class TrivialIndicatorData:
 
 
 @dataclass
-class NonTrivalIndicatorData:
+class NonTrivialIndicatorData:
     name: str
     value: "NonTrivialIndicatorDict"
     data_class: t.Literal[
         "non_trivial_indicator_data"
     ] = NON_TRIVIAL_INDICATOR_DATA
+
+
+class BaseDataValueSortableMixin:
+    def __post_init__(self):
+        if not isinstance(self.value, list):
+            return
+        warmup = self.value[0]
+        if isinstance(warmup, int) or isinstance(warmup, float):
+            self.value = list(sorted(self.value, reverse=True))  # type: ignore
+        if hasattr(warmup, "value"):
+            self.value = list(sorted(self.value, key=lambda x: x.value, reverse=True))  # type: ignore
+        if isinstance(warmup, dict) and "value" in warmup:
+            self.value = list(sorted(self.value, key=lambda x: x["value"], reverse=True))  # type: ignore
 
 
 @dataclass
@@ -131,3 +144,8 @@ class ProjectOpenRankNetworkEdgeDict(t.TypedDict):
 class BaseNetworkData(Generic[T, S]):
     nodes: List[T]
     edges: List[S]
+
+    def __post_init__(self):
+        if isinstance(self.nodes[0], NameAndValue):
+            self.nodes = list(sorted(self.nodes, key=lambda x: x.value, reverse=True))  # type: ignore
+            self.edges = list(sorted(self.edges, key=lambda x: x.value, reverse=True))  # type: ignore

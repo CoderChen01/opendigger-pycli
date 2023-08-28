@@ -4,7 +4,7 @@ from opendigger_pycli.datatypes import (
     ActivityData,
     AttentionData,
     OpenRankData,
-    DataloaderState,
+    DataloaderResult,
 )
 from .base import (
     BaseRepoDataloader,
@@ -29,16 +29,16 @@ class OpenRankRepoDataloader(BaseRepoDataloader):
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/openrank.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[OpenRankData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[OpenRankData]:
         data = get_repo_data(org, repo, OpenRankData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=OpenRankData(value=load_base_data(data, float)),
@@ -53,16 +53,16 @@ class ActivityRepoDataloader(BaseRepoDataloader):
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/activity.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[ActivityData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[ActivityData]:
         data = get_repo_data(org, repo, ActivityData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ActivityData(
@@ -81,16 +81,16 @@ class AttentionRepoDataloader(BaseRepoDataloader):
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/attention.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[AttentionData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[AttentionData]:
         data = get_repo_data(org, repo, AttentionData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=AttentionData(
@@ -109,16 +109,16 @@ class OpenRankUserDataLoader(BaseUserDataloader):
         "https://oss.x-lab.info/open_digger/github/frank-zsy/openrank.json"
     )
 
-    def load(self, username: str) -> DataloaderState[OpenRankData]:
+    def load(self, username: str) -> DataloaderResult[OpenRankData]:
         data = get_developer_data(username, OpenRankData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=OpenRankData(value=load_base_data(data, float)),
@@ -135,16 +135,16 @@ class ActivityUserDataLoader(BaseUserDataloader):
         "https://oss.x-lab.info/open_digger/github/frank-zsy/activity.json"
     )
 
-    def load(self, username: str) -> DataloaderState[ActivityData]:
+    def load(self, username: str) -> DataloaderResult[ActivityData]:
         data = get_developer_data(username, ActivityData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
                 dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ActivityData(

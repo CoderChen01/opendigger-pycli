@@ -20,7 +20,7 @@ class DataloaderResult(t.Generic[T]):
             f"{self.dataloader.__class__.__name__}State("
             f"is_success={self.is_success}, "
             f"desc='{self.desc}', "
-            f"data={data_class_name})"
+            f"data={data_class_name}())"
         )
 
 
