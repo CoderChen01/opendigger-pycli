@@ -3,6 +3,7 @@ import typing as t
 from functools import partial
 
 from rich.color import blend_rgb
+from rich.color_triplet import ColorTriplet
 from rich.columns import Columns
 
 from . import CONSOLE
@@ -58,7 +59,7 @@ def print_bar_row(
         for _ in range(int(num_blocks)):
             CONSOLE.print(tick, end="")
 
-    CONSOLE.print(f" {value}" + tail)
+    CONSOLE.print(f" {value:.2f}" + tail)
 
 
 def blocks_num_map(
@@ -81,11 +82,20 @@ def print_trivial_base_data_graph(
     The graph is a horizontal graph with a label and a bar.
     """
     print_header_row()
+
     warm_up_data = base_data_list[0]
     if isinstance(warm_up_data.value, list):
-        values = [len(data.value) for data in base_data_list]
+        values = [
+            len(data.value)
+            for data in t.cast(
+                t.List["BaseData[t.List[str]]"],
+                base_data_list,
+            )
+        ]
     else:
         values = [data.value for data in base_data_list]
+
+    values = t.cast(t.List[t.Union[int, float]], values)
     neg_blocks_num_map = blocks_num_map(
         [abs(value) for value in values if value < 0]
     )
@@ -166,7 +176,9 @@ def print_non_trivial_base_data_graph(
     CONSOLE.print()
 
 
-def get_heatmap_data(base_data_list: t.List["BaseData[t.List[int]]"]):
+def get_base_data_heatmap_data(
+    base_data_list: t.List["BaseData[t.List[int]]"],
+):
     # Create an array for hours and days
     hours = list(range(24))
     days = ["Sun.", "Sat.", "Fri.", "Thu.", "Wed.", "Tue.", "Mon."]
@@ -196,10 +208,10 @@ def print_heatmap(data: t.List[t.List[t.Union[int, float]]], *args, **kwargs):
     max_val = max(map(max, data))
     min_val = min(map(min, data))
 
-    # 获取终端的宽度
+    # Get the width of the terminal
     console_width = CONSOLE.width
 
-    # 计算行号和列号标签的宽度 (序号从1开始)
+    # Computes the width of the row and column labels (numbers start at 1)
     row_label_width = len(str(len(data)))
     col_label_width = len(str(len(data[0])))
 
@@ -207,42 +219,49 @@ def print_heatmap(data: t.List[t.List[t.Union[int, float]]], *args, **kwargs):
         data[0]
     ) + row_label_width + 3 > console_width
 
-    # 如果需要转置，则交换行和列的标签
-    if transpose_needed and row_labels and col_labels:
-        row_labels, col_labels = col_labels, row_labels
-
-    # 判断是否需要转置
-    if transpose_needed:
-        data = list(zip(*data))  # 转置数据
-        row_label_width, col_label_width = col_label_width, row_label_width
-
-    # 定义颜色渐变
+    # define color gradient
     def get_color(val):
         linear_ratio = (val - min_val) / (max_val - min_val)
         enhanced_ratio = linear_ratio**0.5
-        return blend_rgb((0, 0, 255), (255, 0, 0), enhanced_ratio)
+        return blend_rgb(
+            ColorTriplet(0, 0, 255), ColorTriplet(255, 0, 0), enhanced_ratio
+        )
 
-    # 打印数据和字符热力图
-    for idx, row in enumerate(data, 1):  # 开始序号为1
-        line = f"{idx:{row_label_width}} | "
-        for val in row:
-            color = get_color(val)
-            line += f"[{color.hex}]{HEATMAP_CHAR * (col_label_width + 1)}[/]"
-        CONSOLE.print(line)
+    # When the width is exceeded, change the strategy to use column to print directly
+    if transpose_needed:
+        items = []
+        for row_idx, row in enumerate(data, 1):
+            for col_idx, val in enumerate(row, 1):
+                color = get_color(val)
+                item = f"[{color.hex}]Row({row_idx})-Col({col_idx})-Value({val:.2f})[/]"
+                items.append(item)
+        columns = Columns(items, equal=True, padding=1)
+        CONSOLE.print(columns)
+        CONSOLE.print()
+    else:
+        # Print data and character heatmaps
+        for idx, row in enumerate(data, 1):  # Start sequence number is 1
+            line = f"{idx:{row_label_width}} | "
+            for val in row:
+                color = get_color(val)
+                line += (
+                    f"[{color.hex}]{HEATMAP_CHAR * (col_label_width + 1)}[/]"
+                )
+            CONSOLE.print(line)
 
-    # 打印行标签下方的分隔线
-    header_spacing = " " * (row_label_width + 2)  # 2 for '| '
-    CONSOLE.print(
-        header_spacing + "-" * ((col_label_width + 1) * len(data[0]))
-    )
+        # Print the separator line below the row labels
+        header_spacing = " " * (row_label_width + 2)  # 2 for '| '
+        CONSOLE.print(
+            header_spacing + "-" * ((col_label_width + 1) * len(data[0]))
+        )
 
-    # 打印列标签数字
-    col_numbers = "".join(
-        [f"{i+1:{col_label_width + 1}}" for i in range(len(data[0]))]
-    )  # 从1开始
-    CONSOLE.print(header_spacing + col_numbers, end="\n\n")
+        # print column label numbers
+        col_numbers = "".join(
+            [f"{i+1:{col_label_width + 1}}" for i in range(len(data[0]))]
+        )  # start from 1
+        CONSOLE.print(header_spacing + col_numbers, end="\n\n")
 
-    # 如果提供了列标签，打印序号与标签的对应关系
+    # If a column label is provided, print the correspondence between the serial number and the label
     if col_labels:
         name, labels = col_labels
         CONSOLE.print(f"Colunm Labels Denoting [green]{name}[/] Data:")
@@ -251,7 +270,7 @@ def print_heatmap(data: t.List[t.List[t.Union[int, float]]], *args, **kwargs):
         CONSOLE.print(columns)
         CONSOLE.print()
 
-    # 如果提供了行标签，打印序号与标签的对应关系
+    # If a row label is provided, print the correspondence between the serial number and the label
     if row_labels:
         name, labels = row_labels
         CONSOLE.print(f"Row Labels Denoting [green]{name}[/] Data:")
@@ -272,7 +291,8 @@ def print_base_data_graph(base_data_list: t.List["BaseData"], *args, **kwargs):
         elif isinstance(warm_up_data.value[0], int):
             if len(warm_up_data.value) != 24 * 7:
                 return
-            data = get_heatmap_data(base_data_list)
+            data = get_base_data_heatmap_data(base_data_list)
+            data = t.cast(t.List[t.List[float]], data)
             print_heatmap(
                 data,
                 row_labels=(
@@ -292,7 +312,75 @@ def print_base_data_graph(base_data_list: t.List["BaseData"], *args, **kwargs):
     print_trivial_base_data_graph(base_data_list)
 
 
+def get_trivival_network_heatmap_data(
+    netwok_data: "BaseNetworkData",
+) -> t.Tuple[
+    t.List[t.List[float]],
+    t.List[t.Tuple[str, float]],
+    t.List[t.Tuple[str, float]],
+]:
+    node_names = [node.name for node in netwok_data.nodes]
+    node_values = [node.value for node in netwok_data.nodes]
+    nodes_length = len(node_names)
+
+    heatmap_data = [[0.0] * nodes_length for _ in range(nodes_length)]
+    row_labels = col_labels = t.cast(
+        t.List[t.Tuple[str, float]], list(zip(node_names, node_values))
+    )
+    for edge in netwok_data.edges:
+        heatmap_data[node_names.index(edge.name0)][
+            node_names.index(edge.name1)
+        ] = edge.value
+
+    return heatmap_data, row_labels, col_labels
+
+
+def get_non_trivival_network_heatmap_data(
+    netwok_data: "BaseNetworkData",
+) -> t.Tuple[
+    t.List[t.List[float]],
+    t.List[t.Tuple[str, float]],
+    t.List[t.Tuple[str, float]],
+]:
+    node_names = [node["id"] for node in netwok_data.nodes]
+    node_values = [node["v"] for node in netwok_data.nodes]
+    nodes_length = len(node_names)
+
+    heatmap_data = [[0.0] * nodes_length for _ in range(nodes_length)]
+    row_labels = col_labels = t.cast(
+        t.List[t.Tuple[str, float]], list(zip(node_names, node_values))
+    )
+    for edge in netwok_data.edges:
+        heatmap_data[node_names.index(edge["s"])][
+            node_names.index(edge["t"])
+        ] = edge["w"]
+
+    return heatmap_data, row_labels, col_labels
+
+
 def print_base_network_data_graph(
     network_data: "BaseNetworkData", *args, **kwargs
 ):
-    pass
+    caption = kwargs.pop("caption", None)
+    if caption:
+        CONSOLE.print(f"[green]# {caption}", end="\n\n")
+
+    warm_up_data = network_data.nodes[0]
+    if hasattr(warm_up_data, "name"):
+        (
+            heatmap_data,
+            row_labels,
+            col_labels,
+        ) = get_trivival_network_heatmap_data(network_data)
+    else:
+        (
+            heatmap_data,
+            row_labels,
+            col_labels,
+        ) = get_non_trivival_network_heatmap_data(network_data)
+
+    print_heatmap(
+        heatmap_data,
+        row_labels=("Source Node Node", row_labels),
+        col_labels=("Dest Node Data", col_labels),
+    )
