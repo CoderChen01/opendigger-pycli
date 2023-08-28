@@ -39,4 +39,6 @@ def print_base_data_json(base_data_list: t.List["BaseData"], *args, **kwarg):
 def print_base_network_data_json(
     network_data: "BaseNetworkData", *args, **kwargs
 ):
-    pass
+    from dataclasses import asdict
+
+    CONSOLE.print(asdict(network_data))
