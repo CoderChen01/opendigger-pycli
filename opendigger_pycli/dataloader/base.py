@@ -1,203 +1,147 @@
 import abc
-from dataclasses import dataclass
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Generic,
-    List,
-    Literal,
-    Optional,
-    Tuple,
-    TypeVar,
-    TypedDict,
-    Type,
-    Union,
+from collections import defaultdict
+import itertools
+import typing as t
+
+
+if t.TYPE_CHECKING:
+    from opendigger_pycli.datatypes import DataloaderProto
+
+
+DATALOADERS = t.TypedDict(
+    "DATALOADERS",
+    index=t.Dict[str, t.List[t.Type["DataloaderProto"]]],
+    metric=t.Dict[str, t.List[t.Type["DataloaderProto"]]],
+    network=t.Dict[str, t.List[t.Type["DataloaderProto"]]],
+)(
+    index=defaultdict(list),
+    metric=defaultdict(list),
+    network=defaultdict(list),
 )
 
-import requests
 
-from opendigger_pycli.datatypes import (
-    BaseData,
-    BaseNetworkData,
-    NameAndValue,
-    NameNameAndValue,
-    NonTrivialMetricDict,
-    ProjectOpenRankNetworkEdgeDict,
-    ProjectOpenRankNetworkNodeDict,
-)
-
-DATALOADERS = TypedDict("DATALOADERS", index=dict, metric=dict, network=dict)(
-    index={}, metric={}, network={}
-)
-
-BASE_API_URL = "https://oss.x-lab.info/open_digger/github/"
-
-T = TypeVar("T")
-
-
-def get_repo_data(
-    org: str, repo: str, metric_name: str, date: Optional[str] = None
-) -> Optional[Dict]:
-    if date is not None:
-        url = f"{BASE_API_URL}{org}/{repo}/{metric_name}/{date}.json"
-    else:
-        url = f"{BASE_API_URL}{org}/{repo}/{metric_name}.json"
-    r = requests.get(url)
-    if r.status_code != 200:
-        return None
-    return r.json()
-
-
-def get_developer_data(username: str, metric_name: str) -> Optional[Dict]:
-    url = f"{BASE_API_URL}{username}/{metric_name}.json"
-    r = requests.get(url)
-    if r.status_code != 200:
-        return None
-    return r.json()
-
-
-def load_base_data(
-    data: Dict[str, Any], load_value: Callable
-) -> List[BaseData]:
-    base_data_list = []
-
-    for date, value in data.items():
-        is_raw = False
-        if date.endswith("raw"):
-            is_raw = True
-            date.replace("-raw", "")
-        try:
-            year, month = date.split("-")[:2]
-        except Exception:
-            # TODO(chenjunjie): add warning
-            year, month = (
-                "0",
-                "0",
-            )  # If the date is not in the correct format, set it to 0
-
-        # value has different types,
-        # you need to pass in a function to handle it
-        base_data_list.append(
-            BaseData(
-                year=int(year),
-                month=int(month),
-                is_raw=is_raw,
-                value=load_value(value),
-            )
-        )
-
-    return base_data_list
-
-
-def load_name_and_value(data: Tuple[str, float]) -> NameAndValue:
-    name, value = data
-    return NameAndValue(name=name, value=value)
-
-
-def load_name_name_and_value(data: Tuple[str, str, float]) -> NameNameAndValue:
-    name0, name1, value = data
-    return NameNameAndValue(name0=name0, name1=name1, value=value)
-
-
-def load_avg_data(data: Dict[str, Any]) -> List[BaseData[float]]:
-    return load_base_data(data, float)
-
-
-def load_level_data(data: Dict[str, Any]) -> List[BaseData[List[int]]]:
-    return load_base_data(data, lambda x: [int(i) for i in x])
-
-
-def load_quantile_data(data: Dict[str, Any]) -> List[BaseData[float]]:
-    return load_base_data(data, float)
-
-
-def load_non_trival_metric_data(data: Dict[str, Any]) -> NonTrivialMetricDict:
-    return NonTrivialMetricDict(
-        avg=load_avg_data(data["avg"]),
-        levels=load_level_data(data["levels"]),
-        quantile0=load_quantile_data(data["quantile_0"]),
-        quantile1=load_quantile_data(data["quantile_1"]),
-        quantile2=load_quantile_data(data["quantile_2"]),
-        quantile3=load_quantile_data(data["quantile_3"]),
-        quantile4=load_quantile_data(data["quantile_4"]),
-    )
-
-
-def load_openrank_network_data(
-    data: Dict[str, List],
-) -> BaseNetworkData[
-    ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict
-]:
-    nodes = data["nodes"]
-    edges = data["links"]
-    return BaseNetworkData(nodes=nodes, edges=edges)
-
-
-def load_network_data(
-    data: Dict[str, List]
-) -> BaseNetworkData[NameAndValue, NameNameAndValue]:
-    nodes = data["nodes"]
-    edges = data["edges"]
-    return BaseNetworkData(
-        nodes=[NameAndValue(name=node[0], value=node[1]) for node in nodes],
-        edges=[
-            NameNameAndValue(name0=edge[0], name1=edge[1], value=edge[2])
-            for edge in edges
-        ],
-    )
+T = t.TypeVar("T")
 
 
 def register_dataloader(
-    cls: Union[Type["BaseRepoDataloader"], Type["BaseUserDataloader"]]
+    cls: t.Union[
+        t.Type["BaseRepoDataloader"],
+        t.Type["BaseUserDataloader"],
+        t.Type["BaseOpenRankNetworkDataloader"],
+    ]
 ):
-    DATALOADERS[cls.metric_type][cls.name] = cls
+    DATALOADERS[cls.indicator_type][cls.name].append(
+        t.cast(t.Type["DataloaderProto"], cls)
+    )
     return cls
 
 
-@dataclass
-class DataloaderState(Generic[T]):
-    is_success: bool
-    desc: str
-    data: Optional[T] = None
+def filter_dataloader(
+    types: t.Set[t.Literal["repo", "user"]],
+    indicator_types: t.Set[t.Literal["index", "metric", "network"]],
+    introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
+) -> t.Iterator["DataloaderProto"]:
+    indicator_dicts: t.List[
+        t.Dict[str, t.List[t.Type["DataloaderProto"]]]
+    ] = list(
+        t.cast(
+            t.ValuesView,
+            DATALOADERS.values(),
+        )
+    )
+    indicator_dataloaders = itertools.chain.from_iterable(
+        itertools.chain.from_iterable(
+            [
+                [
+                    indicator_dataloader()
+                    for indicator_dataloader in indicator_dataloaders
+                    if (
+                        indicator_dataloader.type in types
+                        and not indicator_types
+                        and indicator_dataloader.introducer in introducers
+                    )
+                    or (
+                        indicator_dataloader.type in types
+                        and indicator_dataloader.indicator_type
+                        in indicator_types
+                        and not introducers
+                    )
+                    or (
+                        indicator_dataloader.type in types
+                        and indicator_dataloader.indicator_type
+                        in indicator_types
+                        and indicator_dataloader.introducer in introducers
+                    )
+                ]
+                for indicator_dataloaders in indicator_dict.values()
+            ]
+            for indicator_dict in indicator_dicts
+        )
+    )
+    return indicator_dataloaders
 
 
-class BaseRepoDataloader(abc.ABC, Generic[T]):
+class BaseRepoDataloader(abc.ABC):
     # Specify the name of the indicator,
     # which is different from the name field in datatypes
-    name: str
-    metric_type: Literal[
-        "index", "metric", "network"
+    name: t.ClassVar[str]
+    pass_date: t.ClassVar[bool] = False
+    indicator_type: t.ClassVar[
+        t.Literal["index", "metric", "network"]
     ]  # Specifies the type of indicator
+    introducer: t.ClassVar[t.Literal["X-lab", "CHAOSS"]]
+    type: t.ClassVar[t.Literal["repo", "user"]] = "repo"
+    demo_url: t.ClassVar[str]
 
     def __init__(self) -> None:
         super().__init__()
 
     @abc.abstractmethod
-    def load(self, org: str, repo: str) -> DataloaderState[T]:
+    def load(self, org: str, repo: str):
         pass
 
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}()"
 
-class BaseOpenRankNetworkDataloader(abc.ABC, Generic[T]):
+
+class BaseOpenRankNetworkDataloader(abc.ABC):
     # Specify the name of the indicator,
     # which is different from the name field in datatypes
-    name: str
-    metric_type: Literal["network"]  # Specifies the type of indicator
+    name: t.ClassVar[str]
+    pass_date: t.ClassVar[bool] = False
+    indicator_type: t.ClassVar[
+        t.Literal["network"]
+    ] = "network"  # Specifies the type of indicator
+    introducer: t.ClassVar[t.Literal["X-lab", "CHAOSS"]]
+    type: t.ClassVar[t.Literal["repo", "user"]]
+    demo_url: t.ClassVar[str]
 
     def __init__(self) -> None:
         super().__init__()
 
     @abc.abstractmethod
-    def load(self, org: str, repo: str, date: str) -> DataloaderState[T]:
+    def load(self, org: str, repo: str, dates: t.List[t.Tuple[int, int]]):
         pass
 
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}()"
 
-class BaseUserDataloader(abc.ABC, Generic[T]):
+
+class BaseUserDataloader(abc.ABC):
     # Specify the name of the indicator,
     # which is different from the name field in datatypes
-    name: str
-    metric_type: Literal["index", "network"]  # Specifies the type of indicator
+    name: t.ClassVar[str]
+    pass_date: t.ClassVar[bool] = False
+    indicator_type: t.ClassVar[
+        t.Literal["index", "network"]
+    ]  # Specifies the type of indicator
+    introducer: t.ClassVar[t.Literal["X-lab", "CHAOSS"]]
+    type: t.ClassVar[t.Literal["repo", "user"]] = "user"
+    demo_url: t.ClassVar[str]
 
     @abc.abstractmethod
-    def load(self, username: str) -> DataloaderState[T]:
+    def load(self, username: str):
         pass
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}()"

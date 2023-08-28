@@ -1,3 +1,5 @@
+import typing as t
+
 from opendigger_pycli.datatypes import (
     AcceptedChangeRequestData,
     ActiveDateAndTimeData,
@@ -20,38 +22,45 @@ from opendigger_pycli.datatypes import (
     RemovedCodeChangeLineData,
     StarData,
     TechnicalForkData,
+    DataloaderResult,
 )
 
 from .base import (
     BaseRepoDataloader,
-    DataloaderState,
+    register_dataloader,
+)
+from .utils import (
     get_repo_data,
     load_base_data,
     load_name_and_value,
-    load_non_trival_metric_data,
-    register_dataloader,
+    load_non_trival_indicator_data,
 )
+
+if t.TYPE_CHECKING:
+    from opendigger_pycli.datatypes.dataloader import DataloaderProto
 
 
 @register_dataloader
-class ActiveDateAndTimeRepoDataloader(
-    BaseRepoDataloader[ActiveDateAndTimeData]
-):
+class ActiveDateAndTimeRepoDataloader(BaseRepoDataloader):
     name = "active_date_and_time"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/active_dates_and_times.json"
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[ActiveDateAndTimeData]:
+    ) -> DataloaderResult[ActiveDateAndTimeData]:
         data = get_repo_data(org, repo, ActiveDateAndTimeData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=ActiveDateAndTimeData(
                 value=load_base_data(data, lambda x: [int(i) for i in x]),
             ),
@@ -60,81 +69,99 @@ class ActiveDateAndTimeRepoDataloader(
 
 
 @register_dataloader
-class StarRepoDataloader(BaseRepoDataloader[StarData]):
+class StarRepoDataloader(BaseRepoDataloader):
     name = "star"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/stars.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[StarData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[StarData]:
         data = get_repo_data(org, repo, StarData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=StarData(value=load_base_data(data, int)),
             desc="",
         )
 
 
 @register_dataloader
-class TechnicalForkRepoDataloader(BaseRepoDataloader[TechnicalForkData]):
+class TechnicalForkRepoDataloader(BaseRepoDataloader):
     name = "technical_fork"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/technical_fork.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[TechnicalForkData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[TechnicalForkData]:
         data = get_repo_data(org, repo, TechnicalForkData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=TechnicalForkData(value=load_base_data(data, int)),
             desc="",
         )
 
 
 @register_dataloader
-class ParticipantRepoDataloader(BaseRepoDataloader[ParticipantData]):
+class ParticipantRepoDataloader(BaseRepoDataloader):
     name = "participant"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/participants.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[ParticipantData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[ParticipantData]:
         data = get_repo_data(org, repo, ParticipantData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=ParticipantData(value=load_base_data(data, int)),
             desc="",
         )
 
 
 @register_dataloader
-class NewContributorRepoDataloader(BaseRepoDataloader[NewContributorData]):
+class NewContributorRepoDataloader(BaseRepoDataloader):
     name = "new_contributor"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/new_contributors_detail.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[NewContributorData]:
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderResult[NewContributorData]:
         data = get_repo_data(org, repo, NewContributorData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=NewContributorData(
                 value=load_base_data(data, lambda x: [str(i) for i in x]),
             ),
@@ -143,46 +170,52 @@ class NewContributorRepoDataloader(BaseRepoDataloader[NewContributorData]):
 
 
 @register_dataloader
-class InactiveContributorRepoDataloader(
-    BaseRepoDataloader[InactiveContributorData]
-):
+class InactiveContributorRepoDataloader(BaseRepoDataloader):
     name = "inactive_contributor"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/inactive_contributors.json"
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[InactiveContributorData]:
+    ) -> DataloaderResult[InactiveContributorData]:
         data = get_repo_data(org, repo, InactiveContributorData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=InactiveContributorData(value=load_base_data(data, int)),
             desc="",
         )
 
 
 @register_dataloader
-class BusFactorRepoDataloader(BaseRepoDataloader[BusFactorData]):
+class BusFactorRepoDataloader(BaseRepoDataloader):
     name = "bus_factor"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/bus_factor_detail.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[BusFactorData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[BusFactorData]:
         data = get_repo_data(org, repo, BusFactorData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=BusFactorData(
                 value=load_base_data(
                     data, lambda x: [load_name_and_value(i) for i in x]
@@ -193,165 +226,187 @@ class BusFactorRepoDataloader(BaseRepoDataloader[BusFactorData]):
 
 
 @register_dataloader
-class NewIssueRepoDataloader(BaseRepoDataloader[NewIssueData]):
+class NewIssueRepoDataloader(BaseRepoDataloader):
     name = "new_issue"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issues_new.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[NewIssueData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[NewIssueData]:
         data = get_repo_data(org, repo, NewIssueData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=NewIssueData(value=load_base_data(data, int)),
             desc="",
         )
 
 
 @register_dataloader
-class ClosedIssueRepoDataloader(BaseRepoDataloader[ClosedIssueData]):
+class ClosedIssueRepoDataloader(BaseRepoDataloader):
     name = "closed_issue"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issues_closed.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[ClosedIssueData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[ClosedIssueData]:
         data = get_repo_data(org, repo, ClosedIssueData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=ClosedIssueData(value=load_base_data(data, int)),
             desc="",
         )
 
 
 @register_dataloader
-class IssueCommentRepoDataloader(BaseRepoDataloader[IssueCommentData]):
+class IssueCommentRepoDataloader(BaseRepoDataloader):
     name = "issue_comment"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_comments.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[IssueCommentData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[IssueCommentData]:
         data = get_repo_data(org, repo, IssueCommentData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=IssueCommentData(value=load_base_data(data, int)),
             desc="",
         )
 
 
 @register_dataloader
-class IssueResponseTimeRepoDataloader(
-    BaseRepoDataloader[IssueResponseTimeData]
-):
+class IssueResponseTimeRepoDataloader(BaseRepoDataloader):
     name = "issue_response_time"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_response_time.json"
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[IssueResponseTimeData]:
+    ) -> DataloaderResult[IssueResponseTimeData]:
         data = get_repo_data(org, repo, IssueResponseTimeData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=IssueResponseTimeData(
-                value=load_non_trival_metric_data(data)
+                value=load_non_trival_indicator_data(data)
             ),
             desc="",
         )
 
 
 @register_dataloader
-class IssueResolutionDurationRepoDataloader(
-    BaseRepoDataloader[IssueResolutionDurationData]
-):
+class IssueResolutionDurationRepoDataloader(BaseRepoDataloader):
     name = "issue_resolution_duration"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_resolution_duration.json"
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[IssueResolutionDurationData]:
+    ) -> DataloaderResult[IssueResolutionDurationData]:
         data = get_repo_data(org, repo, IssueResolutionDurationData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=IssueResolutionDurationData(
-                value=load_non_trival_metric_data(data)
+                value=load_non_trival_indicator_data(data)
             ),
             desc="",
         )
 
 
 @register_dataloader
-class IssueAgeRepoDataloader(BaseRepoDataloader[IssueAgeData]):
+class IssueAgeRepoDataloader(BaseRepoDataloader):
     name = "issue_age"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_age.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[IssueAgeData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[IssueAgeData]:
         data = get_repo_data(org, repo, IssueAgeData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=IssueAgeData(
-                value=load_non_trival_metric_data(data),
+                value=load_non_trival_indicator_data(data),
             ),
             desc="",
         )
 
 
 @register_dataloader
-class AddedCodeChangeLineRepoDataloader(
-    BaseRepoDataloader[AddedCodeChangeLineData]
-):
+class AddedCodeChangeLineRepoDataloader(BaseRepoDataloader):
     name = "added_code_change_line"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/code_change_lines_add.json"
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[AddedCodeChangeLineData]:
+    ) -> DataloaderResult[AddedCodeChangeLineData]:
         data = get_repo_data(org, repo, AddedCodeChangeLineData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=AddedCodeChangeLineData(
                 value=load_base_data(data, int),
             ),
@@ -360,25 +415,27 @@ class AddedCodeChangeLineRepoDataloader(
 
 
 @register_dataloader
-class RemovedCodeChangeLineRepoDataloader(
-    BaseRepoDataloader[RemovedCodeChangeLineData]
-):
+class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
     name = "removed_code_change_line"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/code_change_lines_remove.json"
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[RemovedCodeChangeLineData]:
+    ) -> DataloaderResult[RemovedCodeChangeLineData]:
         data = get_repo_data(org, repo, RemovedCodeChangeLineData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=RemovedCodeChangeLineData(
                 value=load_base_data(data, int),
             ),
@@ -387,21 +444,25 @@ class RemovedCodeChangeLineRepoDataloader(
 
 
 @register_dataloader
-class ChangeRequestRepoDataloader(BaseRepoDataloader[ChangeRequestData]):
+class ChangeRequestRepoDataloader(BaseRepoDataloader):
     name = "change_request"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_requests.json"
 
-    def load(self, org: str, repo: str) -> DataloaderState[ChangeRequestData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[ChangeRequestData]:
         data = get_repo_data(org, repo, ChangeRequestData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestData(
                 value=load_base_data(data, int),
             ),
@@ -410,25 +471,27 @@ class ChangeRequestRepoDataloader(BaseRepoDataloader[ChangeRequestData]):
 
 
 @register_dataloader
-class AcceptedChangeRequestRepoDataloader(
-    BaseRepoDataloader[AcceptedChangeRequestData]
-):
+class AcceptedChangeRequestRepoDataloader(BaseRepoDataloader):
     name = "accepted_change_request"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_requests_accepted.json"
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[AcceptedChangeRequestData]:
+    ) -> DataloaderResult[AcceptedChangeRequestData]:
         data = get_repo_data(org, repo, AcceptedChangeRequestData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=AcceptedChangeRequestData(
                 value=load_base_data(data, int),
             ),
@@ -437,25 +500,27 @@ class AcceptedChangeRequestRepoDataloader(
 
 
 @register_dataloader
-class ChangeRequestReviewRepoDataloader(
-    BaseRepoDataloader[ChangeRequestReviewData]
-):
+class ChangeRequestReviewRepoDataloader(BaseRepoDataloader):
     name = "change_request_review"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_requests_reviews.json"
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[ChangeRequestReviewData]:
+    ) -> DataloaderResult[ChangeRequestReviewData]:
         data = get_repo_data(org, repo, ChangeRequestReviewData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestReviewData(
                 value=load_base_data(data, int),
             ),
@@ -464,81 +529,89 @@ class ChangeRequestReviewRepoDataloader(
 
 
 @register_dataloader
-class ChangeRequestResponseTimeRepoDataloader(
-    BaseRepoDataloader[ChangeRequestResponseTimeData]
-):
+class ChangeRequestResponseTimeRepoDataloader(BaseRepoDataloader):
     name = "change_request_response_time"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_request_response_time.json"
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[ChangeRequestResponseTimeData]:
+    ) -> DataloaderResult[ChangeRequestResponseTimeData]:
         data = get_repo_data(org, repo, ChangeRequestResponseTimeData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestResponseTimeData(
-                value=load_non_trival_metric_data(data),
+                value=load_non_trival_indicator_data(data),
             ),
             desc="",
         )
 
 
 @register_dataloader
-class ChangeRequestResolutionDurationRepoDataloader(
-    BaseRepoDataloader[ChangeRequestResolutionDurationData]
-):
+class ChangeRequestResolutionDurationRepoDataloader(BaseRepoDataloader):
     name = "change_request_resolution_duration"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_request_resolution_duration.json"
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[ChangeRequestResolutionDurationData]:
+    ) -> DataloaderResult[ChangeRequestResolutionDurationData]:
         data = get_repo_data(
             org, repo, ChangeRequestResolutionDurationData.name
         )
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestResolutionDurationData(
-                value=load_non_trival_metric_data(data),
+                value=load_non_trival_indicator_data(data),
             ),
             desc="",
         )
 
 
 @register_dataloader
-class ChangeRequestAgeRepoDataloader(BaseRepoDataloader[ChangeRequestAgeData]):
+class ChangeRequestAgeRepoDataloader(BaseRepoDataloader):
     name = "change_request_age"
-    metric_type = "metric"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_request_age.json"
 
     def load(
         self, org: str, repo: str
-    ) -> DataloaderState[ChangeRequestAgeData]:
+    ) -> DataloaderResult[ChangeRequestAgeData]:
         data = get_repo_data(org, repo, ChangeRequestAgeData.name)
         if data is None:
-            return DataloaderState(
+            return DataloaderResult(
                 is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
                 data=None,
                 desc="Cannot find data for this indicator",
             )
 
-        return DataloaderState(
+        return DataloaderResult(
             is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestAgeData(
-                value=load_non_trival_metric_data(data),
+                value=load_non_trival_indicator_data(data),
             ),
             desc="",
         )

@@ -1,11 +1,17 @@
 from dataclasses import dataclass
 from typing import ClassVar, List
 
-from .base import BaseData, NameAndValue, NonTrivialMetricDict
+from .base import (
+    BaseData,
+    NameAndValue,
+    NonTrivialIndicatorDict,
+    NonTrivialIndicatorData,
+    TrivialIndicatorData,
+)
 
 
 @dataclass
-class ActiveDateAndTimeData:
+class ActiveDateAndTimeData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-activity-dates-and-times/
     """
@@ -15,13 +21,13 @@ class ActiveDateAndTimeData:
 
 
 @dataclass
-class StarData:
+class StarData(TrivialIndicatorData):
     name: ClassVar[str] = "stars"
     value: List[BaseData[int]]
 
 
 @dataclass
-class TechnicalForkData:
+class TechnicalForkData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-technical-fork/
     """
@@ -31,13 +37,13 @@ class TechnicalForkData:
 
 
 @dataclass
-class ParticipantData:
+class ParticipantData(TrivialIndicatorData):
     name: ClassVar[str] = "participants"
     value: List[BaseData[int]]
 
 
 @dataclass
-class NewContributorData:
+class NewContributorData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-new-contributors/
     """
@@ -47,7 +53,7 @@ class NewContributorData:
 
 
 @dataclass
-class InactiveContributorData:
+class InactiveContributorData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-inactive-contributors/
     """
@@ -57,7 +63,7 @@ class InactiveContributorData:
 
 
 @dataclass
-class BusFactorData:
+class BusFactorData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-bus-factor/
     """
@@ -67,7 +73,7 @@ class BusFactorData:
 
 
 @dataclass
-class NewIssueData:
+class NewIssueData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issues-new/
     """
@@ -77,7 +83,7 @@ class NewIssueData:
 
 
 @dataclass
-class ClosedIssueData:
+class ClosedIssueData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issues-closed/
     """
@@ -87,43 +93,43 @@ class ClosedIssueData:
 
 
 @dataclass
-class IssueCommentData:
+class IssueCommentData(TrivialIndicatorData):
     name: ClassVar[str] = "issue_comments"
     value: List[BaseData[int]]
 
 
 @dataclass
-class IssueResponseTimeData:
+class IssueResponseTimeData(NonTrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issue-response-time/
     """
 
     name: ClassVar[str] = "issue_response_time"
-    value: NonTrivialMetricDict
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
-class IssueResolutionDurationData:
+class IssueResolutionDurationData(NonTrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issue-resolution-duration/
     """
 
     name: ClassVar[str] = "issue_resolution_duration"
-    value: NonTrivialMetricDict
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
-class IssueAgeData:
+class IssueAgeData(NonTrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issue-age/
     """
 
     name: ClassVar[str] = "issue_age"
-    value: NonTrivialMetricDict
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
-class AddedCodeChangeLineData:
+class AddedCodeChangeLineData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-code-changes-lines/
     """
@@ -133,7 +139,7 @@ class AddedCodeChangeLineData:
 
 
 @dataclass
-class RemovedCodeChangeLineData:
+class RemovedCodeChangeLineData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-code-changes-lines/
     """
@@ -143,7 +149,7 @@ class RemovedCodeChangeLineData:
 
 
 @dataclass
-class ChangeRequestData:
+class ChangeRequestData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-change-requests/
     """
@@ -153,7 +159,7 @@ class ChangeRequestData:
 
 
 @dataclass
-class AcceptedChangeRequestData:
+class AcceptedChangeRequestData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-change-requests-accepted/
     """
@@ -163,7 +169,7 @@ class AcceptedChangeRequestData:
 
 
 @dataclass
-class ChangeRequestReviewData:
+class ChangeRequestReviewData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-change-request-reviews/
     """
@@ -173,30 +179,30 @@ class ChangeRequestReviewData:
 
 
 @dataclass
-class ChangeRequestResponseTimeData:
+class ChangeRequestResponseTimeData(NonTrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issue-response-time/
     """
 
     name: ClassVar[str] = "change_request_response_time"
-    value: NonTrivialMetricDict
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
-class ChangeRequestResolutionDurationData:
+class ChangeRequestResolutionDurationData(NonTrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issue-resolution-duration/
     """
 
     name: ClassVar[str] = "change_request_resolution_duration"
-    value: NonTrivialMetricDict
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
-class ChangeRequestAgeData:
+class ChangeRequestAgeData(NonTrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-issue-age/
     """
 
     name: ClassVar[str] = "change_request_age"
-    value: NonTrivialMetricDict
+    value: NonTrivialIndicatorDict

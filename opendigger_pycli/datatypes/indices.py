@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 from typing import ClassVar, List
 
-from .base import BaseData, NameAndValue
+from .base import BaseData, NameAndValue, TrivialIndicatorData
 
 
 @dataclass
-class OpenRankData:
+class OpenRankData(TrivialIndicatorData):
     """
     ref: https://blog.frankzhao.cn/how_to_measure_open_source_2/
     """
@@ -15,7 +15,7 @@ class OpenRankData:
 
 
 @dataclass
-class ActivityData:
+class ActivityData(TrivialIndicatorData):
     """
     ref: https://blog.frankzhao.cn/how_to_measure_open_source_1/
     """
@@ -25,7 +25,7 @@ class ActivityData:
 
 
 @dataclass
-class AttentionData:
+class AttentionData(TrivialIndicatorData):
     """
     ref: https://github.com/X-lab2017/open-digger/issues/1186
     """
