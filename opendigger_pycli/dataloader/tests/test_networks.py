@@ -42,13 +42,15 @@ def test_developer_network():
 
 
 def test_project_openrank_network():
-    project_openrank_network_dataloader = ProjectOpenRankNetworkRepoDataloader()
+    project_openrank_network_dataloader = (
+        ProjectOpenRankNetworkRepoDataloader()
+    )
     success_data = project_openrank_network_dataloader.load(
-        TEST_ORG, TEST_REPO, "2022-12"
+        TEST_ORG, TEST_REPO, [(2022, 12)]
     )
     assert success_data.is_success
 
     fail_data = project_openrank_network_dataloader.load(
-        TEST_ORG, "non-exist-repo", "2022-12"
+        TEST_ORG, "non-exist-repo", [(2022, 12)]
     )
-    assert not fail_data.is_success
+    assert not fail_data.data.value[0].value
