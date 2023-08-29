@@ -13,6 +13,8 @@ from .base import (
     NonTrivalNetworkInciatorData,
     NonTrivialIndicatorData,
     NonTrivialIndicatorDict,
+    ProjectOpenRankNetworkEdgeDict,
+    ProjectOpenRankNetworkNodeDict,
     QuantileDataType,
     TrivialIndicatorData,
     TrivialNetworkIndicatorData,
@@ -43,11 +45,5 @@ from .metrics import (
     SumCodeChangeLineData,
     TechnicalForkData,
 )
-from .networks import (
-    DeveloperNetworkData,
-    ProjectOpenRankNetworkData,
-    ProjectOpenRankNetworkEdgeDict,
-    ProjectOpenRankNetworkNodeDict,
-    RepoNetworkData,
-)
+from .networks import DeveloperNetworkData, ProjectOpenRankNetworkData, RepoNetworkData
 from .query import IndicatorQuery

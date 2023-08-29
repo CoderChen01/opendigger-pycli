@@ -27,13 +27,12 @@ install:          ## Install the project in dev mode.
 .PHONY: fmt
 fmt:              ## Format code using black & isort.
 	$(ENV_PREFIX)isort opendigger_pycli/
-	$(ENV_PREFIX)black -l 79 opendigger_pycli/
-	$(ENV_PREFIX)black -l 79 tests/
+	$(ENV_PREFIX)black -l 88 opendigger_pycli/
 
 .PHONY: lint
 lint:             ## Run pep8, black, mypy linters.
 	$(ENV_PREFIX)flake8 opendigger_pycli/
-	$(ENV_PREFIX)black -l 79 --check opendigger_pycli/
+	$(ENV_PREFIX)black -l 88 --check opendigger_pycli/
 	$(ENV_PREFIX)mypy --ignore-missing-imports opendigger_pycli/
 
 .PHONY: test
@@ -91,21 +90,3 @@ docs:             ## Build the documentation.
 	@echo "building documentation ..."
 	@$(ENV_PREFIX)mkdocs build
 	URL="site/index.html"; xdg-open $$URL || sensible-browser $$URL || x-www-browser $$URL || gnome-open $$URL
-
-.PHONY: switch-to-poetry
-switch-to-poetry: ## Switch to poetry package manager.
-	@echo "Switching to poetry ..."
-	@if ! poetry --version > /dev/null; then echo 'poetry is required, install from https://python-poetry.org/'; exit 1; fi
-	@rm -rf .venv
-	@poetry init --no-interaction --name=a_flask_test --author=rochacbruno
-	@echo "" >> pyproject.toml
-	@echo "[tool.poetry.scripts]" >> pyproject.toml
-	@echo "opendigger_pycli = 'opendigger_pycli.__main__:main'" >> pyproject.toml
-	@cat requirements.txt | while read in; do poetry add --no-interaction "$${in}"; done
-	@cat requirements-test.txt | while read in; do poetry add --no-interaction "$${in}" --dev; done
-	@poetry install --no-interaction
-	@mkdir -p .github/backup
-	@mv requirements* .github/backup
-	@mv setup.py .github/backup
-	@echo "You have switched to https://python-poetry.org/ package manager."
-	@echo "Please run 'poetry shell' or 'poetry run opendigger_pycli'"

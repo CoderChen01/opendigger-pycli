@@ -1,6 +1,6 @@
 class OpenDiggerCliConfig:
     def __init__(self):
-        self.github_pat = "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"
+        self.github_pat = ""
 
         self.__load_config()
 

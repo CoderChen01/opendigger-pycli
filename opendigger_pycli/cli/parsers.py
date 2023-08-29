@@ -7,9 +7,9 @@ class QueryParser:
     def _try_parse_month(self, item: str) -> t.Optional[t.Set[int]]:
         if "~" in item:
             try:
-                start, end = item.split("~", 1)
-                start = int(start)
-                end = int(end)
+                start_str, end_str = item.split("~", 1)
+                start = int(start_str)
+                end = int(end_str)
                 if start > end:
                     return None
                 if start < 1 or end > 12:
@@ -29,9 +29,9 @@ class QueryParser:
     def _try_parse_year(self, item: str) -> t.Optional[t.Set[int]]:
         if "~" in item:
             try:
-                start, end = item.split("~", 1)
-                start = int(start)
-                end = int(end)
+                start_str, end_str = item.split("~", 1)
+                start = int(start_str)
+                end = int(end_str)
                 if start > end:
                     return None
                 if start < 1970 or end > 2100:
@@ -48,43 +48,46 @@ class QueryParser:
             except ValueError:
                 return None
 
-    def _try_parse_year_month(self, item: str) -> t.Optional[t.Set[t.Tuple[int, int]]]:
-        if "~" in item:
-            try:
-                start, end = item.split("~", 1)
-                start_year, start_month = start.split("-", 1)
-                end_year, end_month = end.split("-", 1)
-                start_year = int(start_year)
-                start_month = int(start_month)
-                end_year = int(end_year)
-                end_month = int(end_month)
-                if start_year > end_year:
-                    return None
-                if start_year < 1970 or end_year > 2100:
-                    return None
-                if start_month > end_month:
-                    return None
-                if start_month < 1 or end_month > 12:
-                    return None
-
-                result = set()
-                current_year = start_year
-                current_month = start_month
-                while (current_year, current_month) <= (end_year, end_month):
-                    result.add((current_year, current_month))
-                    current_month += 1
-                    if current_month > 12:
-                        current_month = 1
-                        current_year += 1
-                return result
-
-            except ValueError:
+    def _try_parse_year_month_range(
+        self, item: str
+    ) -> t.Optional[t.Set[t.Tuple[int, int]]]:
+        try:
+            start_str, end_str = item.split("~", 1)
+            start_year_str, start_month_str = start_str.split("-", 1)
+            end_year_str, end_month_str = end_str.split("-", 1)
+            start_year = int(start_year_str)
+            start_month = int(start_month_str)
+            end_year = int(end_year_str)
+            end_month = int(end_month_str)
+            if start_year > end_year:
                 return None
-        else:
+            if start_year < 1970 or end_year > 2100:
+                return None
+            if start_month > end_month:
+                return None
+            if start_month < 1 or end_month > 12:
+                return None
+
+            result = set()
+            current_year = start_year
+            current_month = start_month
+            while (current_year, current_month) <= (end_year, end_month):
+                result.add((current_year, current_month))
+                current_month += 1
+                if current_month > 12:
+                    current_month = 1
+                    current_year += 1
+            return result
+
+        except ValueError:
+            return None
+
+    def _try_parse_year_month(self, item: str) -> t.Optional[t.Set[t.Tuple[int, int]]]:
+        if "~" not in item:
             try:
-                year, month = item.split("-", 1)
-                year = int(year)
-                month = int(month)
+                year_str, month_str = item.split("-", 1)
+                year = int(year_str)
+                month = int(month_str)
                 if year < 1970 or year > 2100:
                     return None
                 if month < 1 or month > 12:
@@ -92,6 +95,7 @@ class QueryParser:
                 return {(year, month)}
             except ValueError:
                 return None
+        return self._try_parse_year_month_range(item)
 
     def try_parse_indicator_query(
         self, indicator_query: str

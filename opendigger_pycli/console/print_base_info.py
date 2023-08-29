@@ -6,8 +6,8 @@ from rich.table import Table
 from opendigger_pycli.dataloader import filter_dataloader
 from opendigger_pycli.utils import THREAD_POOL
 from opendigger_pycli.utils.gtihub_api import (
-    REPO_INFO_DICT,
-    USER_INFO_DICT,
+    RepoInfoType,
+    UserInfoType,
     get_repo_info,
     get_user_info,
 )
@@ -21,7 +21,7 @@ def print_user_info(
     table = Table(box=box.HORIZONTALS)
 
     name_map = {}
-    for key in USER_INFO_DICT.__annotations__.keys():
+    for key in UserInfoType.__annotations__.keys():
         name = " ".join(key.split("_")).title()
         name_map[name] = key
         table.add_column(name, overflow="fold")
@@ -37,11 +37,15 @@ def print_user_info(
                 f"[red]fail to request user [green]{user_info['username']}[/] [red]info![/]"
             )
         table.add_row(
-            *[str(user_info[name_map[key]]) for key in name_map if "url" not in key]
+            *[
+                str(user_info[name_map[key]])  # type: ignore
+                for key in name_map
+                if "url" not in key
+            ]
         )
         table.add_row(
             *[
-                f"[link={user_info[name_map[key]]}]{user_info[name_map[key]]}[/link]"
+                f"[link={user_info[name_map[key]]}]{user_info[name_map[key]]}[/link]"  # type: ignore
                 for key in name_map
                 if "url" in key
             ]
@@ -61,7 +65,7 @@ def print_repo_info(
     table = Table(box=box.HORIZONTALS)
 
     name_map = {}
-    for key in REPO_INFO_DICT.__annotations__.keys():
+    for key in RepoInfoType.__annotations__.keys():
         name = " ".join(key.split("_")).title()
         name_map[name] = key
         table.add_column(name, overflow="fold")
@@ -77,11 +81,15 @@ def print_repo_info(
                 f"[red]fail to request repo [green]{repo_info['repository']}[/] [red]info![/]"
             )
         table.add_row(
-            *[str(repo_info[name_map[key]]) for key in name_map if "url" not in key]
+            *[
+                str(repo_info[name_map[key]])  # type: ignore
+                for key in name_map
+                if "url" not in key
+            ]
         )
         table.add_row(
             *[
-                f"[link={repo_info[name_map[key]]}]{repo_info[name_map[key]]}[/link]"
+                f"[link={repo_info[name_map[key]]}]{repo_info[name_map[key]]}[/link]"  # type: ignore
                 for key in name_map
                 if "url" in key
             ]

@@ -5,10 +5,16 @@ from typing import Generic, List, NamedTuple, TypedDict, TypeVar
 T = TypeVar("T")
 S = TypeVar("S")
 
-TRIVIAL_INDICATOR_DATA = "trivial_indicator_data"
-NON_TRIVIAL_INDICATOR_DATA = "non_trivial_indicator_data"
-TRIVIAL_NETWORK_INDICATOR_DATA = "trivial_network_indicator_data"
-NON_TRIVAL_NETWORK_INDICATOR_DATA = "non_trivial_network_indicator_data"
+TRIVIAL_INDICATOR_DATA: t.Literal["trivial_indicator_data"] = "trivial_indicator_data"
+NON_TRIVIAL_INDICATOR_DATA: t.Literal[
+    "non_trivial_indicator_data"
+] = "non_trivial_indicator_data"
+TRIVIAL_NETWORK_INDICATOR_DATA: t.Literal[
+    "trivial_network_indicator_data"
+] = "trivial_network_indicator_data"
+NON_TRIVAL_NETWORK_INDICATOR_DATA: t.Literal[
+    "non_trivial_network_indicator_data"
+] = "non_trivial_network_indicator_data"
 
 IndicatorDataClassType = t.Literal[
     "trivial_indicator_data",
@@ -31,7 +37,7 @@ TrivialDataType = t.Union[
 
 @dataclass
 class TrivialNetworkIndicatorData:
-    name: str
+    name: t.ClassVar[str]
     value: "BaseNetworkData[NameAndValue, NameNameAndValue]"
     data_class: t.Literal[
         "trivial_network_indicator_data"
@@ -40,9 +46,9 @@ class TrivialNetworkIndicatorData:
 
 @dataclass
 class NonTrivalNetworkInciatorData:
-    name: str
+    name: t.ClassVar[str]
     value: List[
-        "BaseData[BaseNetworkData[ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict]]"
+        "BaseData[t.Optional[BaseNetworkData[ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict]]]"
     ]
     data_class: t.Literal[
         "non_trivial_network_indicator_data"
@@ -51,14 +57,14 @@ class NonTrivalNetworkInciatorData:
 
 @dataclass
 class TrivialIndicatorData:
-    name: str
+    name: t.ClassVar[str]
     value: List["BaseData[TrivialDataType]"]
     data_class: t.Literal["trivial_indicator_data"] = TRIVIAL_INDICATOR_DATA
 
 
 @dataclass
 class NonTrivialIndicatorData:
-    name: str
+    name: t.ClassVar[str]
     value: "NonTrivialIndicatorDict"
     data_class: t.Literal["non_trivial_indicator_data"] = NON_TRIVIAL_INDICATOR_DATA
 

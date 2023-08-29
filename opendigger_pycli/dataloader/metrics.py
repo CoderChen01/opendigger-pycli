@@ -432,7 +432,7 @@ class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
 
 
 @register_dataloader
-class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
+class SummedCodeChangeLineRepoDataloader(BaseRepoDataloader):
     name = "summed_code_change_line"
     indicator_type = "metric"
     introducer = "CHAOSS"

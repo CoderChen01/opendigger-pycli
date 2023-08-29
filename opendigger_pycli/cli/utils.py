@@ -34,7 +34,7 @@ def update_filtered_indicator_dataloaders(ctx: "Context") -> None:
         ),
         t.cast(t.Set[t.Literal["X-lab", "CHAOSS"]], introducers),
     )
-    ctx.meta[f"filtered_dataloaders"] = {
+    ctx.meta["filtered_dataloaders"] = {
         dataloader.name: dataloader for dataloader in dataloaders
     }
 
@@ -92,8 +92,8 @@ def distinct_indicator_queries(
 
     new_indicator_queries = []
     for indicator_name, queries in indicator_query_dict.items():
-        queries = set(queries)
-        for query in queries:
+        queries_set = set(queries)
+        for query in queries_set:
             new_indicator_queries.append((indicator_name, query))
 
     return new_indicator_queries

@@ -45,7 +45,7 @@ def get_developer_data(username: str, indicator_name: str) -> t.Optional[t.Dict]
 def load_base_data(
     data: t.Dict[str, t.Any], load_value: t.Callable
 ) -> t.List[BaseData]:
-    base_data_list = []
+    base_data_list: t.List[BaseData] = []
 
     for date, value in data.items():
         is_raw = False

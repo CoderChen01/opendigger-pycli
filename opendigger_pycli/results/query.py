@@ -88,14 +88,18 @@ def run_dataloader(result) -> None:
 def merge_indicator_queries(
     indicator_queries: t.List["IndicatorQuery"],
 ) -> "IndicatorQuery":
-    need_years = [{year for year in query.years} for query in indicator_queries]
-    need_years = set.union(*need_years) if need_years else set()
-    need_months = [{month for month in query.months} for query in indicator_queries]
-    need_months = set.union(*need_months) if need_months else set()
-    need_year_months = [
+    need_years_list = [{year for year in query.years} for query in indicator_queries]
+    need_years = set.union(*need_years_list) if need_years_list else set()
+    need_months_list = [
+        {month for month in query.months} for query in indicator_queries
+    ]
+    need_months = set.union(*need_months_list) if need_months_list else set()
+    need_year_months_list = [
         {year_month for year_month in query.year_months} for query in indicator_queries
     ]
-    need_year_months = set.union(*need_year_months) if need_year_months else set()
+    need_year_months = (
+        set.union(*need_year_months_list) if need_year_months_list else set()
+    )
     return IndicatorQuery(
         years=frozenset(need_years),
         months=frozenset(need_months),
@@ -160,7 +164,7 @@ def query_non_trivial_indicator(
         queried_base_data, failed_query = query_base_data(
             base_data_list, indicator_queries
         )
-        queried_indicator_data.value[key] = queried_base_data
+        queried_indicator_data.value[key] = queried_base_data  # type: ignore
         failed_queries[key] = failed_query
     return queried_indicator_data, failed_queries
 
@@ -217,6 +221,7 @@ def run_query(query_result: "BaseQueryResult"):
             continue
 
         indicator_data_class = indicator_dataloder_result.data.data_class
+        queried_indciator_data: t.Any
         if indicator_data_class == TRIVIAL_NETWORK_INDICATOR_DATA:
             (
                 queried_indciator_data,

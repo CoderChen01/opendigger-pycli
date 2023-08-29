@@ -24,8 +24,8 @@ class GhRepoNameType(click.ParamType):
     def convert(
         self,
         value: str,
-        param: "Parameter",
-        ctx: "Context",
+        param: t.Optional["Parameter"],
+        ctx: t.Optional["Context"],
     ) -> t.Tuple[str, str]:
         try:
             org_name, repo_name = value.split("/")
@@ -45,8 +45,8 @@ class GhUserNameType(click.ParamType):
     def convert(
         self,
         value: str,
-        param: "Parameter",
-        ctx: "Context",
+        param: t.Optional["Parameter"],
+        ctx: t.Optional["Context"],
     ) -> str:
         if not exist_gh_user(value):
             self.fail(
@@ -57,7 +57,7 @@ class GhUserNameType(click.ParamType):
 
 
 class FilteredMetricQueryType(click.ParamType):
-    name: t.ClassVar[str] = "indicator_query"
+    name: str = "indicator_query"
 
     def __init__(self) -> None:
         super().__init__()
@@ -74,9 +74,11 @@ class FilteredMetricQueryType(click.ParamType):
     def convert(
         self,
         value: str,
-        param: "Parameter",
-        ctx: "Context",
+        param: t.Optional["Parameter"],
+        ctx: t.Optional["Context"],
     ) -> t.Tuple[str, t.Optional["IndicatorQuery"]]:
+        if ctx is None:
+            raise ValueError("ctx should not be None")
         indicator_name, indicator_query_str = self._try_split_value(value)
         if indicator_name not in ctx.meta["filtered_dataloaders"]:
             self.fail(
@@ -113,8 +115,13 @@ class FilteredMetricQueryType(click.ParamType):
         return indicator_name, indicator_query
 
     def shell_complete(
-        self, ctx: "Context", param: "Parameter", incomplete: str
+        self,
+        ctx: t.Optional["Context"],
+        param: t.Optional["Parameter"],
+        incomplete: str,
     ) -> t.List[CompletionItem]:
+        if ctx is None:
+            raise ValueError("ctx should not be None")
         incomplete, query_str = self._try_split_value(incomplete)
         return [
             CompletionItem(name if query_str is None else f"{name}:{query_str}")
@@ -124,14 +131,16 @@ class FilteredMetricQueryType(click.ParamType):
 
 
 class IgnoredIndicatorNameType(click.ParamType):
-    name: t.ClassVar[str] = "ignored_indicator_names"
+    name: str = "ignored_indicator_names"
 
     def convert(
         self,
         value: str,
-        param: "Parameter",
-        ctx: "Context",
+        param: t.Optional["Parameter"],
+        ctx: t.Optional["Context"],
     ) -> str:
+        if ctx is None:
+            raise ValueError("ctx should not be None")
         indicator_name = value
         if indicator_name not in ctx.meta["filtered_dataloaders"]:
             self.fail(
@@ -144,8 +153,13 @@ class IgnoredIndicatorNameType(click.ParamType):
         return indicator_name
 
     def shell_complete(
-        self, ctx: "Context", param: "Parameter", incomplete: str
+        self,
+        ctx: t.Optional["Context"],
+        param: t.Optional["Parameter"],
+        incomplete: str,
     ) -> t.List[CompletionItem]:
+        if ctx is None:
+            raise ValueError("ctx should not be None")
         return [
             CompletionItem(name)
             for name in ctx.meta["filtered_dataloaders"]
@@ -161,7 +175,10 @@ class IndicatorQueryType(click.ParamType):
         self.query_parser = QueryParser()
 
     def convert(
-        self, value: str, param: "Parameter", ctx: "Context"
+        self,
+        value: str,
+        param: t.Optional["Parameter"],
+        ctx: t.Optional["Context"],
     ) -> "IndicatorQuery":
         query = self.query_parser.try_parse_indicator_query(value)
         if query is None:

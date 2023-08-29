@@ -43,3 +43,7 @@ test = [
     "gitchangelog",
     "mkdocs",
 ]
+
+[tool.black]
+line-length = 88
+target-version = ["py38", "py39"]

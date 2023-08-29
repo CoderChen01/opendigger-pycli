@@ -2,29 +2,28 @@ import typing as t
 
 import requests
 
-REPO_INFO_DICT = t.TypedDict(
-    "repo_info",
-    repository=str,
-    repository_url=str,
-    owner_url=str,
-    is_fork=str,
-    created_at=str,
-    updated_at=str,
-)
-USER_INFO_DICT = t.TypedDict(
-    "user_info",
-    username=str,
-    name=str,
-    email=str,
-    github_homepage_url=str,
-    created_at=str,
-    updated_at=str,
-)
+
+class RepoInfoType(t.TypedDict):
+    repository: str
+    repository_url: str
+    owner_url: str
+    is_fork: str
+    created_at: str
+    updated_at: str
+
+
+class UserInfoType(t.TypedDict):
+    username: str
+    name: str
+    email: str
+    github_homepage_url: str
+    created_at: str
+    updated_at: str
 
 
 def get_repo_info(
     org_name: str, repo_name: str, github_pat: t.Optional[str] = None
-) -> t.Tuple[bool, REPO_INFO_DICT]:
+) -> t.Tuple[bool, RepoInfoType]:
     """
     Get repo info from GitHub API
     """
@@ -39,7 +38,7 @@ def get_repo_info(
         response = requests.get(url)
 
     if response.status_code != 200:
-        return False, REPO_INFO_DICT(
+        return False, RepoInfoType(
             repository=f"{org_name}/{repo_name}",
             repository_url=f"https://www.github.com/{org_name}/{repo_name}",
             owner_url="null",
@@ -49,7 +48,7 @@ def get_repo_info(
         )
 
     data = response.json()
-    return True, REPO_INFO_DICT(
+    return True, RepoInfoType(
         repository=f"{org_name}/{repo_name}",
         repository_url=f"https://www.github.com/{org_name}/{repo_name}",
         owner_url=data["owner"]["html_url"],
@@ -61,7 +60,7 @@ def get_repo_info(
 
 def get_user_info(
     username: str, github_pat: t.Optional[str] = None
-) -> t.Tuple[bool, USER_INFO_DICT]:
+) -> t.Tuple[bool, UserInfoType]:
     url = f"https://api.github.com/users/{username}"
 
     if github_pat is not None:
@@ -70,7 +69,7 @@ def get_user_info(
         response = requests.get(url)
 
     if response.status_code != 200:
-        return False, USER_INFO_DICT(
+        return False, UserInfoType(
             username=username,
             name="null",
             email="null",
@@ -80,7 +79,7 @@ def get_user_info(
         )
 
     data = response.json()
-    return True, USER_INFO_DICT(
+    return True, UserInfoType(
         username=username,
         name=data["name"],
         email=data["email"] if data["email"] is not None else "null",

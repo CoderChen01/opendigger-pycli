@@ -7,12 +7,13 @@ if t.TYPE_CHECKING:
     from opendigger_pycli.datatypes import DataloaderProto
 
 
-DATALOADERS = t.TypedDict(
-    "DATALOADERS",
-    index=t.Dict[str, t.List[t.Type["DataloaderProto"]]],
-    metric=t.Dict[str, t.List[t.Type["DataloaderProto"]]],
-    network=t.Dict[str, t.List[t.Type["DataloaderProto"]]],
-)(
+class DataLoadersType(t.TypedDict):
+    index: t.Dict[str, t.List[t.Type["DataloaderProto"]]]
+    metric: t.Dict[str, t.List[t.Type["DataloaderProto"]]]
+    network: t.Dict[str, t.List[t.Type["DataloaderProto"]]]
+
+
+DATALOADERS = DataLoadersType(
     index=defaultdict(list),
     metric=defaultdict(list),
     network=defaultdict(list),

@@ -19,11 +19,7 @@ from opendigger_pycli.results.query import RepoQueryResult, UserQueryResult
 
 if t.TYPE_CHECKING:
     from opendigger_pycli.datatypes.query import IndicatorQuery
-    from opendigger_pycli.results.query import (
-        QueryResults,
-        RepoQueryResult,
-        UserQueryResult,
-    )
+    from opendigger_pycli.results.query import QueryResults
 
 
 class DisplyCMDResult:
@@ -126,7 +122,7 @@ class DisplyCMDResult:
         self, query_result: t.Union["RepoQueryResult", "UserQueryResult"]
     ) -> t.Optional[str]:
         if self.save_path is None:
-            return
+            return None
         self.save_path.mkdir(parents=True, exist_ok=True)
 
         if query_result.__class__ is RepoQueryResult:
@@ -163,8 +159,8 @@ class DisplyCMDResult:
                 self._handle_title(query_result)
                 self._handle_query_result(query_result)
 
-            if self.save_path is not None:
-                save_path = self._handle_save_path(query_result)
+            save_path = self._handle_save_path(query_result)
+            if save_path is not None:
                 save_paths.append(save_path)
                 with open(save_path, "w") as f:
                     f.write(CONSOLE.export_html())

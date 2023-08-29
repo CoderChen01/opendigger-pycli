@@ -1,7 +1,7 @@
 import typing as t
 
 from rich import box
-from rich.pretty import Pretty
+from rich.pretty import pretty_repr
 from rich.table import Table
 
 from . import CONSOLE
@@ -35,7 +35,9 @@ def print_base_data_table(base_data_list: t.List["BaseData"], *args, **kwargs):
     table.add_column("value", overflow="fold")
 
     for data in base_data_list:
-        value = str(data.value) if not if_prettey(data.value) else Pretty(data.value)
+        value = (
+            str(data.value) if not if_prettey(data.value) else pretty_repr(data.value)
+        )
 
         year = str(data.year) if not data.is_raw else f"[green]{data.year}"
         month = str(data.month) if not data.is_raw else f"[green]{data.month}"
@@ -57,8 +59,8 @@ def print_base_network_data_table(network_data: "BaseNetworkData", *args, **kwar
     table.add_column("nodes", overflow="fold")
     table.add_column("edges", overflow="fold")
     table.add_row(
-        Pretty(network_data.nodes, indent_size=2),
-        Pretty(network_data.edges, indent_size=2),
+        pretty_repr(network_data.nodes, indent_size=2),
+        pretty_repr(network_data.edges, indent_size=2),
     )
     print_table(table)
     CONSOLE.print()

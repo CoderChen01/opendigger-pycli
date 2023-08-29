@@ -38,7 +38,7 @@ if t.TYPE_CHECKING:
 pass_environment = click.make_pass_decorator(Environment, ensure=True)
 
 
-@click.group(
+@click.group(  # type: ignore
     context_settings={
         "help_option_names": ["-h", "--help"],
     }
@@ -62,7 +62,7 @@ def opendigger(
 opendigger_cmd = t.cast("Group", opendigger)
 
 
-@opendigger_cmd.group(invoke_without_command=True)
+@opendigger_cmd.group(invoke_without_command=True)  # type: ignore
 @click.option(
     "--username",
     "-u",
@@ -99,7 +99,7 @@ def user(env: Environment, usernames: t.List[str]):
     env.dlog("env.params:", env.params)
 
 
-@opendigger_cmd.group(invoke_without_command=True)
+@opendigger_cmd.group(invoke_without_command=True)  # type: ignore
 @click.option(
     "--repo",
     "-r",
@@ -135,7 +135,7 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
     env.vlog("Set params to env")
 
 
-@click.group(
+@click.group(  # type: ignore
     chain=True,
     help="Query indicators",
     invoke_without_command=True,
@@ -319,6 +319,7 @@ def process_query_results(
         dataloaders = list(filtered_dataloaders.values())
 
     mode = env.mode  # This is assigned in the repo command
+    results: t.Union[t.List[UserQueryResult], t.List[RepoQueryResult]]
     if mode == "user":
         usernames = t.cast(t.List[str], env.params)
         # build result

@@ -85,9 +85,11 @@ def print_trivial_base_data_graph(
             )
         ]
     else:
-        values = [data.value for data in base_data_list]
+        values = t.cast(
+            t.List[int],
+            [data.value for data in base_data_list],
+        )
 
-    values = t.cast(t.List[t.Union[int, float]], values)
     neg_blocks_num_map = blocks_num_map([abs(value) for value in values if value < 0])
     positive_blocks_num_map = blocks_num_map([value for value in values if value >= 0])
     for value, data in zip(values, base_data_list):
@@ -164,10 +166,6 @@ def print_non_trivial_base_data_graph(
 def get_base_data_heatmap_data(
     base_data_list: t.List["BaseData[t.List[int]]"],
 ):
-    # Create an array for hours and days
-    hours = list(range(24))
-    days = ["Sun.", "Sat.", "Fri.", "Thu.", "Wed.", "Tue.", "Mon."]
-
     # Assuming data is provided as a dictionary, sum up all the working hours
     values = [sum(x) for x in zip(*[data.value for data in base_data_list])]
 
@@ -190,8 +188,8 @@ def print_heatmap(data: t.List[t.List[t.Union[int, float]]], *args, **kwargs):
     row_labels = kwargs.pop("row_labels", None)
     col_labels = kwargs.pop("col_labels", None)
 
-    max_val = max(map(max, data))
-    min_val = min(map(min, data))
+    max_val = max(map(max, data))  # type: ignore
+    min_val = min(map(min, data))  # type: ignore
 
     # Get the width of the terminal
     console_width = CONSOLE.width
