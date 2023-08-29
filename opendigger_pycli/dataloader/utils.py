@@ -12,7 +12,6 @@ from opendigger_pycli.datatypes import (
     ProjectOpenRankNetworkNodeDict,
 )
 
-
 BASE_API_URL = "https://oss.x-lab.info/open_digger/github/"
 
 T = t.TypeVar("T")
@@ -35,9 +34,7 @@ def get_repo_data(
     return r.json()
 
 
-def get_developer_data(
-    username: str, indicator_name: str
-) -> t.Optional[t.Dict]:
+def get_developer_data(username: str, indicator_name: str) -> t.Optional[t.Dict]:
     url = f"{BASE_API_URL}{username}/{indicator_name}.json"
     r = requests.get(url)
     if r.status_code != 200:
@@ -85,9 +82,7 @@ def load_name_and_value(data: t.Tuple[str, float]) -> NameAndValue:
     return NameAndValue(name=name, value=value)
 
 
-def load_name_name_and_value(
-    data: t.Tuple[str, str, float]
-) -> NameNameAndValue:
+def load_name_name_and_value(data: t.Tuple[str, str, float]) -> NameNameAndValue:
     name0, name1, value = data
     return NameNameAndValue(name0=name0, name1=name1, value=value)
 
@@ -104,9 +99,7 @@ def load_quantile_data(data: t.Dict[str, t.Any]) -> t.List[BaseData[float]]:
     return load_base_data(data, float)
 
 
-def load_non_trival_indicator_data(
-    data: t.Dict[str, t.Any]
-) -> NonTrivialIndicatorDict:
+def load_non_trival_indicator_data(data: t.Dict[str, t.Any]) -> NonTrivialIndicatorDict:
     return NonTrivialIndicatorDict(
         avg=load_avg_data(data["avg"]),
         levels=load_level_data(data["levels"]),
@@ -120,9 +113,7 @@ def load_non_trival_indicator_data(
 
 def load_openrank_network_data(
     data: t.Dict[str, t.List],
-) -> BaseNetworkData[
-    ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict
-]:
+) -> BaseNetworkData[ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict]:
     nodes = data["nodes"]
     edges = data["links"]
     return BaseNetworkData(nodes=nodes, edges=edges)

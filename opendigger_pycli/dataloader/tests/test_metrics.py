@@ -39,9 +39,7 @@ def test_active_date_and_time():
     success_data = active_date_and_time_dataloader.load(TEST_ORG, TEST_REPO)
     assert success_data.is_success
 
-    fail_data = active_date_and_time_dataloader.load(
-        TEST_ORG, "non-exist-repo"
-    )
+    fail_data = active_date_and_time_dataloader.load(TEST_ORG, "non-exist-repo")
     assert not fail_data.is_success
 
 
@@ -50,22 +48,16 @@ def test_added_code_change_line():
     success_data = added_code_change_line_dataloader.load(TEST_ORG, TEST_REPO)
     assert success_data.is_success
 
-    fail_data = added_code_change_line_dataloader.load(
-        TEST_ORG, "non-exist-repo"
-    )
+    fail_data = added_code_change_line_dataloader.load(TEST_ORG, "non-exist-repo")
     assert not fail_data.is_success
 
 
 def test_removed_code_change_line():
     removed_code_change_line_dataloader = RemovedCodeChangeLineRepoDataloader()
-    success_data = removed_code_change_line_dataloader.load(
-        TEST_ORG, TEST_REPO
-    )
+    success_data = removed_code_change_line_dataloader.load(TEST_ORG, TEST_REPO)
     assert success_data.is_success
 
-    fail_data = removed_code_change_line_dataloader.load(
-        TEST_ORG, "non-exist-repo"
-    )
+    fail_data = removed_code_change_line_dataloader.load(TEST_ORG, "non-exist-repo")
     assert not fail_data.is_success
 
 
@@ -115,17 +107,11 @@ def test_participant():
 
 
 def test_issue_resolution_duration():
-    issue_resolution_duration_dataloader = (
-        IssueResolutionDurationRepoDataloader()
-    )
-    success_data = issue_resolution_duration_dataloader.load(
-        TEST_ORG, TEST_REPO
-    )
+    issue_resolution_duration_dataloader = IssueResolutionDurationRepoDataloader()
+    success_data = issue_resolution_duration_dataloader.load(TEST_ORG, TEST_REPO)
     assert success_data.is_success
 
-    fail_data = issue_resolution_duration_dataloader.load(
-        TEST_ORG, "non-exist-repo"
-    )
+    fail_data = issue_resolution_duration_dataloader.load(TEST_ORG, "non-exist-repo")
     assert not fail_data.is_success
 
 
@@ -188,9 +174,7 @@ def test_change_request_review():
     success_data = change_request_review_dataloader.load(TEST_ORG, TEST_REPO)
     assert success_data.is_success
 
-    fail_data = change_request_review_dataloader.load(
-        TEST_ORG, "non-exist-repo"
-    )
+    fail_data = change_request_review_dataloader.load(TEST_ORG, "non-exist-repo")
     assert not fail_data.is_success
 
 
@@ -199,9 +183,7 @@ def test_inactive_contributor():
     success_data = inactive_contributor_dataloader.load(TEST_ORG, TEST_REPO)
     assert success_data.is_success
 
-    fail_data = inactive_contributor_dataloader.load(
-        TEST_ORG, "non-exist-repo"
-    )
+    fail_data = inactive_contributor_dataloader.load(TEST_ORG, "non-exist-repo")
     assert not fail_data.is_success
 
 
@@ -210,24 +192,16 @@ def test_accepted_change_request():
     success_data = accepted_change_request_dataloader.load(TEST_ORG, TEST_REPO)
     assert success_data.is_success
 
-    fail_data = accepted_change_request_dataloader.load(
-        TEST_ORG, "non-exist-repo"
-    )
+    fail_data = accepted_change_request_dataloader.load(TEST_ORG, "non-exist-repo")
     assert not fail_data.is_success
 
 
 def test_change_request_response_time():
-    change_request_response_time_dataloader = (
-        ChangeRequestResponseTimeRepoDataloader()
-    )
-    success_data = change_request_response_time_dataloader.load(
-        TEST_ORG, TEST_REPO
-    )
+    change_request_response_time_dataloader = ChangeRequestResponseTimeRepoDataloader()
+    success_data = change_request_response_time_dataloader.load(TEST_ORG, TEST_REPO)
     assert success_data.is_success
 
-    fail_data = change_request_response_time_dataloader.load(
-        TEST_ORG, "non-exist-repo"
-    )
+    fail_data = change_request_response_time_dataloader.load(TEST_ORG, "non-exist-repo")
     assert not fail_data.is_success
 
 

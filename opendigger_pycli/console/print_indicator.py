@@ -1,27 +1,19 @@
 import typing as t
 
 from opendigger_pycli.datatypes.query import IndicatorQuery
+
 from . import CONSOLE
-from .print_indicator_table import (
-    print_base_data_table,
-    print_base_network_data_table,
-)
-from .print_indicator_json import (
-    print_base_data_json,
-    print_base_network_data_json,
-)
-from .print_indicator_graph import (
-    print_base_data_graph,
-    print_base_network_data_graph,
-)
+from .print_indicator_graph import print_base_data_graph, print_base_network_data_graph
+from .print_indicator_json import print_base_data_json, print_base_network_data_json
+from .print_indicator_table import print_base_data_table, print_base_network_data_table
 
 if t.TYPE_CHECKING:
     from opendigger_pycli.datatypes import (
-        TrivialIndicatorData,
-        NonTrivialIndicatorData,
-        TrivialNetworkIndicatorData,
-        NonTrivalNetworkInciatorData,
         BaseData,
+        NonTrivalNetworkInciatorData,
+        NonTrivialIndicatorData,
+        TrivialIndicatorData,
+        TrivialNetworkIndicatorData,
     )
 
 SURPPORTED_DISPLAY_FORMATS = ["table", "graph", "json"]

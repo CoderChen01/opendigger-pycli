@@ -1,23 +1,19 @@
-from pathlib import Path
 import typing as t
+from pathlib import Path
 
 import click
 
+from opendigger_pycli.console.print_indicator import SURPPORTED_DISPLAY_FORMATS
+from opendigger_pycli.results.display import DisplyCMDResult
 from opendigger_pycli.utils.decorators import processor
-from opendigger_pycli.results.display import (
-    DisplyCMDResult,
-)
-from opendigger_pycli.console.print_indicator import (
-    SURPPORTED_DISPLAY_FORMATS,
-)
+
 from .base import pass_environment
 
 if t.TYPE_CHECKING:
-    from .base import Environment
+    from opendigger_pycli.console.print_indicator import SURPPORTED_DISPLAY_FORMAT_TYPE
     from opendigger_pycli.results.query import QueryResults
-    from opendigger_pycli.console.print_indicator import (
-        SURPPORTED_DISPLAY_FORMAT_TYPE,
-    )
+
+    from .base import Environment
 
 
 @click.command("display", help="Display metrics")
@@ -40,7 +36,8 @@ if t.TYPE_CHECKING:
     "-p/ ",
     "paging",
     default=False,
-    help="Page output like more/less command, you CANNOT use this option and save to file at the same time",
+    help="Page output like more/less command, "
+    "you CANNOT use this option and save to file at the same time",
 )
 @click.option(
     "--pager-color/--no-pager-color",
@@ -59,9 +56,7 @@ def display(
     paging: bool,
     pager_color: bool,
 ):
-    env.dlog(
-        f"Received Params: format_name={format_name}, save_path={save_path}"
-    )
+    env.dlog(f"Received Params: format_name={format_name}, save_path={save_path}")
     env.vlog(f"Displaying results, format: {format_name}")
     DisplyCMDResult(
         results, format_name, save_path, paging=paging, color=pager_color

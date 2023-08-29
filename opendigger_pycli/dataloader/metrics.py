@@ -4,7 +4,6 @@ from opendigger_pycli.datatypes import (
     AcceptedChangeRequestData,
     ActiveDateAndTimeData,
     AddedCodeChangeLineData,
-    SumCodeChangeLineData,
     BusFactorData,
     ChangeRequestAgeData,
     ChangeRequestData,
@@ -12,6 +11,7 @@ from opendigger_pycli.datatypes import (
     ChangeRequestResponseTimeData,
     ChangeRequestReviewData,
     ClosedIssueData,
+    DataloaderResult,
     InactiveContributorData,
     IssueAgeData,
     IssueCommentData,
@@ -22,14 +22,11 @@ from opendigger_pycli.datatypes import (
     ParticipantData,
     RemovedCodeChangeLineData,
     StarData,
+    SumCodeChangeLineData,
     TechnicalForkData,
-    DataloaderResult,
 )
 
-from .base import (
-    BaseRepoDataloader,
-    register_dataloader,
-)
+from .base import BaseRepoDataloader, register_dataloader
 from .utils import (
     get_repo_data,
     load_base_data,
@@ -48,9 +45,7 @@ class ActiveDateAndTimeRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/active_dates_and_times.json"
 
-    def load(
-        self, org: str, repo: str
-    ) -> DataloaderResult[ActiveDateAndTimeData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[ActiveDateAndTimeData]:
         data = get_repo_data(org, repo, ActiveDateAndTimeData.name)
         if data is None:
             return DataloaderResult(
@@ -74,7 +69,9 @@ class StarRepoDataloader(BaseRepoDataloader):
     name = "star"
     indicator_type = "metric"
     introducer = "X-lab"
-    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/stars.json"
+    demo_url = (
+        "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/stars.json"
+    )
 
     def load(self, org: str, repo: str) -> DataloaderResult[StarData]:
         data = get_repo_data(org, repo, StarData.name)
@@ -148,9 +145,7 @@ class NewContributorRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/new_contributors_detail.json"
 
-    def load(
-        self, org: str, repo: str
-    ) -> DataloaderResult[NewContributorData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[NewContributorData]:
         data = get_repo_data(org, repo, NewContributorData.name)
         if data is None:
             return DataloaderResult(
@@ -177,9 +172,7 @@ class InactiveContributorRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/inactive_contributors.json"
 
-    def load(
-        self, org: str, repo: str
-    ) -> DataloaderResult[InactiveContributorData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[InactiveContributorData]:
         data = get_repo_data(org, repo, InactiveContributorData.name)
         if data is None:
             return DataloaderResult(
@@ -308,9 +301,7 @@ class IssueResponseTimeRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_response_time.json"
 
-    def load(
-        self, org: str, repo: str
-    ) -> DataloaderResult[IssueResponseTimeData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[IssueResponseTimeData]:
         data = get_repo_data(org, repo, IssueResponseTimeData.name)
         if data is None:
             return DataloaderResult(
@@ -323,9 +314,7 @@ class IssueResponseTimeRepoDataloader(BaseRepoDataloader):
         return DataloaderResult(
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
-            data=IssueResponseTimeData(
-                value=load_non_trival_indicator_data(data)
-            ),
+            data=IssueResponseTimeData(value=load_non_trival_indicator_data(data)),
             desc="",
         )
 
@@ -364,7 +353,9 @@ class IssueAgeRepoDataloader(BaseRepoDataloader):
     name = "issue_age"
     indicator_type = "metric"
     introducer = "CHAOSS"
-    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_age.json"
+    demo_url = (
+        "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/issue_age.json"
+    )
 
     def load(self, org: str, repo: str) -> DataloaderResult[IssueAgeData]:
         data = get_repo_data(org, repo, IssueAgeData.name)
@@ -393,9 +384,7 @@ class AddedCodeChangeLineRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/code_change_lines_add.json"
 
-    def load(
-        self, org: str, repo: str
-    ) -> DataloaderResult[AddedCodeChangeLineData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[AddedCodeChangeLineData]:
         data = get_repo_data(org, repo, AddedCodeChangeLineData.name)
         if data is None:
             return DataloaderResult(
@@ -422,9 +411,7 @@ class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/code_change_lines_remove.json"
 
-    def load(
-        self, org: str, repo: str
-    ) -> DataloaderResult[RemovedCodeChangeLineData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[RemovedCodeChangeLineData]:
         data = get_repo_data(org, repo, RemovedCodeChangeLineData.name)
         if data is None:
             return DataloaderResult(
@@ -451,9 +438,7 @@ class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/code_change_lines_sum.json"
 
-    def load(
-        self, org: str, repo: str
-    ) -> DataloaderResult[SumCodeChangeLineData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[SumCodeChangeLineData]:
         data = get_repo_data(org, repo, SumCodeChangeLineData.name)
         if data is None:
             return DataloaderResult(
@@ -507,9 +492,7 @@ class AcceptedChangeRequestRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_requests_accepted.json"
 
-    def load(
-        self, org: str, repo: str
-    ) -> DataloaderResult[AcceptedChangeRequestData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[AcceptedChangeRequestData]:
         data = get_repo_data(org, repo, AcceptedChangeRequestData.name)
         if data is None:
             return DataloaderResult(
@@ -536,9 +519,7 @@ class ChangeRequestReviewRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_requests_reviews.json"
 
-    def load(
-        self, org: str, repo: str
-    ) -> DataloaderResult[ChangeRequestReviewData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[ChangeRequestReviewData]:
         data = get_repo_data(org, repo, ChangeRequestReviewData.name)
         if data is None:
             return DataloaderResult(
@@ -597,9 +578,7 @@ class ChangeRequestResolutionDurationRepoDataloader(BaseRepoDataloader):
     def load(
         self, org: str, repo: str
     ) -> DataloaderResult[ChangeRequestResolutionDurationData]:
-        data = get_repo_data(
-            org, repo, ChangeRequestResolutionDurationData.name
-        )
+        data = get_repo_data(org, repo, ChangeRequestResolutionDurationData.name)
         if data is None:
             return DataloaderResult(
                 is_success=False,
@@ -625,9 +604,7 @@ class ChangeRequestAgeRepoDataloader(BaseRepoDataloader):
     introducer = "CHAOSS"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/change_request_age.json"
 
-    def load(
-        self, org: str, repo: str
-    ) -> DataloaderResult[ChangeRequestAgeData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[ChangeRequestAgeData]:
         data = get_repo_data(org, repo, ChangeRequestAgeData.name)
         if data is None:
             return DataloaderResult(

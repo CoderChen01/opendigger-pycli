@@ -1,4 +1,4 @@
-import typing as t
+import typing as t  # noqa: F401
 
 import click
 

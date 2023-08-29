@@ -2,38 +2,37 @@ import typing as t
 
 import click
 
+from opendigger_pycli.console import CONSOLE
 from opendigger_pycli.console.print_base_info import (
+    print_indicator_info,
     print_repo_info,
     print_user_info,
 )
-from opendigger_pycli.console import CONSOLE
 from opendigger_pycli.results.query import RepoQueryResult, UserQueryResult
-from opendigger_pycli.console.print_base_info import print_indicator_info
 from opendigger_pycli.utils.decorators import (
-    process_commands,
     pass_filtered_dataloaders,
+    process_commands,
 )
 
-from .env import Environment
 from .custom_types import (
+    FILTERED_METRIC_QUERY_TYPE,
     GH_REPO_NAME_TYPE,
     GH_USERNAME_TYPE,
-    FILTERED_METRIC_QUERY_TYPE,
     IGNORED_METRIC_NAME_TYPE,
     INDICATOR_QUERY_TYPE,
 )
+from .env import Environment
 from .utils import (
-    add_introducer,
     add_indicator_type,
+    add_introducer,
     distinct_indicator_names,
     distinct_indicator_queries,
 )
 
-
 if t.TYPE_CHECKING:
     from click import Group
-    from opendigger_pycli.datatypes import IndicatorQuery, DataloaderProto
-    from .base import Environment
+
+    from opendigger_pycli.datatypes import DataloaderProto, IndicatorQuery
 
 
 pass_environment = click.make_pass_decorator(Environment, ensure=True)
@@ -48,17 +47,13 @@ pass_environment = click.make_pass_decorator(Environment, ensure=True)
     "--log-level",
     "-L",
     "log_level",
-    type=click.Choice(
-        ["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-    ),
+    type=click.Choice(["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]),
     help="Enables verbose mode.",
 )
 @pass_environment
 def opendigger(
     env: Environment,
-    log_level: t.Literal[
-        "NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
-    ],
+    log_level: t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
 ):
     """Open Digger CLI"""
     env.set_log_level(log_level)
@@ -81,7 +76,7 @@ def user(env: Environment, usernames: t.List[str]):
     """
     Operate on user indicators
     """
-    env.vlog(f"indicator mode: [green]USER")
+    env.vlog("indicator mode: [green]USER")
 
     usernames = list(set(usernames))
     env.dlog("usernames:", usernames)
@@ -238,9 +233,7 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
 def query(
     indicator_types: t.Set[t.Literal["index", "metric", "network"]],
     introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
-    selected_indicator_queries: t.List[
-        t.Tuple[str, t.Optional["IndicatorQuery"]]
-    ],
+    selected_indicator_queries: t.List[t.Tuple[str, t.Optional["IndicatorQuery"]]],
     is_only_select: bool,
     ignore_indicator_names: t.List[str],
     uniform_query: t.Optional["IndicatorQuery"],
@@ -267,17 +260,13 @@ def process_query_results(
     processors: t.List[t.Callable],
     indicator_types: t.Set[t.Literal["index", "metric", "network"]],
     introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
-    selected_indicator_queries: t.List[
-        t.Tuple[str, t.Optional["IndicatorQuery"]]
-    ],
+    selected_indicator_queries: t.List[t.Tuple[str, t.Optional["IndicatorQuery"]]],
     is_only_select: bool,
     ignore_indicator_names: t.List[str],
     uniform_query: t.Optional["IndicatorQuery"],
 ):
     # Processing parameters: deduplication and default value processing
-    selected_indicator_queries = distinct_indicator_queries(
-        selected_indicator_queries
-    )
+    selected_indicator_queries = distinct_indicator_queries(selected_indicator_queries)
     ignore_indicator_names = distinct_indicator_names(ignore_indicator_names)
     if not indicator_types and not introducers:
         indicator_types = {"index", "metric", "network"}
@@ -287,15 +276,16 @@ def process_query_results(
     env.dlog(
         f"""Parameters:
         indicator_types: {indicator_types},
-        introducers: {introducers}, 
-        selected_indicator_queries: {selected_indicator_queries}, 
+        introducers: {introducers},
+        selected_indicator_queries: {selected_indicator_queries},
         is_only_select: {is_only_select},
         ignore_indicator_names: {ignore_indicator_names},
         uniform_query: {uniform_query}
         """
     )
 
-    # If the subcommand is not called, then print the filtered indicators information
+    # If the subcommand is not called,
+    # then print the filtered indicators information
     if click.get_current_context().invoked_subcommand is None:
         env.vlog("Loading indicators info...")
         with CONSOLE.status("Loading indicators info..."):
@@ -318,9 +308,7 @@ def process_query_results(
     if is_only_select:
         if not selected_indicator_queries:
             env.elog("You must specify the indicators you want to query.")
-            raise click.UsageError(
-                "You must specify the indicators you want to query."
-            )
+            raise click.UsageError("You must specify the indicators you want to query.")
         env.vlog("Query only selected indicators")
         dataloaders = [
             filtered_dataloaders[indicator_name]

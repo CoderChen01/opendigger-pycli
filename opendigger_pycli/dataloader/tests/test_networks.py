@@ -42,9 +42,7 @@ def test_developer_network():
 
 
 def test_project_openrank_network():
-    project_openrank_network_dataloader = (
-        ProjectOpenRankNetworkRepoDataloader()
-    )
+    project_openrank_network_dataloader = ProjectOpenRankNetworkRepoDataloader()
     success_data = project_openrank_network_dataloader.load(
         TEST_ORG, TEST_REPO, "2022-12"
     )

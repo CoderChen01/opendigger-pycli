@@ -5,9 +5,9 @@ import click
 
 from opendigger_pycli.dataloader import filter_dataloader
 
-
 if t.TYPE_CHECKING:
     from click import Context
+
     from opendigger_pycli.datatypes import IndicatorQuery
 
 

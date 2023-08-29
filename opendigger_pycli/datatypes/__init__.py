@@ -1,28 +1,28 @@
 from .base import (
+    NON_TRIVAL_NETWORK_INDICATOR_DATA,
+    NON_TRIVIAL_INDICATOR_DATA,
+    TRIVIAL_INDICATOR_DATA,
+    TRIVIAL_NETWORK_INDICATOR_DATA,
     AvgDataType,
     BaseData,
+    BaseDataValueSortableMixin,
     BaseNetworkData,
     LevelDataType,
     NameAndValue,
     NameNameAndValue,
+    NonTrivalNetworkInciatorData,
+    NonTrivialIndicatorData,
     NonTrivialIndicatorDict,
     QuantileDataType,
-    NON_TRIVAL_NETWORK_INDICATOR_DATA,
-    NON_TRIVIAL_INDICATOR_DATA,
-    TRIVIAL_NETWORK_INDICATOR_DATA,
-    TRIVIAL_INDICATOR_DATA,
     TrivialIndicatorData,
-    NonTrivialIndicatorData,
     TrivialNetworkIndicatorData,
-    NonTrivalNetworkInciatorData,
-    BaseDataValueSortableMixin,
 )
+from .dataloader import DataloaderProto, DataloaderResult
 from .indices import ActivityData, AttentionData, OpenRankData
 from .metrics import (
     AcceptedChangeRequestData,
     ActiveDateAndTimeData,
     AddedCodeChangeLineData,
-    SumCodeChangeLineData,
     BusFactorData,
     ChangeRequestAgeData,
     ChangeRequestData,
@@ -40,6 +40,7 @@ from .metrics import (
     ParticipantData,
     RemovedCodeChangeLineData,
     StarData,
+    SumCodeChangeLineData,
     TechnicalForkData,
 )
 from .networks import (
@@ -49,5 +50,4 @@ from .networks import (
     ProjectOpenRankNetworkNodeDict,
     RepoNetworkData,
 )
-from .dataloader import DataloaderProto, DataloaderResult
 from .query import IndicatorQuery

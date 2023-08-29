@@ -2,10 +2,10 @@ import typing as t
 
 from opendigger_pycli.datatypes import (
     BaseData,
+    DataloaderResult,
     DeveloperNetworkData,
     ProjectOpenRankNetworkData,
     RepoNetworkData,
-    DataloaderResult,
 )
 
 from .base import (
@@ -32,9 +32,7 @@ class DeveloperNetworkRepoDataloader(BaseRepoDataloader):
     introducer = "X-lab"
     demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/developer_network.json"
 
-    def load(
-        self, org: str, repo: str
-    ) -> DataloaderResult[DeveloperNetworkData]:
+    def load(self, org: str, repo: str) -> DataloaderResult[DeveloperNetworkData]:
         data = get_repo_data(org, repo, DeveloperNetworkData.name)
         if data is None:
             return DataloaderResult(
@@ -89,9 +87,7 @@ class ProjectOpenRankNetworkRepoDataloader(BaseOpenRankNetworkDataloader):
     ) -> DataloaderResult[ProjectOpenRankNetworkData]:
         values = []
         for date in dates:
-            data = get_repo_data(
-                org, repo, ProjectOpenRankNetworkData.name, date
-            )
+            data = get_repo_data(org, repo, ProjectOpenRankNetworkData.name, date)
             year, month = date
             values.append(
                 BaseData(
@@ -115,7 +111,9 @@ class DeveloperNetworkUserDataloader(BaseUserDataloader):
     name = "developer_network"
     indicator_type = "network"
     introducer = "X-lab"
-    demo_url = "https://oss.x-lab.info/open_digger/github/frank-zsy/developer_network.json"
+    demo_url = (
+        "https://oss.x-lab.info/open_digger/github/frank-zsy/developer_network.json"
+    )
 
     def load(self, username: str) -> DataloaderResult[DeveloperNetworkData]:
         data = get_developer_data(username, DeveloperNetworkData.name)
@@ -139,9 +137,7 @@ class RepoNetworkUserDataloader(BaseUserDataloader):
     name = "repo_network"
     indicator_type = "network"
     introducer = "X-lab"
-    demo_url = (
-        "https://oss.x-lab.info/open_digger/github/frank-zsy/repo_network.json"
-    )
+    demo_url = "https://oss.x-lab.info/open_digger/github/frank-zsy/repo_network.json"
 
     def load(self, username: str) -> DataloaderResult[RepoNetworkData]:
         data = get_developer_data(username, RepoNetworkData.name)

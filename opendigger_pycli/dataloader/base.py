@@ -1,8 +1,7 @@
 import abc
-from collections import defaultdict
 import itertools
 import typing as t
-
+from collections import defaultdict
 
 if t.TYPE_CHECKING:
     from opendigger_pycli.datatypes import DataloaderProto
@@ -41,9 +40,7 @@ def filter_dataloader(
     indicator_types: t.Set[t.Literal["index", "metric", "network"]],
     introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
 ) -> t.Iterator["DataloaderProto"]:
-    indicator_dicts: t.List[
-        t.Dict[str, t.List[t.Type["DataloaderProto"]]]
-    ] = list(
+    indicator_dicts: t.List[t.Dict[str, t.List[t.Type["DataloaderProto"]]]] = list(
         t.cast(
             t.ValuesView,
             DATALOADERS.values(),
@@ -62,14 +59,12 @@ def filter_dataloader(
                     )
                     or (
                         indicator_dataloader.type in types
-                        and indicator_dataloader.indicator_type
-                        in indicator_types
+                        and indicator_dataloader.indicator_type in indicator_types
                         and not introducers
                     )
                     or (
                         indicator_dataloader.type in types
-                        and indicator_dataloader.indicator_type
-                        in indicator_types
+                        and indicator_dataloader.indicator_type in indicator_types
                         and indicator_dataloader.introducer in introducers
                     )
                 ]

@@ -2,7 +2,6 @@ import typing as t
 from dataclasses import dataclass
 from typing import Generic, List, NamedTuple, TypedDict, TypeVar
 
-
 T = TypeVar("T")
 S = TypeVar("S")
 
@@ -61,9 +60,7 @@ class TrivialIndicatorData:
 class NonTrivialIndicatorData:
     name: str
     value: "NonTrivialIndicatorDict"
-    data_class: t.Literal[
-        "non_trivial_indicator_data"
-    ] = NON_TRIVIAL_INDICATOR_DATA
+    data_class: t.Literal["non_trivial_indicator_data"] = NON_TRIVIAL_INDICATOR_DATA
 
 
 class BaseDataValueSortableMixin:

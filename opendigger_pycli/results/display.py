@@ -1,29 +1,29 @@
-from pathlib import Path
 import typing as t
+from pathlib import Path
 
 from opendigger_pycli.console import CONSOLE
-from opendigger_pycli.results.query import RepoQueryResult, UserQueryResult
+from opendigger_pycli.console.print_indicator import (
+    SURPPORTED_DISPLAY_FORMAT_TYPE,
+    print_non_trivial_indicator,
+    print_non_trivial_network_indciator,
+    print_trivial_indicator,
+    print_trivial_network_indicator,
+)
 from opendigger_pycli.datatypes import (
     NON_TRIVAL_NETWORK_INDICATOR_DATA,
     NON_TRIVIAL_INDICATOR_DATA,
     TRIVIAL_INDICATOR_DATA,
     TRIVIAL_NETWORK_INDICATOR_DATA,
 )
-from opendigger_pycli.console.print_indicator import (
-    print_non_trivial_indicator,
-    print_non_trivial_network_indciator,
-    print_trivial_indicator,
-    print_trivial_network_indicator,
-    SURPPORTED_DISPLAY_FORMAT_TYPE,
-)
+from opendigger_pycli.results.query import RepoQueryResult, UserQueryResult
 
 if t.TYPE_CHECKING:
+    from opendigger_pycli.datatypes.query import IndicatorQuery
     from opendigger_pycli.results.query import (
         QueryResults,
         RepoQueryResult,
         UserQueryResult,
     )
-    from opendigger_pycli.datatypes.query import IndicatorQuery
 
 
 class DisplyCMDResult:

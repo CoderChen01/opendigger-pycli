@@ -4,8 +4,8 @@ from typing import ClassVar, List
 from .base import (
     BaseData,
     NameAndValue,
-    NonTrivialIndicatorDict,
     NonTrivialIndicatorData,
+    NonTrivialIndicatorDict,
     TrivialIndicatorData,
 )
 

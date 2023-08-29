@@ -9,11 +9,7 @@ from rich.columns import Columns
 from . import CONSOLE
 
 if t.TYPE_CHECKING:
-    from opendigger_pycli.datatypes import (
-        BaseData,
-        BaseNetworkData,
-        NameAndValue,
-    )
+    from opendigger_pycli.datatypes import BaseData, BaseNetworkData, NameAndValue
 
 DELIM = ","
 POSITIVE_TICK = "▇"
@@ -23,12 +19,8 @@ HEATMAP_CHAR = "▓"
 
 
 def print_header_row():
-    CONSOLE.print(
-        f"[red]{NEGTIVE_TICK}[/]" + " " + "Negative Value" + "  ", end=""
-    )
-    CONSOLE.print(
-        f"[green]{POSITIVE_TICK}[/]" + " " + "Positive Value" + "  ", end=""
-    )
+    CONSOLE.print(f"[red]{NEGTIVE_TICK}[/]" + " " + "Negative Value" + "  ", end="")
+    CONSOLE.print(f"[green]{POSITIVE_TICK}[/]" + " " + "Positive Value" + "  ", end="")
     CONSOLE.print("", end="\n\n")
 
 
@@ -96,18 +88,12 @@ def print_trivial_base_data_graph(
         values = [data.value for data in base_data_list]
 
     values = t.cast(t.List[t.Union[int, float]], values)
-    neg_blocks_num_map = blocks_num_map(
-        [abs(value) for value in values if value < 0]
-    )
-    positive_blocks_num_map = blocks_num_map(
-        [value for value in values if value >= 0]
-    )
+    neg_blocks_num_map = blocks_num_map([abs(value) for value in values if value < 0])
+    positive_blocks_num_map = blocks_num_map([value for value in values if value >= 0])
     for value, data in zip(values, base_data_list):
         label = f"{data.year}-{data.month:02}"
         num_blocks = (
-            positive_blocks_num_map(value)
-            if value >= 0
-            else neg_blocks_num_map(value)
+            positive_blocks_num_map(value) if value >= 0 else neg_blocks_num_map(value)
         )
         print_bar_row(
             f"{label}:",
@@ -127,8 +113,7 @@ def print_non_trivial_base_data_graph(
     """
     print_header_row()
     sum_values = [
-        sum([nv.value for nv in base_data.value])
-        for base_data in base_data_list
+        sum([nv.value for nv in base_data.value]) for base_data in base_data_list
     ]
     sum_blocks_num_map = blocks_num_map(sum_values)
     values_list = [
@@ -244,16 +229,12 @@ def print_heatmap(data: t.List[t.List[t.Union[int, float]]], *args, **kwargs):
             line = f"{idx:{row_label_width}} | "
             for val in row:
                 color = get_color(val)
-                line += (
-                    f"[{color.hex}]{HEATMAP_CHAR * (col_label_width + 1)}[/]"
-                )
+                line += f"[{color.hex}]{HEATMAP_CHAR * (col_label_width + 1)}[/]"
             CONSOLE.print(line)
 
         # Print the separator line below the row labels
         header_spacing = " " * (row_label_width + 2)  # 2 for '| '
-        CONSOLE.print(
-            header_spacing + "-" * ((col_label_width + 1) * len(data[0]))
-        )
+        CONSOLE.print(header_spacing + "-" * ((col_label_width + 1) * len(data[0])))
 
         # print column label numbers
         col_numbers = "".join(
@@ -351,16 +332,14 @@ def get_non_trivival_network_heatmap_data(
         t.List[t.Tuple[str, float]], list(zip(node_names, node_values))
     )
     for edge in netwok_data.edges:
-        heatmap_data[node_names.index(edge["s"])][
-            node_names.index(edge["t"])
-        ] = edge["w"]
+        heatmap_data[node_names.index(edge["s"])][node_names.index(edge["t"])] = edge[
+            "w"
+        ]
 
     return heatmap_data, row_labels, col_labels
 
 
-def print_base_network_data_graph(
-    network_data: "BaseNetworkData", *args, **kwargs
-):
+def print_base_network_data_graph(network_data: "BaseNetworkData", *args, **kwargs):
     caption = kwargs.pop("caption", None)
     if caption:
         CONSOLE.print(f"[green]# {caption}", end="\n\n")

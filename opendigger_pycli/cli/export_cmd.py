@@ -2,8 +2,8 @@ import typing as t
 
 import click
 
-from .base import pass_environment
 from ..utils.decorators import processor
+from .base import pass_environment
 
 if t.TYPE_CHECKING:
     from .base import Environment

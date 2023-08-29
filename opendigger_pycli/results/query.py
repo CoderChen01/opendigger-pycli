@@ -1,8 +1,8 @@
-import datetime
 import copy
+import datetime
 import typing as t
-from dataclasses import dataclass, field, replace
 from collections import defaultdict
+from dataclasses import dataclass, field, replace
 
 from rich.progress import track
 
@@ -16,13 +16,13 @@ from opendigger_pycli.datatypes import (
 
 if t.TYPE_CHECKING:
     from opendigger_pycli.datatypes import (
+        BaseData,
         DataloaderProto,
         DataloaderResult,
-        TrivialIndicatorData,
-        NonTrivialIndicatorData,
-        TrivialNetworkIndicatorData,
         NonTrivalNetworkInciatorData,
-        BaseData,
+        NonTrivialIndicatorData,
+        TrivialIndicatorData,
+        TrivialNetworkIndicatorData,
     )
 
 
@@ -61,8 +61,7 @@ def run_dataloader(result) -> None:
         current_indicator_queries = [
             indicator_query[1]
             for indicator_query in result.indicator_queries
-            if indicator_query[0] == dataloader.name
-            and indicator_query[1] is not None
+            if indicator_query[0] == dataloader.name and indicator_query[1] is not None
         ]
         # For indicators that do not specify a query and need to pass in a date query, ignore it directly
         if not current_indicator_queries:
@@ -89,21 +88,14 @@ def run_dataloader(result) -> None:
 def merge_indicator_queries(
     indicator_queries: t.List["IndicatorQuery"],
 ) -> "IndicatorQuery":
-    need_years = [
-        {year for year in query.years} for query in indicator_queries
-    ]
+    need_years = [{year for year in query.years} for query in indicator_queries]
     need_years = set.union(*need_years) if need_years else set()
-    need_months = [
-        {month for month in query.months} for query in indicator_queries
-    ]
+    need_months = [{month for month in query.months} for query in indicator_queries]
     need_months = set.union(*need_months) if need_months else set()
     need_year_months = [
-        {year_month for year_month in query.year_months}
-        for query in indicator_queries
+        {year_month for year_month in query.year_months} for query in indicator_queries
     ]
-    need_year_months = (
-        set.union(*need_year_months) if need_year_months else set()
-    )
+    need_year_months = set.union(*need_year_months) if need_year_months else set()
     return IndicatorQuery(
         years=frozenset(need_years),
         months=frozenset(need_months),
@@ -160,9 +152,7 @@ def query_base_data(
 def query_non_trivial_indicator(
     indicator_data: "NonTrivialIndicatorData",
     indicator_queries: t.List["IndicatorQuery"],
-) -> t.Tuple[
-    "NonTrivialIndicatorData", t.Dict[str, t.Optional["IndicatorQuery"]]
-]:
+) -> t.Tuple["NonTrivialIndicatorData", t.Dict[str, t.Optional["IndicatorQuery"]]]:
     queried_indicator_data = copy.deepcopy(indicator_data)
     failed_queries = {}
     for key, base_data_list in indicator_data.value.items():
@@ -279,9 +269,7 @@ class BaseQueryResult:
     dataloaders: t.List["DataloaderProto"]
     indicator_queries: t.List[t.Tuple[str, t.Optional["IndicatorQuery"]]]
     uniform_query: t.Optional["IndicatorQuery"]
-    data: t.Dict[str, "DataloaderResult"] = field(
-        default_factory=dict, init=False
-    )
+    data: t.Dict[str, "DataloaderResult"] = field(default_factory=dict, init=False)
     queried_data: t.Dict[str, "DataloaderResult"] = field(
         default_factory=dict, init=False
     )

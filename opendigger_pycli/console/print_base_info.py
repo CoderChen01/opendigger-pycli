@@ -1,16 +1,17 @@
 import typing as t
 
-from rich.table import Table
 from rich import box
+from rich.table import Table
 
+from opendigger_pycli.dataloader import filter_dataloader
+from opendigger_pycli.utils import THREAD_POOL
 from opendigger_pycli.utils.gtihub_api import (
     REPO_INFO_DICT,
     USER_INFO_DICT,
     get_repo_info,
     get_user_info,
 )
-from opendigger_pycli.dataloader import filter_dataloader
-from opendigger_pycli.utils import THREAD_POOL
+
 from . import CONSOLE
 
 
@@ -36,11 +37,7 @@ def print_user_info(
                 f"[red]fail to request user [green]{user_info['username']}[/] [red]info![/]"
             )
         table.add_row(
-            *[
-                str(user_info[name_map[key]])
-                for key in name_map
-                if "url" not in key
-            ]
+            *[str(user_info[name_map[key]]) for key in name_map if "url" not in key]
         )
         table.add_row(
             *[
@@ -80,11 +77,7 @@ def print_repo_info(
                 f"[red]fail to request repo [green]{repo_info['repository']}[/] [red]info![/]"
             )
         table.add_row(
-            *[
-                str(repo_info[name_map[key]])
-                for key in name_map
-                if "url" not in key
-            ]
+            *[str(repo_info[name_map[key]]) for key in name_map if "url" not in key]
         )
         table.add_row(
             *[
@@ -115,9 +108,7 @@ def print_indicator_info(
     table.add_column("Introducer", overflow="fold")
     table.add_column("Demo URL", overflow="fold")
 
-    indicator_dataloaders = filter_dataloader(
-        {mode}, indicator_types, introducers
-    )
+    indicator_dataloaders = filter_dataloader({mode}, indicator_types, introducers)
     for indicator_dataloader in indicator_dataloaders:
         table.add_row(
             f"{indicator_dataloader.indicator_type}/{indicator_dataloader.name}",

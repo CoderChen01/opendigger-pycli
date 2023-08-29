@@ -1,16 +1,15 @@
 import typing as t
 from dataclasses import dataclass
 
-
 from .base import (
     BaseData,
     BaseNetworkData,
     NameAndValue,
     NameNameAndValue,
+    NonTrivalNetworkInciatorData,
     ProjectOpenRankNetworkEdgeDict,
     ProjectOpenRankNetworkNodeDict,
     TrivialNetworkIndicatorData,
-    NonTrivalNetworkInciatorData,
 )
 
 

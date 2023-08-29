@@ -48,9 +48,7 @@ class QueryParser:
             except ValueError:
                 return None
 
-    def _try_parse_year_month(
-        self, item: str
-    ) -> t.Optional[t.Set[t.Tuple[int, int]]]:
+    def _try_parse_year_month(self, item: str) -> t.Optional[t.Set[t.Tuple[int, int]]]:
         if "~" in item:
             try:
                 start, end = item.split("~", 1)

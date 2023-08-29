@@ -1,3 +1,4 @@
+from .base import DATALOADERS, filter_dataloader
 from .indices import (
     ActivityRepoDataloader,
     ActivityUserDataLoader,
@@ -35,4 +36,3 @@ from .networks import (
     RepoNetworkRepoDataloader,
     RepoNetworkUserDataloader,
 )
-from .base import DATALOADERS, filter_dataloader

@@ -1,21 +1,16 @@
+import logging
 import os
-import sys
 import textwrap
 import typing as t
-import logging
 
 import click
 from rich.logging import RichHandler
-from rich.pretty import Pretty
 
 from opendigger_pycli.config.cli_config import OpenDiggerCliConfig
 from opendigger_pycli.console import CONSOLE
 
-
 FORMAT = "%(message)s"
-RICH_LOGGER_HANDLER = RichHandler(
-    rich_tracebacks=True, tracebacks_suppress=[click]
-)
+RICH_LOGGER_HANDLER = RichHandler(rich_tracebacks=True, tracebacks_suppress=[click])
 logging.basicConfig(
     format=FORMAT,
     datefmt="[%X]",
@@ -104,9 +99,7 @@ class Environment:
     def set_log_level(
         self,
         log_level: t.Optional[
-            t.Literal[
-                "NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
-            ]
+            t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
         ] = None,
     ) -> None:
         if log_level is None:

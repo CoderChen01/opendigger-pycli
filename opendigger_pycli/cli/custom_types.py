@@ -1,20 +1,20 @@
 import typing as t
 
 import click
-from click.core import Context, Parameter
 from click.shell_completion import CompletionItem
 
-from opendigger_pycli.utils.checkers import exist_gh_repo, exist_gh_user
 from opendigger_pycli.dataloader import (
-    ProjectOpenRankNetworkRepoDataloader,
     DeveloperNetworkRepoDataloader,
+    ProjectOpenRankNetworkRepoDataloader,
     RepoNetworkRepoDataloader,
 )
+from opendigger_pycli.utils.checkers import exist_gh_repo, exist_gh_user
+
 from .parsers import QueryParser
 
 if t.TYPE_CHECKING:
-    from click import Context, Parameter, Command
-    from opendigger_pycli.datatypes import DataloaderProto
+    from click.core import Context, Parameter
+
     from opendigger_pycli.datatypes import IndicatorQuery
 
 
@@ -31,7 +31,8 @@ class GhRepoNameType(click.ParamType):
             org_name, repo_name = value.split("/")
             if not exist_gh_repo(org_name, repo_name):
                 self.fail(
-                    f"{value} repo does not exist, please check https://www.github.com/{org_name}/{repo_name}"
+                    f"{value} repo does not exist, "
+                    f"please check https://www.github.com/{org_name}/{repo_name}"
                 )
             return org_name, repo_name
         except ValueError:
@@ -49,7 +50,8 @@ class GhUserNameType(click.ParamType):
     ) -> str:
         if not exist_gh_user(value):
             self.fail(
-                f"{value} user does not exist, please check https://www.github.com/{value}"
+                f"{value} user does not exist, "
+                f"please check https://www.github.com/{value}"
             )
         return value
 
@@ -78,7 +80,8 @@ class FilteredMetricQueryType(click.ParamType):
         indicator_name, indicator_query_str = self._try_split_value(value)
         if indicator_name not in ctx.meta["filtered_dataloaders"]:
             self.fail(
-                f"{indicator_name} is not a valid indicator name for filtered indicator info, "
+                f"{indicator_name} is not a valid indicator name "
+                f"for filtered indicator info, "
                 f"METRIC_TYPES: {ctx.params['indicator_types']}, "
                 f"INTRODUCERS: {ctx.params['introducers']}"
             )
@@ -114,9 +117,7 @@ class FilteredMetricQueryType(click.ParamType):
     ) -> t.List[CompletionItem]:
         incomplete, query_str = self._try_split_value(incomplete)
         return [
-            CompletionItem(
-                name if query_str is None else f"{name}:{query_str}"
-            )
+            CompletionItem(name if query_str is None else f"{name}:{query_str}")
             for name in ctx.meta["filtered_dataloaders"]
             if name.startswith(incomplete)
         ]
@@ -134,7 +135,8 @@ class IgnoredIndicatorNameType(click.ParamType):
         indicator_name = value
         if indicator_name not in ctx.meta["filtered_dataloaders"]:
             self.fail(
-                f"{indicator_name} is not a valid indicator name for filtered indicator info, "
+                f"{indicator_name} is not a valid indicator name "
+                f"for filtered indicator info, "
                 f"METRIC_TYPES: {ctx.params['indicator_types']}, "
                 f"INTRODUCERS: {ctx.params['introducers']}"
             )

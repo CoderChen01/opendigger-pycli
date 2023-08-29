@@ -1,9 +1,9 @@
-from opendigger_pycli.datatypes import DataloaderProto
 from opendigger_pycli.dataloader import (
-    ProjectOpenRankNetworkRepoDataloader,
     OpenRankRepoDataloader,
     OpenRankUserDataLoader,
+    ProjectOpenRankNetworkRepoDataloader,
 )
+from opendigger_pycli.datatypes import DataloaderProto
 
 
 def test_dataloader_proto_check():

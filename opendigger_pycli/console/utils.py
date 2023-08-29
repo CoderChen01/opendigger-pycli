@@ -1,11 +1,7 @@
 import typing as t
 
-
 if t.TYPE_CHECKING:
-    from opendigger_pycli.datatypes import (
-        NameAndValue,
-        NameNameAndValue,
-    )
+    from opendigger_pycli.datatypes import NameAndValue, NameNameAndValue
 
 
 def if_prettey(value: t.Any) -> bool:

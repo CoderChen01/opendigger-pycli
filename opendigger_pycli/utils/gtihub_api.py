@@ -2,7 +2,6 @@ import typing as t
 
 import requests
 
-
 REPO_INFO_DICT = t.TypedDict(
     "repo_info",
     repository=str,
@@ -66,9 +65,7 @@ def get_user_info(
     url = f"https://api.github.com/users/{username}"
 
     if github_pat is not None:
-        response = requests.get(
-            url, headers={"Authorization": f"token {github_pat}"}
-        )
+        response = requests.get(url, headers={"Authorization": f"token {github_pat}"})
     else:
         response = requests.get(url)
 
