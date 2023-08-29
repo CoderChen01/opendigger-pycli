@@ -149,6 +149,16 @@ class RemovedCodeChangeLineData(TrivialIndicatorData):
 
 
 @dataclass
+class SumCodeChangeLineData(TrivialIndicatorData):
+    """
+    ref: https://chaoss.community/metric-code-changes-lines/
+    """
+
+    name: ClassVar[str] = "code_change_lines_sum"
+    value: List[BaseData[int]]
+
+
+@dataclass
 class ChangeRequestData(TrivialIndicatorData):
     """
     ref: https://chaoss.community/metric-change-requests/

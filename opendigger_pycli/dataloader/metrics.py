@@ -4,6 +4,7 @@ from opendigger_pycli.datatypes import (
     AcceptedChangeRequestData,
     ActiveDateAndTimeData,
     AddedCodeChangeLineData,
+    SumCodeChangeLineData,
     BusFactorData,
     ChangeRequestAgeData,
     ChangeRequestData,
@@ -437,6 +438,35 @@ class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=RemovedCodeChangeLineData(
+                value=load_base_data(data, int),
+            ),
+            desc="",
+        )
+
+
+@register_dataloader
+class RemovedCodeChangeLineRepoDataloader(BaseRepoDataloader):
+    name = "summed_code_change_line"
+    indicator_type = "metric"
+    introducer = "CHAOSS"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/code_change_lines_sum.json"
+
+    def load(
+        self, org: str, repo: str
+    ) -> DataloaderResult[SumCodeChangeLineData]:
+        data = get_repo_data(org, repo, SumCodeChangeLineData.name)
+        if data is None:
+            return DataloaderResult(
+                is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
+                data=None,
+                desc="Cannot find data for this indicator",
+            )
+
+        return DataloaderResult(
+            is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
+            data=SumCodeChangeLineData(
                 value=load_base_data(data, int),
             ),
             desc="",

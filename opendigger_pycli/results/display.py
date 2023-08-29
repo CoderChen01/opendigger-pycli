@@ -66,6 +66,7 @@ class DisplyCMDResult:
             indicator_data_class = indicator_dataloder_result.data.data_class
             if indicator_data_class == TRIVIAL_NETWORK_INDICATOR_DATA:
                 print_trivial_network_indicator(
+                    indicator_name,
                     indicator_dataloder_result.data,
                     t.cast(
                         "t.Optional[IndicatorQuery]",
@@ -75,6 +76,7 @@ class DisplyCMDResult:
                 )
             elif indicator_data_class == NON_TRIVAL_NETWORK_INDICATOR_DATA:
                 print_non_trivial_network_indciator(
+                    indicator_name,
                     indicator_dataloder_result.data,
                     t.cast(
                         "t.Optional[IndicatorQuery]",
@@ -84,6 +86,7 @@ class DisplyCMDResult:
                 )
             elif indicator_data_class == TRIVIAL_INDICATOR_DATA:
                 print_trivial_indicator(
+                    indicator_name,
                     indicator_dataloder_result.data,
                     t.cast(
                         "t.Optional[IndicatorQuery]",
@@ -94,6 +97,7 @@ class DisplyCMDResult:
             elif indicator_data_class == NON_TRIVIAL_INDICATOR_DATA:
                 failed_queries[indicator_name]
                 print_non_trivial_indicator(
+                    indicator_name,
                     indicator_dataloder_result.data,
                     t.cast(
                         "t.Dict[str, IndicatorQuery]",
@@ -129,12 +133,14 @@ class DisplyCMDResult:
             query_result = t.cast(RepoQueryResult, query_result)
             save_path = str(
                 self.save_path
-                / f"{query_result.org_name}-{query_result.repo_name}.html"
+                / f"{query_result.org_name}-{query_result.repo_name}-{self.mode}.html"
             )
-            return save_path
         else:
             query_result = t.cast(UserQueryResult, query_result)
-            save_path = str(self.save_path / f"{query_result.username}.html")
+            save_path = str(
+                self.save_path / f"{query_result.username}-{self.mode}.html"
+            )
+        return save_path
 
     def display(self) -> None:
         if not self.query_results:

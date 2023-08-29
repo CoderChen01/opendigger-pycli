@@ -100,6 +100,8 @@ def user(env: Environment, usernames: t.List[str]):
     env.set_mode("user")
     env.set_params(usernames)
     env.dlog("Set params to env")
+    env.dlog("env.mode:", env.mode)
+    env.dlog("env.params:", env.params)
 
 
 @opendigger_cmd.group(invoke_without_command=True)
@@ -342,20 +344,20 @@ def process_query_results(
             )
             for username in usernames
         ]
-
-    # repo mode
-    repos = t.cast(t.List[t.Tuple[str, str]], env.params)
-    # build result
-    env.vlog("Fetching repo indicators data...")
-    results = [
-        RepoQueryResult(
-            repo=repo,
-            dataloaders=dataloaders,
-            indicator_queries=selected_indicator_queries,
-            uniform_query=uniform_query,
-        )
-        for repo in repos
-    ]
+    else:
+        # repo mode
+        repos = t.cast(t.List[t.Tuple[str, str]], env.params)
+        # build result
+        env.vlog("Fetching repo indicators data...")
+        results = [
+            RepoQueryResult(
+                repo=repo,
+                dataloaders=dataloaders,
+                indicator_queries=selected_indicator_queries,
+                uniform_query=uniform_query,
+            )
+            for repo in repos
+        ]
 
     env.vlog("End fetching indicators data...")
     env.dlog("Query Results:", results)
