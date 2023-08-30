@@ -34,6 +34,19 @@ TrivialDataType = t.Union[
     List["NameNameAndValue"],
 ]
 
+TrivalIndicatorValue = t.TypeVar(
+    "TrivalIndicatorValue",
+    int,
+    float,
+    str,
+    bool,
+    List[int],
+    List[float],
+    List[str],
+    List["NameAndValue"],
+    List["NameNameAndValue"],
+)
+
 
 @dataclass
 class TrivialNetworkIndicatorData:
@@ -56,9 +69,9 @@ class NonTrivalNetworkInciatorData:
 
 
 @dataclass
-class TrivialIndicatorData:
+class TrivialIndicatorData(Generic[TrivalIndicatorValue]):
     name: t.ClassVar[str]
-    value: List["BaseData[TrivialDataType]"]
+    value: List["BaseData[TrivalIndicatorValue]"]
     data_class: t.Literal["trivial_indicator_data"] = TRIVIAL_INDICATOR_DATA
 
 

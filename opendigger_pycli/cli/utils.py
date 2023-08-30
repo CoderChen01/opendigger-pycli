@@ -3,7 +3,7 @@ from collections import defaultdict
 
 import click
 
-from opendigger_pycli.dataloader import filter_dataloader
+from opendigger_pycli.dataloaders import filter_dataloader
 
 if t.TYPE_CHECKING:
     from click import Context

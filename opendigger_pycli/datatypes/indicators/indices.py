@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from typing import ClassVar
+from typing import ClassVar, List
 
-from .base import TrivialIndicatorData
+from .base import BaseData, NameAndValue, TrivialIndicatorData
 
 
 @dataclass
@@ -11,6 +11,7 @@ class OpenRankData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "openrank"
+    value: List[BaseData[float]]
 
 
 @dataclass
@@ -20,6 +21,7 @@ class ActivityData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "activity_details"
+    value: List[BaseData[List[NameAndValue]]]
 
 
 @dataclass
@@ -29,3 +31,4 @@ class AttentionData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "attention"
+    value: List[BaseData[int]]

@@ -1,7 +1,13 @@
 from dataclasses import dataclass
-from typing import ClassVar
+from typing import ClassVar, List
 
-from .base import NonTrivialIndicatorData, TrivialIndicatorData
+from .base import (
+    BaseData,
+    NameAndValue,
+    NonTrivialIndicatorData,
+    NonTrivialIndicatorDict,
+    TrivialIndicatorData,
+)
 
 
 @dataclass
@@ -11,11 +17,13 @@ class ActiveDateAndTimeData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "active_dates_and_times"
+    value: List[BaseData[List[int]]]
 
 
 @dataclass
 class StarData(TrivialIndicatorData):
     name: ClassVar[str] = "stars"
+    value: List[BaseData[int]]
 
 
 @dataclass
@@ -25,11 +33,13 @@ class TechnicalForkData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "technical_fork"
+    value: List[BaseData[int]]
 
 
 @dataclass
 class ParticipantData(TrivialIndicatorData):
     name: ClassVar[str] = "participants"
+    value: List[BaseData[int]]
 
 
 @dataclass
@@ -39,6 +49,7 @@ class NewContributorData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "new_contributors_detail"
+    value: List[BaseData[List[str]]]
 
 
 @dataclass
@@ -48,6 +59,7 @@ class InactiveContributorData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "inactive_contributors"
+    value: List[BaseData[int]]
 
 
 @dataclass
@@ -57,6 +69,7 @@ class BusFactorData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "bus_factor_detail"
+    value: List[BaseData[List[NameAndValue]]]
 
 
 @dataclass
@@ -66,6 +79,7 @@ class NewIssueData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "issues_new"
+    value: List[BaseData[int]]
 
 
 @dataclass
@@ -75,11 +89,13 @@ class ClosedIssueData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "issues_closed"
+    value: List[BaseData[int]]
 
 
 @dataclass
 class IssueCommentData(TrivialIndicatorData):
     name: ClassVar[str] = "issue_comments"
+    value: List[BaseData[int]]
 
 
 @dataclass
@@ -89,6 +105,7 @@ class IssueResponseTimeData(NonTrivialIndicatorData):
     """
 
     name: ClassVar[str] = "issue_response_time"
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
@@ -98,6 +115,7 @@ class IssueResolutionDurationData(NonTrivialIndicatorData):
     """
 
     name: ClassVar[str] = "issue_resolution_duration"
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
@@ -107,6 +125,7 @@ class IssueAgeData(NonTrivialIndicatorData):
     """
 
     name: ClassVar[str] = "issue_age"
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
@@ -116,6 +135,7 @@ class AddedCodeChangeLineData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "code_change_lines_add"
+    value: List[BaseData[int]]
 
 
 @dataclass
@@ -125,6 +145,7 @@ class RemovedCodeChangeLineData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "code_change_lines_remove"
+    value: List[BaseData[int]]
 
 
 @dataclass
@@ -134,6 +155,7 @@ class SumCodeChangeLineData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "code_change_lines_sum"
+    value: List[BaseData[int]]
 
 
 @dataclass
@@ -143,6 +165,7 @@ class ChangeRequestData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "change_requests"
+    value: List[BaseData[int]]
 
 
 @dataclass
@@ -152,6 +175,7 @@ class AcceptedChangeRequestData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "change_requests_accepted"
+    value: List[BaseData[int]]
 
 
 @dataclass
@@ -161,6 +185,7 @@ class ChangeRequestReviewData(TrivialIndicatorData):
     """
 
     name: ClassVar[str] = "change_requests_reviews"
+    value: List[BaseData[int]]
 
 
 @dataclass
@@ -170,6 +195,7 @@ class ChangeRequestResponseTimeData(NonTrivialIndicatorData):
     """
 
     name: ClassVar[str] = "change_request_response_time"
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
@@ -179,6 +205,7 @@ class ChangeRequestResolutionDurationData(NonTrivialIndicatorData):
     """
 
     name: ClassVar[str] = "change_request_resolution_duration"
+    value: NonTrivialIndicatorDict
 
 
 @dataclass
@@ -188,3 +215,4 @@ class ChangeRequestAgeData(NonTrivialIndicatorData):
     """
 
     name: ClassVar[str] = "change_request_age"
+    value: NonTrivialIndicatorDict
