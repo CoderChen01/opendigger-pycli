@@ -6,7 +6,7 @@ import typing as t
 import click
 from rich.logging import RichHandler
 
-from opendigger_pycli.config.cli_config import OpenDiggerCliConfig
+from opendigger_pycli.cli.config import OpenDiggerCliConfig
 from opendigger_pycli.console import CONSOLE
 
 FORMAT = "%(message)s"
@@ -29,8 +29,7 @@ class Environment:
         self.verbose = False
         self.home = os.getcwd()
         self.params = []
-
-        self.load_configs()
+        self.logger = logging.getLogger("opendigger-pycli")
 
     def log(
         self,
@@ -77,12 +76,8 @@ class Environment:
 
     def load_configs(self) -> bool:
         try:
-            if self.verbose:
-                with CONSOLE.status("[bold green]loading configs..."):
-                    self.cli_config = OpenDiggerCliConfig()
-                self.cli_config.print()
-            else:
-                self.cli_config = OpenDiggerCliConfig()
+            self.vlog("[bold green]loading configs...")
+            self.cli_config = OpenDiggerCliConfig()
             return True
         except Exception as e:
             self.log(f"[bold red]load configs failed: {e}")
@@ -106,8 +101,9 @@ class Environment:
             self.verbose = False
         else:
             self.verbose = True
-            self.logger = logging.getLogger("opendigger-pycli")
             self.logger.setLevel(log_level)
             RICH_LOGGER_HANDLER.setLevel(log_level)
             CONSOLE.quiet = True
             self.log("[bold green]verbose mode enabled")
+
+        self.load_configs()

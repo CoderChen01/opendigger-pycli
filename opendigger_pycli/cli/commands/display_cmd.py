@@ -7,7 +7,7 @@ from opendigger_pycli.console.print_indicator import SURPPORTED_DISPLAY_FORMATS
 from opendigger_pycli.results.display import DisplyCMDResult
 from opendigger_pycli.utils.decorators import processor
 
-from .base import pass_environment
+from ..base import pass_environment
 
 if t.TYPE_CHECKING:
     from opendigger_pycli.console.print_indicator import SURPPORTED_DISPLAY_FORMAT_TYPE

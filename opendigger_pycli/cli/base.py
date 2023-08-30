@@ -1,6 +1,8 @@
 import typing as t
+from pkg_resources import iter_entry_points
 
 import click
+from click_plugins import with_plugins
 
 from opendigger_pycli.console import CONSOLE
 from opendigger_pycli.console.print_base_info import (
@@ -47,13 +49,17 @@ pass_environment = click.make_pass_decorator(Environment, ensure=True)
     "--log-level",
     "-L",
     "log_level",
-    type=click.Choice(["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]),
+    type=click.Choice(
+        ["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+    ),
     help="Enables verbose mode.",
 )
 @pass_environment
 def opendigger(
     env: Environment,
-    log_level: t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+    log_level: t.Literal[
+        "NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
+    ],
 ):
     """Open Digger CLI"""
     env.set_log_level(log_level)
@@ -84,7 +90,9 @@ def user(env: Environment, usernames: t.List[str]):
     if click.get_current_context().invoked_subcommand is None:
         env.vlog("[bold green]requesting users info...")
         with CONSOLE.status("[bold green]requesting users info..."):
-            env.dlog(print_user_info(usernames, env.cli_config.github_pat))
+            env.dlog(
+                print_user_info(usernames, env.cli_config.app_keys.github_pat)
+            )
             env.vlog("[bold green]end requesting users info...")
             return
 
@@ -122,7 +130,9 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
     if click.get_current_context().invoked_subcommand is None:
         env.vlog("[bold green]fetching repos info...")
         with CONSOLE.status("[bold green]fetching repos info..."):
-            env.dlog(print_repo_info(repos, env.cli_config.github_pat))
+            env.dlog(
+                print_repo_info(repos, env.cli_config.app_keys.github_pat)
+            )
             env.vlog("[bold green]end fetching repos info...")
         return
 
@@ -135,6 +145,7 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
     env.vlog("Set params to env")
 
 
+@with_plugins(iter_entry_points("opendigger-pycli.plugins"))
 @click.group(  # type: ignore
     chain=True,
     help="Query indicators",
@@ -233,7 +244,9 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
 def query(
     indicator_types: t.Set[t.Literal["index", "metric", "network"]],
     introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
-    selected_indicator_queries: t.List[t.Tuple[str, t.Optional["IndicatorQuery"]]],
+    selected_indicator_queries: t.List[
+        t.Tuple[str, t.Optional["IndicatorQuery"]]
+    ],
     is_only_select: bool,
     ignore_indicator_names: t.List[str],
     uniform_query: t.Optional["IndicatorQuery"],
@@ -260,13 +273,17 @@ def process_query_results(
     processors: t.List[t.Callable],
     indicator_types: t.Set[t.Literal["index", "metric", "network"]],
     introducers: t.Set[t.Literal["X-lab", "CHAOSS"]],
-    selected_indicator_queries: t.List[t.Tuple[str, t.Optional["IndicatorQuery"]]],
+    selected_indicator_queries: t.List[
+        t.Tuple[str, t.Optional["IndicatorQuery"]]
+    ],
     is_only_select: bool,
     ignore_indicator_names: t.List[str],
     uniform_query: t.Optional["IndicatorQuery"],
 ):
     # Processing parameters: deduplication and default value processing
-    selected_indicator_queries = distinct_indicator_queries(selected_indicator_queries)
+    selected_indicator_queries = distinct_indicator_queries(
+        selected_indicator_queries
+    )
     ignore_indicator_names = distinct_indicator_names(ignore_indicator_names)
     if not indicator_types and not introducers:
         indicator_types = {"index", "metric", "network"}
@@ -308,7 +325,9 @@ def process_query_results(
     if is_only_select:
         if not selected_indicator_queries:
             env.elog("You must specify the indicators you want to query.")
-            raise click.UsageError("You must specify the indicators you want to query.")
+            raise click.UsageError(
+                "You must specify the indicators you want to query."
+            )
         env.vlog("Query only selected indicators")
         dataloaders = [
             filtered_dataloaders[indicator_name]

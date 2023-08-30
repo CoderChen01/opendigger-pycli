@@ -2,11 +2,11 @@ import typing as t
 
 import click
 
-from ..utils.decorators import processor
-from .base import pass_environment
+from opendigger_pycli.utils.decorators import processor
+from ..base import pass_environment
 
 if t.TYPE_CHECKING:
-    from .base import Environment
+    from ..base import Environment
 
 
 @click.command("export", help="Export metrics")

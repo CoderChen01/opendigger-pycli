@@ -1,10 +1,11 @@
 from .base import opendigger_cmd as opendigger
 from .base import query_cmd as query
-from .config_cmd import config
-from .display_cmd import display
-from .export_cmd import export
-from .monitor_cmd import monitor
-from .report_cmd import report
+
+from .commands.config_cmd import config
+from .commands.display_cmd import display
+from .commands.export_cmd import export
+from .commands.monitor_cmd import monitor
+from .commands.report_cmd import report
 
 opendigger.add_command(config)
 
