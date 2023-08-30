@@ -74,15 +74,15 @@ class OpenDiggerCliConfig:
     def __rich_console__(
         self, console: "Console", options: "ConsoleOptions"
     ) -> "RenderResult":
-        yield f"[b]OpenDigger Python CLI Configs:[/b]"
+        yield "[b]OpenDigger Python CLI Configs:[/b]"
         for config_dataclass in ALL_CONFIGS:
             if not is_dataclass(config_dataclass):
                 raise TypeError(f"{config_dataclass} is not a dataclass")
 
             table = Table(
-                "Key", "Value", title=config_dataclass.config_name, box=box.HORIZONTALS
+                "Key", "Value", title=config_dataclass.config_name, box=box.HORIZONTALS  # type: ignore
             )
-            config = getattr(self, config_dataclass.config_name, config_dataclass())
+            config = getattr(self, config_dataclass.config_name, config_dataclass())  # type: ignore
             config_fields = fields(config_dataclass)
             for field in config_fields:
                 table.add_row(field.name, getattr(config, field.name))

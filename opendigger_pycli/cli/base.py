@@ -2,7 +2,7 @@ import typing as t
 
 import click
 from click_plugins import with_plugins
-from pkg_resources import iter_entry_points
+from pkg_resources import iter_entry_points  # type: ignore
 
 from opendigger_pycli.console import CONSOLE
 from opendigger_pycli.console.print_base_info import (
@@ -137,7 +137,7 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
     env.vlog("Set params to env")
 
 
-@with_plugins(iter_entry_points("opendigger-pycli.plugins"))
+@with_plugins(iter_entry_points("opendigger-pycli.plugins"))  # type: ignore
 @click.group(  # type: ignore
     chain=True,
     help="Query indicators",
