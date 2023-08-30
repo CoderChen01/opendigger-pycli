@@ -1,11 +1,11 @@
-import typing as t
-from pathlib import Path
-from dataclasses import dataclass, fields, is_dataclass
 import configparser
+import typing as t
+from dataclasses import dataclass, fields, is_dataclass
+from pathlib import Path
 
 import click
-from rich.table import Table
 from rich import box
+from rich.table import Table
 
 from opendigger_pycli.datatypes import ALL_CONFIGS, AppKeyConfig, UserInfoConfig
 

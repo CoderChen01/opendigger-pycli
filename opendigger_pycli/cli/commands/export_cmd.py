@@ -3,6 +3,7 @@ import typing as t
 import click
 
 from opendigger_pycli.utils.decorators import processor
+
 from ..base import pass_environment
 
 if t.TYPE_CHECKING:
