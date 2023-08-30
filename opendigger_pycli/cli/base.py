@@ -1,6 +1,8 @@
 import typing as t
 
 import click
+from click_plugins import with_plugins
+from pkg_resources import iter_entry_points  # type: ignore
 
 from opendigger_pycli.console import CONSOLE
 from opendigger_pycli.console.print_base_info import (
@@ -84,7 +86,7 @@ def user(env: Environment, usernames: t.List[str]):
     if click.get_current_context().invoked_subcommand is None:
         env.vlog("[bold green]requesting users info...")
         with CONSOLE.status("[bold green]requesting users info..."):
-            env.dlog(print_user_info(usernames, env.cli_config.github_pat))
+            env.dlog(print_user_info(usernames, env.cli_config.app_keys.github_pat))
             env.vlog("[bold green]end requesting users info...")
             return
 
@@ -122,7 +124,7 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
     if click.get_current_context().invoked_subcommand is None:
         env.vlog("[bold green]fetching repos info...")
         with CONSOLE.status("[bold green]fetching repos info..."):
-            env.dlog(print_repo_info(repos, env.cli_config.github_pat))
+            env.dlog(print_repo_info(repos, env.cli_config.app_keys.github_pat))
             env.vlog("[bold green]end fetching repos info...")
         return
 
@@ -135,6 +137,7 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
     env.vlog("Set params to env")
 
 
+@with_plugins(iter_entry_points("opendigger-pycli.plugins"))  # type: ignore
 @click.group(  # type: ignore
     chain=True,
     help="Query indicators",
