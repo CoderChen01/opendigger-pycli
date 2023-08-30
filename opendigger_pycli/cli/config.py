@@ -24,7 +24,10 @@ class OpenDiggerCliConfig:
     def user_config_file_path(self) -> str:
         config_dir_str = click.get_app_dir("opendigger-pycli")
         config_dir = Path(config_dir_str)
+        config_dir.mkdir(parents=True, exist_ok=True)
         user_config = config_dir / "config.ini"
+        if not user_config.exists():
+            user_config.touch()
         return str(user_config)
 
     @property
@@ -40,7 +43,9 @@ class OpenDiggerCliConfig:
         parser = configparser.RawConfigParser()
         parser.read(self.config_file_paths)
 
-        for config_dataclass in ALL_CONFIGS:
+        for config_dataclass_key in ALL_CONFIGS:
+            config_dataclass = ALL_CONFIGS[config_dataclass_key]
+            config_dataclass = ALL_CONFIGS[config_dataclass_key]
             if not is_dataclass(config_dataclass):
                 raise TypeError(f"{config_dataclass} is not a dataclass")
 
@@ -54,8 +59,10 @@ class OpenDiggerCliConfig:
 
     def update_config(self):
         parser = configparser.RawConfigParser()
+        parser.read(self.config_file_paths)
 
-        for config_dataclass in ALL_CONFIGS:
+        for config_dataclass_key in ALL_CONFIGS:
+            config_dataclass = ALL_CONFIGS[config_dataclass_key]
             if not is_dataclass(config_dataclass):
                 raise TypeError(f"{config_dataclass} is not a dataclass")
 
@@ -75,7 +82,8 @@ class OpenDiggerCliConfig:
         self, console: "Console", options: "ConsoleOptions"
     ) -> "RenderResult":
         yield "[b]OpenDigger Python CLI Configs:[/b]"
-        for config_dataclass in ALL_CONFIGS:
+        for config_dataclass_key in ALL_CONFIGS:
+            config_dataclass = ALL_CONFIGS[config_dataclass_key]
             if not is_dataclass(config_dataclass):
                 raise TypeError(f"{config_dataclass} is not a dataclass")
 

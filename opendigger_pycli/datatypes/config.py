@@ -21,4 +21,7 @@ class UserInfoConfig(BaseConfig):
     email: str = ""
 
 
-ALL_CONFIGS: t.List[t.Type[BaseConfig]] = [AppKeyConfig, UserInfoConfig]
+ALL_CONFIGS: t.Dict[str, t.Type[BaseConfig]] = {
+    "app_keys": AppKeyConfig,
+    "user_info": UserInfoConfig,
+}
