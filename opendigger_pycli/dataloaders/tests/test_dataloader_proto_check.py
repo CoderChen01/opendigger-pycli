@@ -1,4 +1,4 @@
-from opendigger_pycli.dataloader import (
+from opendigger_pycli.dataloaders import (
     OpenRankRepoDataloader,
     OpenRankUserDataLoader,
     ProjectOpenRankNetworkRepoDataloader,
