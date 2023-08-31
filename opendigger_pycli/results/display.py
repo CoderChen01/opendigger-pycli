@@ -129,12 +129,12 @@ class DisplyCMDResult:
             query_result = t.cast(RepoQueryResult, query_result)
             save_path = str(
                 self.save_path
-                / f"{query_result.org_name}-{query_result.repo_name}-{self.mode}.html"
+                / f"repo-{query_result.org_name}-{query_result.repo_name}-{self.mode}.html"
             )
         else:
             query_result = t.cast(UserQueryResult, query_result)
             save_path = str(
-                self.save_path / f"{query_result.username}-{self.mode}.html"
+                self.save_path / f"user-{query_result.username}-{self.mode}.html"
             )
         return save_path
 

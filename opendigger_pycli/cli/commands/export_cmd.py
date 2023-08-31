@@ -1,12 +1,20 @@
 import typing as t
+from pathlib import Path
 
 import click
 
+from opendigger_pycli.exporters import (
+    SURPPORTED_EXPORT_FORMAT_TYPE,
+    SURPPORTED_EXPORT_FORMATS,
+)
+from opendigger_pycli.results.export import ExportResult
 from opendigger_pycli.utils.decorators import processor
 
 from ..base import pass_environment
 
 if t.TYPE_CHECKING:
+    from opendigger_pycli.results.query import QueryResults
+
     from ..base import Environment
 
 
@@ -14,16 +22,32 @@ if t.TYPE_CHECKING:
 @click.option(
     "--format",
     "-f",
-    "format_name",
-    type=click.Choice(["csv", "json", "mhtml"]),
+    type=click.Choice(SURPPORTED_EXPORT_FORMATS),
     required=True,
+    help="Format to export",
 )
-@click.option("--filename", "-o", "filename", type=str, required=True)
+@click.option(
+    "--save-dir",
+    "-s",
+    "save_dir",
+    type=click.Path(file_okay=False, resolve_path=True, path_type=Path),
+    required=True,
+    help="Directory to save indicators",
+)
+@click.option(
+    "--split/--no-split",
+    "is_split",
+    default=True,
+    help="Save indicators in separate files",
+)
 @processor
 @pass_environment
 def export(
     env: "Environment",
-    format_name: t.Literal["csv", "json", "mhtml"],
-    filename: click.Path,
+    results: "QueryResults",
+    format: SURPPORTED_EXPORT_FORMAT_TYPE,
+    save_dir: Path,
+    is_split: bool,
 ):
-    pass
+    ExportResult(results, format, save_dir, is_split).export()
+    yield from results

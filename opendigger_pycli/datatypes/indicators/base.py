@@ -113,6 +113,10 @@ class NameAndValue(NamedTuple):
     def __repr__(self) -> str:
         return f"\033[34m{self.name}\033[0m: {self.value}"
 
+    @property
+    def tuple(self) -> t.Tuple[str, float]:
+        return (self.name, self.value)
+
 
 class NameNameAndValue(NamedTuple):
     name0: str
@@ -124,6 +128,10 @@ class NameNameAndValue(NamedTuple):
 
     def __repr__(self) -> str:
         return f"\033[34m{self.name0}\033[0m>>\033[31m{self.name1}\033[0m: {self.value}"
+
+    @property
+    def tuple(self) -> t.Tuple[str, str, float]:
+        return (self.name0, self.name1, self.value)
 
 
 AvgDataType = BaseData[float]
