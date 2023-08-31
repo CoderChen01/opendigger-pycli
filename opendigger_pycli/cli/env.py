@@ -107,3 +107,14 @@ class Environment:
             self.log("[bold green]verbose mode enabled")
 
         self.load_configs()
+
+    def set_config(
+        self, section_name: str, key: str, value: str, *, is_persist: bool = True
+    ) -> None:
+        config = getattr(self.cli_config, section_name.replace(".", "_"))
+        setattr(config, key, value)
+        if is_persist:
+            self.cli_config.update_config()
+            self.dlog(
+                f"[bold green]set config {section_name}.{key} to {value} successfully"
+            )

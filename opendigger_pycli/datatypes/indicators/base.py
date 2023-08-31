@@ -34,6 +34,19 @@ TrivialDataType = t.Union[
     List["NameNameAndValue"],
 ]
 
+TrivalIndicatorValue = t.TypeVar(
+    "TrivalIndicatorValue",
+    int,
+    float,
+    str,
+    bool,
+    List[int],
+    List[float],
+    List[str],
+    List["NameAndValue"],
+    List["NameNameAndValue"],
+)
+
 
 @dataclass
 class TrivialNetworkIndicatorData:
@@ -56,9 +69,9 @@ class NonTrivalNetworkInciatorData:
 
 
 @dataclass
-class TrivialIndicatorData:
+class TrivialIndicatorData(Generic[TrivalIndicatorValue]):
     name: t.ClassVar[str]
-    value: List["BaseData[TrivialDataType]"]
+    value: List["BaseData[TrivalIndicatorValue]"]
     data_class: t.Literal["trivial_indicator_data"] = TRIVIAL_INDICATOR_DATA
 
 
@@ -100,6 +113,10 @@ class NameAndValue(NamedTuple):
     def __repr__(self) -> str:
         return f"\033[34m{self.name}\033[0m: {self.value}"
 
+    @property
+    def tuple(self) -> t.Tuple[str, float]:
+        return (self.name, self.value)
+
 
 class NameNameAndValue(NamedTuple):
     name0: str
@@ -111,6 +128,10 @@ class NameNameAndValue(NamedTuple):
 
     def __repr__(self) -> str:
         return f"\033[34m{self.name0}\033[0m>>\033[31m{self.name1}\033[0m: {self.value}"
+
+    @property
+    def tuple(self) -> t.Tuple[str, str, float]:
+        return (self.name0, self.name1, self.value)
 
 
 AvgDataType = BaseData[float]

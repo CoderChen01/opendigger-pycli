@@ -3,7 +3,7 @@ import typing as t
 from rich import box
 from rich.table import Table
 
-from opendigger_pycli.dataloader import filter_dataloader
+from opendigger_pycli.dataloaders import filter_dataloader
 from opendigger_pycli.utils import THREAD_POOL
 from opendigger_pycli.utils.gtihub_api import (
     RepoInfoType,

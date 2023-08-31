@@ -3,7 +3,7 @@ import typing as t
 import click
 from click.shell_completion import CompletionItem
 
-from opendigger_pycli.dataloader import (
+from opendigger_pycli.dataloaders import (
     DeveloperNetworkRepoDataloader,
     ProjectOpenRankNetworkRepoDataloader,
     RepoNetworkRepoDataloader,

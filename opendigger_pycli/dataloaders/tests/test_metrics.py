@@ -1,4 +1,4 @@
-from opendigger_pycli.dataloader.metrics import (
+from opendigger_pycli.dataloaders.metrics import (
     AcceptedChangeRequestRepoDataloader,
     ActiveDateAndTimeRepoDataloader,
     AddedCodeChangeLineRepoDataloader,

@@ -1,7 +1,16 @@
 import typing as t
 from dataclasses import dataclass
 
-from .base import NonTrivalNetworkInciatorData, TrivialNetworkIndicatorData
+from .base import (
+    BaseData,
+    BaseNetworkData,
+    NameAndValue,
+    NameNameAndValue,
+    NonTrivalNetworkInciatorData,
+    ProjectOpenRankNetworkEdgeDict,
+    ProjectOpenRankNetworkNodeDict,
+    TrivialNetworkIndicatorData,
+)
 
 
 @dataclass
@@ -11,6 +20,7 @@ class DeveloperNetworkData(TrivialNetworkIndicatorData):
     """
 
     name: t.ClassVar[str] = "developer_network"
+    value: BaseNetworkData[NameAndValue, NameNameAndValue]
 
 
 @dataclass
@@ -20,6 +30,7 @@ class RepoNetworkData(TrivialNetworkIndicatorData):
     """
 
     name: t.ClassVar[str] = "repo_network"
+    value: BaseNetworkData[NameAndValue, NameNameAndValue]
 
 
 @dataclass
@@ -29,3 +40,12 @@ class ProjectOpenRankNetworkData(NonTrivalNetworkInciatorData):
     """
 
     name: t.ClassVar[str] = "project_openrank_detail"
+    value: t.List[
+        BaseData[
+            t.Optional[
+                BaseNetworkData[
+                    ProjectOpenRankNetworkNodeDict, ProjectOpenRankNetworkEdgeDict
+                ]
+            ]
+        ]
+    ]

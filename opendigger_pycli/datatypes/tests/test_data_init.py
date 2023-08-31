@@ -1,6 +1,6 @@
-from opendigger_pycli.datatypes.base import AvgDataType, BaseData
-from opendigger_pycli.datatypes.indices import OpenRankData
-from opendigger_pycli.datatypes.metrics import IssueResponseTimeData
+from opendigger_pycli.datatypes.indicators.base import AvgDataType, BaseData
+from opendigger_pycli.datatypes.indicators.indices import OpenRankData
+from opendigger_pycli.datatypes.indicators.metrics import IssueResponseTimeData
 
 
 def test_init_data():

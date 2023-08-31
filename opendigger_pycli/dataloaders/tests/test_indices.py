@@ -1,4 +1,4 @@
-from opendigger_pycli.dataloader.indices import (
+from opendigger_pycli.dataloaders.indices import (
     ActivityRepoDataloader,
     ActivityUserDataLoader,
     AttentionRepoDataloader,

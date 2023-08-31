@@ -13,7 +13,7 @@ if t.TYPE_CHECKING:
     from opendigger_pycli.console.print_indicator import SURPPORTED_DISPLAY_FORMAT_TYPE
     from opendigger_pycli.results.query import QueryResults
 
-    from .base import Environment
+    from ..base import Environment
 
 
 @click.command("display", help="Display metrics")
