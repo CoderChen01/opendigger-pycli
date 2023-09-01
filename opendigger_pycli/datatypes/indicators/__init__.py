@@ -12,10 +12,10 @@ from .base import (
     NameNameAndValue,
     NonTrivalNetworkInciatorData,
     NonTrivialIndicatorData,
-    NonTrivialIndicatorDict,
     ProjectOpenRankNetworkEdgeDict,
     ProjectOpenRankNetworkNodeDict,
     QuantileDataType,
+    TimeDurationRelatedIndicatorDict,
     TrivialIndicatorData,
     TrivialNetworkIndicatorData,
 )

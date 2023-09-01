@@ -7,9 +7,9 @@ from opendigger_pycli.datatypes import (
     BaseNetworkData,
     NameAndValue,
     NameNameAndValue,
-    NonTrivialIndicatorDict,
     ProjectOpenRankNetworkEdgeDict,
     ProjectOpenRankNetworkNodeDict,
+    TimeDurationRelatedIndicatorDict,
 )
 
 BASE_API_URL = "https://oss.x-lab.info/open_digger/github/"
@@ -99,8 +99,10 @@ def load_quantile_data(data: t.Dict[str, t.Any]) -> t.List[BaseData[float]]:
     return load_base_data(data, float)
 
 
-def load_non_trival_indicator_data(data: t.Dict[str, t.Any]) -> NonTrivialIndicatorDict:
-    return NonTrivialIndicatorDict(
+def load_non_trival_indicator_data(
+    data: t.Dict[str, t.Any]
+) -> TimeDurationRelatedIndicatorDict:
+    return TimeDurationRelatedIndicatorDict(
         avg=load_avg_data(data["avg"]),
         levels=load_level_data(data["levels"]),
         quantile0=load_quantile_data(data["quantile_0"]),

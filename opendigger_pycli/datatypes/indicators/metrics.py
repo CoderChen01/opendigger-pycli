@@ -5,7 +5,7 @@ from .base import (
     BaseData,
     NameAndValue,
     NonTrivialIndicatorData,
-    NonTrivialIndicatorDict,
+    TimeDurationRelatedIndicatorDict,
     TrivialIndicatorData,
 )
 
@@ -105,7 +105,7 @@ class IssueResponseTimeData(NonTrivialIndicatorData):
     """
 
     name: ClassVar[str] = "issue_response_time"
-    value: NonTrivialIndicatorDict
+    value: TimeDurationRelatedIndicatorDict
 
 
 @dataclass
@@ -115,7 +115,7 @@ class IssueResolutionDurationData(NonTrivialIndicatorData):
     """
 
     name: ClassVar[str] = "issue_resolution_duration"
-    value: NonTrivialIndicatorDict
+    value: TimeDurationRelatedIndicatorDict
 
 
 @dataclass
@@ -125,7 +125,7 @@ class IssueAgeData(NonTrivialIndicatorData):
     """
 
     name: ClassVar[str] = "issue_age"
-    value: NonTrivialIndicatorDict
+    value: TimeDurationRelatedIndicatorDict
 
 
 @dataclass
@@ -195,7 +195,7 @@ class ChangeRequestResponseTimeData(NonTrivialIndicatorData):
     """
 
     name: ClassVar[str] = "change_request_response_time"
-    value: NonTrivialIndicatorDict
+    value: TimeDurationRelatedIndicatorDict
 
 
 @dataclass
@@ -205,7 +205,7 @@ class ChangeRequestResolutionDurationData(NonTrivialIndicatorData):
     """
 
     name: ClassVar[str] = "change_request_resolution_duration"
-    value: NonTrivialIndicatorDict
+    value: TimeDurationRelatedIndicatorDict
 
 
 @dataclass
@@ -215,4 +215,4 @@ class ChangeRequestAgeData(NonTrivialIndicatorData):
     """
 
     name: ClassVar[str] = "change_request_age"
-    value: NonTrivialIndicatorDict
+    value: TimeDurationRelatedIndicatorDict

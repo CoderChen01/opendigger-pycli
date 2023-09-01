@@ -78,7 +78,7 @@ class TrivialIndicatorData(Generic[TrivalIndicatorValue]):
 @dataclass
 class NonTrivialIndicatorData:
     name: t.ClassVar[str]
-    value: "NonTrivialIndicatorDict"
+    value: "TimeDurationRelatedIndicatorDict"
     data_class: t.Literal["non_trivial_indicator_data"] = NON_TRIVIAL_INDICATOR_DATA
 
 
@@ -139,7 +139,7 @@ LevelDataType = BaseData[List[int]]
 QuantileDataType = BaseData[float]
 
 
-class NonTrivialIndicatorDict(TypedDict):
+class TimeDurationRelatedIndicatorDict(TypedDict):
     avg: List[AvgDataType]
     levels: List[LevelDataType]
     quantile0: List[QuantileDataType]
