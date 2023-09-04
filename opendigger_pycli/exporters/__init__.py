@@ -1,4 +1,8 @@
 import typing as t
 
-SURPPORTED_EXPORT_FORMATS = ["echarts", "json"]
-SURPPORTED_EXPORT_FORMAT_TYPE = t.Literal["echarts", "json"]
+JSON_FORMT = "json"
+REPORT_FORMAT = "report"
+
+SURPPORTED_EXPORT_FORMATS = [REPORT_FORMAT, JSON_FORMT]
+SURPPORTED_EXPORT_FORMAT_TYPE = t.Literal["json", "report"]
+CAN_SPLIT_EXPORT_FORMATS = [JSON_FORMT]

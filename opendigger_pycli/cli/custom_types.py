@@ -84,8 +84,9 @@ class FilteredMetricQueryType(click.ParamType):
             self.fail(
                 f"{indicator_name} is not a valid indicator name "
                 f"for filtered indicator info, "
-                f"METRIC_TYPES: {ctx.params['indicator_types']}, "
-                f"INTRODUCERS: {ctx.params['introducers']}"
+                f"INDICATOR_TYPES: {list(ctx.params['indicator_types'])}, "
+                f"INTRODUCERS: {list(ctx.params['introducers'])}, "
+                f"FILTERED_INDICATORS: {list(ctx.meta['filtered_dataloaders'])}"
             )
         if indicator_query_str is None:
             if (
