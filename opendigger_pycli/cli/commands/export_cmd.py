@@ -4,6 +4,7 @@ from pathlib import Path
 import click
 
 from opendigger_pycli.exporters import (
+    CAN_SPLIT_EXPORT_FORMATS,
     SURPPORTED_EXPORT_FORMAT_TYPE,
     SURPPORTED_EXPORT_FORMATS,
 )
@@ -37,7 +38,7 @@ if t.TYPE_CHECKING:
 @click.option(
     "--split/--no-split",
     "is_split",
-    default=True,
+    default=False,
     help="Save indicators in separate files",
 )
 @processor
@@ -49,5 +50,8 @@ def export(
     save_dir: Path,
     is_split: bool,
 ):
+    if is_split and format not in CAN_SPLIT_EXPORT_FORMATS:
+        raise click.BadParameter("Format does not support split")
+
     ExportResult(results, format, save_dir, is_split).export()
     yield from results

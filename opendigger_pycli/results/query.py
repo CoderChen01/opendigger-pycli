@@ -119,6 +119,8 @@ def query_base_data(
     queried_data = []
     for base_data in base_data_list:
         is_add = False
+        if base_data.value is None:
+            continue
         if base_data.year in merged_indicator_query.years:
             success_year_query.add(base_data.year)
             is_add = True

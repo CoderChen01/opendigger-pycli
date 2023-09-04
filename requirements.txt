@@ -1,4 +1,6 @@
 click
 rich
 requests
+click-plugins
 types-requests
+pyecharts==2.0.4

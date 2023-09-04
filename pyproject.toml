@@ -20,7 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
 ]
-dependencies = ["click", "rich", "requests", "types-requests", "click-plugins"]
+dependencies = ["click", "rich", "requests", "types-requests", "click-plugins", "pyecharts==2.0.4"]
 dynamic = ["version", "description"]
 
 [project.urls]

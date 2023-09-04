@@ -1,0 +1,56 @@
+{% import 'macro' as macro %}
+
+{%- macro render_chart_extra_data(extra_data) %}
+  {% for key, value in extra_data.items() %}
+  <div class="chart-container">
+    <p><b>{{key}}:</b></p>
+    <p>{{value}}</p>
+    <br />
+  </div>
+  {% endfor %} 
+{%- endmacro %}
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ chart.page_title }}</title>
+    {{ macro.render_chart_dependencies(chart) }} {{
+    macro.render_chart_css(chart) }}
+  </head>
+
+  <body {% if chart.bg_color != '' %}style="background-color: {{ chart.bg_color }}"{% endif %}>
+    <h3>{{ chart.page_title }}</h3>
+    {% if chart.use_custom_tab_css is not true %}
+        {{ macro.generate_tab_css() }}
+    {% else %}
+        <style>{{ chart.tab_custom_css }}</style>
+    {% endif %}
+    <div style="margin-bottom: 20px;">
+    {{ macro.display_tablinks(chart) }}
+    </div>
+
+    <div class="box" style="width: 1600px; margin: 0 auto;">
+        {% for c in chart %}
+            {% if c._component_type in ("table", "image") %}
+                {{ macro.gen_components_content(c) }}
+            {% elif c._component_type == "project_openrank" %}
+              <div id="{{c.chart_id}}" class="chart-container" style="display: flex; justify-content: center; align-items: center; height: 100vh;"> 
+                <iframe  max-width="100%" max-height="100%" width="1200px" height="1200px" frameborder="0" src="data:text/html;charset=UTF-8;base64,{{ c.html_content }}"></iframe>
+              </div>
+            {% else %}
+                {{ macro.render_chart_content(c) }}
+            {% endif %}
+            {{render_chart_extra_data(extra_chart_datum[c.chart_id])}} 
+        {% endfor %}
+    </div>
+
+    <script>
+      {% for js in chart.js_functions.items %}
+      { { js } }
+      {% endfor %}
+    </script>
+    {{ macro.switch_tabs() }}
+  </body>
+</html>
