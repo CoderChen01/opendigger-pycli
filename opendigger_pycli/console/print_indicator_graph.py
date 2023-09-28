@@ -159,6 +159,7 @@ def print_non_trivial_base_data_graph(
                 color="green",
                 tail=f" ({name})",
             )
+        CONSOLE.print()
     CONSOLE.print()
     CONSOLE.print()
 
@@ -288,7 +289,8 @@ def print_base_data_graph(base_data_list: t.List["BaseData"], *args, **kwargs):
                 ),
                 col_labels=("Time", [f"{i:02}:00" for i in range(24)]),
             )
-    print_trivial_base_data_graph(base_data_list)
+    else:
+        print_trivial_base_data_graph(base_data_list)
 
 
 def get_trivival_network_heatmap_data(
