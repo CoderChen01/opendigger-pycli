@@ -216,3 +216,13 @@ class ChangeRequestAgeData(NonTrivialIndicatorData):
 
     name: ClassVar[str] = "change_request_age"
     value: TimeDurationRelatedIndicatorDict
+
+
+@dataclass
+class ActivityDetailData(TrivialIndicatorData):
+    """
+    ref: https://github.com/X-lab2017/open-digger/issues/1186
+    """
+
+    name: ClassVar[str] = "activity_details"
+    value: List[BaseData[List[NameAndValue]]]

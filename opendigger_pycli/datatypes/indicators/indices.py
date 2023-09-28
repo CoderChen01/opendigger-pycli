@@ -20,8 +20,8 @@ class ActivityData(TrivialIndicatorData):
     ref: https://blog.frankzhao.cn/how_to_measure_open_source_1/
     """
 
-    name: ClassVar[str] = "activity_details"
-    value: List[BaseData[List[NameAndValue]]]
+    name: ClassVar[str] = "activity"
+    value: List[BaseData[float]]
 
 
 @dataclass
