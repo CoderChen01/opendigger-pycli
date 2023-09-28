@@ -63,7 +63,7 @@ class QueryParser:
                 return None
             if start_year < 1970 or end_year > 2100:
                 return None
-            if start_month > end_month:
+            if start_month > end_month and not start_year < end_year:
                 return None
             if start_month < 1 or end_month > 12:
                 return None
