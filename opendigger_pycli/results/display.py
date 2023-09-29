@@ -1,5 +1,6 @@
 import typing as t
 from pathlib import Path
+import datetime
 
 from opendigger_pycli.console import CONSOLE
 from opendigger_pycli.console.print_indicator import (
@@ -133,16 +134,18 @@ class DisplyCMDResult:
             return None
         self.save_path.mkdir(parents=True, exist_ok=True)
 
+        curr_datetime_str = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         if query_result.__class__ is RepoQueryResult:
             query_result = t.cast(RepoQueryResult, query_result)
             save_path = str(
                 self.save_path
-                / f"repo-{query_result.org_name}-{query_result.repo_name}-{self.mode}.html"
+                / f"repo-{query_result.org_name}:{query_result.repo_name}-{self.mode}-{curr_datetime_str}.html"
             )
         else:
             query_result = t.cast(UserQueryResult, query_result)
             save_path = str(
-                self.save_path / f"user-{query_result.username}-{self.mode}.html"
+                self.save_path
+                / f"user-{query_result.username}-{self.mode}-{curr_datetime_str}.html"
             )
         return save_path
 
