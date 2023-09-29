@@ -87,3 +87,33 @@ def get_user_info(
         created_at=data["created_at"],
         updated_at=data["updated_at"],
     )
+
+
+def create_issue(
+    org_name: str,
+    repo_name: str,
+    github_pat: str,
+    title: str,
+    body: str,
+    labels: t.Optional[t.List[str]] = None,
+    assignees: t.Optional[t.List[str]] = None,
+) -> bool:
+    url = f"https://api.github.com/repos/{org_name}/{repo_name}/issues"
+
+    data: t.Dict[str, t.Union[str, t.List[str], int]] = {
+        "title": title,
+        "body": body,
+    }
+
+    if labels:
+        data["labels"] = labels
+    if assignees:
+        data["assignees"] = assignees
+
+    response = requests.post(
+        url=url,
+        headers={"Authorization": f"token {github_pat}"},
+        json=data,
+    )
+
+    return response.status_code == 201
