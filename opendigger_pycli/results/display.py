@@ -60,51 +60,59 @@ class DisplyCMDResult:
                 )
                 continue
             indicator_data_class = indicator_dataloder_result.data.data_class
-            if indicator_data_class == TRIVIAL_NETWORK_INDICATOR_DATA:
-                print_trivial_network_indicator(
-                    indicator_name,
-                    indicator_dataloder_result.data,
-                    t.cast(
-                        "t.Optional[IndicatorQuery]",
-                        failed_queries[indicator_name],
-                    ),
-                    self.mode,
-                )
-            elif indicator_data_class == NON_TRIVAL_NETWORK_INDICATOR_DATA:
-                print_non_trivial_network_indciator(
-                    indicator_name,
-                    indicator_dataloder_result.data,
-                    t.cast(
-                        "t.Optional[IndicatorQuery]",
-                        failed_queries[indicator_name],
-                    ),
-                    self.mode,
-                )
-            elif indicator_data_class == TRIVIAL_INDICATOR_DATA:
-                print_trivial_indicator(
-                    indicator_name,
-                    indicator_dataloder_result.data,
-                    t.cast(
-                        "t.Optional[IndicatorQuery]",
-                        failed_queries[indicator_name],
-                    ),
-                    self.mode,
-                )
-            elif indicator_data_class == NON_TRIVIAL_INDICATOR_DATA:
-                failed_queries[indicator_name]
-                print_non_trivial_indicator(
-                    indicator_name,
-                    indicator_dataloder_result.data,
-                    t.cast(
-                        "t.Dict[str, IndicatorQuery]",
-                        failed_queries[indicator_name],
-                    ),
-                    self.mode,
-                )
+
+            def _print_indicator_data(indicator_dataloder_result) -> None:
+                if indicator_data_class == TRIVIAL_NETWORK_INDICATOR_DATA:
+                    print_trivial_network_indicator(
+                        indicator_name,
+                        indicator_dataloder_result.data,
+                        t.cast(
+                            "t.Optional[IndicatorQuery]",
+                            failed_queries[indicator_name],
+                        ),
+                        self.mode,
+                    )
+                elif indicator_data_class == NON_TRIVAL_NETWORK_INDICATOR_DATA:
+                    print_non_trivial_network_indciator(
+                        indicator_name,
+                        indicator_dataloder_result.data,
+                        t.cast(
+                            "t.Optional[IndicatorQuery]",
+                            failed_queries[indicator_name],
+                        ),
+                        self.mode,
+                    )
+                elif indicator_data_class == TRIVIAL_INDICATOR_DATA:
+                    print_trivial_indicator(
+                        indicator_name,
+                        indicator_dataloder_result.data,
+                        t.cast(
+                            "t.Optional[IndicatorQuery]",
+                            failed_queries[indicator_name],
+                        ),
+                        self.mode,
+                    )
+                elif indicator_data_class == NON_TRIVIAL_INDICATOR_DATA:
+                    failed_queries[indicator_name]
+                    print_non_trivial_indicator(
+                        indicator_name,
+                        indicator_dataloder_result.data,
+                        t.cast(
+                            "t.Dict[str, IndicatorQuery]",
+                            failed_queries[indicator_name],
+                        ),
+                        self.mode,
+                    )
+                else:
+                    raise ValueError(
+                        f"Unknown indicator data class: {indicator_dataloder_result}"
+                    )
+
+            if self.paging:
+                with CONSOLE.pager(styles=self.pager_color):
+                    _print_indicator_data(indicator_dataloder_result)
             else:
-                raise ValueError(
-                    f"Unknown indicator data class: {indicator_dataloder_result}"
-                )
+                _print_indicator_data(indicator_dataloder_result)
 
     def _handle_title(
         self, query_result: t.Union["RepoQueryResult", "UserQueryResult"]
@@ -154,10 +162,9 @@ class DisplyCMDResult:
             if self.paging:
                 with CONSOLE.pager(styles=self.pager_color):
                     self._handle_title(query_result)
-                    self._handle_query_result(query_result)
             else:
                 self._handle_title(query_result)
-                self._handle_query_result(query_result)
+            self._handle_query_result(query_result)
 
             save_path = self._handle_save_path(query_result)
             if save_path is not None:
