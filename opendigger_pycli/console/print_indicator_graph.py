@@ -294,6 +294,7 @@ def print_heatmap(data: t.List[t.List[t.Union[int, float]]], *args, **kwargs):
 
 
 def print_base_data_graph(base_data_list: t.List["BaseData"], *args, **kwargs):
+    base_data_list = [base_data for base_data in base_data_list if not base_data.is_raw]
     caption = kwargs.pop("caption", None)
     if caption:
         CONSOLE.print(f"[green]# {caption}", end="\n\n")
