@@ -39,6 +39,7 @@ if t.TYPE_CHECKING:
     "--split/--no-split",
     "is_split",
     default=False,
+    is_flag=True,
     help="Save indicators in separate files",
 )
 @processor
@@ -51,7 +52,7 @@ def export(
     is_split: bool,
 ):
     if is_split and format not in CAN_SPLIT_EXPORT_FORMATS:
-        raise click.BadParameter("Format does not support split")
+        raise click.BadParameter(f"This format {format} does not support split")
 
     ExportResult(results, format, save_dir, is_split).export()
     yield from results
