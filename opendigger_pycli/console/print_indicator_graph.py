@@ -18,7 +18,7 @@ SM_TICK = "|"
 HEATMAP_CHAR = "▓"
 
 
-def print_header_row():
+def print_header_row() -> None:
     CONSOLE.print(f"[red]{NEGTIVE_TICK}[/]" + " " + "Negative Value" + "  ", end="")
     CONSOLE.print(f"[green]{POSITIVE_TICK}[/]" + " " + "Positive Value" + "  ", end="")
     CONSOLE.print("", end="\n\n")
@@ -55,7 +55,7 @@ def print_bar_row(
 
 
 def blocks_num_map(
-    values: t.List[t.Union[int, float]]
+    values: t.Union[t.List[int], t.List[float]]
 ) -> t.Callable[[t.Union[int, float]], float]:
     if not values:
         return lambda x: 0
@@ -108,58 +108,91 @@ def print_trivial_base_data_graph(
 
 
 def print_non_trivial_base_data_graph(
-    base_data_list: t.List["BaseData[t.List[NameAndValue]]"],
-):
+    base_data_list: t.Union[
+        t.List["BaseData[t.List[NameAndValue]]"], t.List["BaseData[t.List[int]]"]
+    ],
+) -> None:
     """Print a graph for a list of BaseData objects.
     The graph is a horizontal graph with a label and a bar.
     """
     print_header_row()
-    sum_values = [
-        sum([nv.value for nv in base_data.value]) for base_data in base_data_list
-    ]
-    sum_blocks_num_map = blocks_num_map(sum_values)
-    values_list = [
-        (
-            [nv.value for nv in base_data.value],
-            [nv.name for nv in base_data.value],
-        )
-        for base_data in base_data_list
-    ]
 
-    CONSOLE.print("# Summary: ", end="\n\n")
-    for sum_value, data in zip(sum_values, base_data_list):
-        label = f"{data.year}-{data.month:02}"
-        print_bar_row(
-            f"{label}:",
-            sum_value,
-            sum_blocks_num_map(sum_value),
-            color="green",
+    warm_up_data = base_data_list[0].value[0]
+    if not isinstance(warm_up_data, int):
+        base_data_list = t.cast(
+            t.List["BaseData[t.List[NameAndValue]]"], base_data_list
         )
-    CONSOLE.print()
+        sum_values = [
+            sum([nv.value for nv in base_data.value]) for base_data in base_data_list
+        ]
+        sum_blocks_num_map = blocks_num_map(sum_values)
+        values_list = [
+            (
+                [nv.value for nv in base_data.value],
+                [nv.name for nv in base_data.value],
+            )
+            for base_data in base_data_list
+        ]
 
-    CONSOLE.print("# Details: ", end="\n\n")
-    for values, data in zip(values_list, base_data_list):
-        label = f"{data.year}-{data.month:02}"
-        value_map = blocks_num_map(values[0])
-        is_first = True
-        for value, name in zip(*values):
-            if is_first:
+        CONSOLE.print("# Summary: ", end="\n\n")
+        for sum_value, data in zip(sum_values, base_data_list):
+            label = f"{data.year}-{data.month:02}"
+            print_bar_row(
+                f"{label}:",
+                sum_value,
+                sum_blocks_num_map(sum_value),
+                color="green",
+            )
+        CONSOLE.print()
+
+        CONSOLE.print("# Details: ", end="\n\n")
+        for values, data in zip(values_list, base_data_list):
+            label = f"{data.year}-{data.month:02}"
+            value_map = blocks_num_map(values[0])
+            is_first = True
+            for value, name in zip(*values):
+                if is_first:
+                    print_bar_row(
+                        f"{label}:",
+                        value,
+                        value_map(value),
+                        color="green",
+                        tail=f" ({name})",
+                    )
+                    is_first = False
                 print_bar_row(
-                    f"{label}:",
+                    " " * (len(label) + 1),
                     value,
                     value_map(value),
                     color="green",
                     tail=f" ({name})",
                 )
-                is_first = False
-            print_bar_row(
-                " " * (len(label) + 1),
-                value,
-                value_map(value),
-                color="green",
-                tail=f" ({name})",
-            )
-        CONSOLE.print()
+            CONSOLE.print()
+    else:
+        base_data_list = t.cast(t.List["BaseData[t.List[int]]"], base_data_list)
+        all_value_lists = [base_data.value for base_data in base_data_list]
+        for value_list, base_data in zip(all_value_lists, base_data_list):
+            value_map = blocks_num_map(value_list)
+            label = f"{base_data.year}-{base_data.month:02}"
+            for i, v in enumerate(value_list):
+                if i == 0:
+                    print_bar_row(
+                        label=f"{label}:",
+                        value=v,
+                        num_blocks=value_map(v),
+                        color="green",
+                        tail=f" (Index {i})",
+                    )
+                else:
+                    print_bar_row(
+                        label=" " * (len(label) + 1),
+                        value=v,
+                        num_blocks=value_map(v),
+                        color="green",
+                        tail=f" (Index {i})",
+                    )
+            CONSOLE.print()
+
     CONSOLE.print()
     CONSOLE.print()
 
@@ -270,6 +303,7 @@ def print_base_data_graph(base_data_list: t.List["BaseData"], *args, **kwargs):
             print_non_trivial_base_data_graph(base_data_list)
         elif isinstance(warm_up_data.value[0], int):
             if len(warm_up_data.value) != 24 * 7:
+                print_non_trivial_base_data_graph(base_data_list)
                 return
             data = get_base_data_heatmap_data(base_data_list)
             data = t.cast(t.List[t.List[float]], data)
