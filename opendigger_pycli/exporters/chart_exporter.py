@@ -21,6 +21,7 @@ from opendigger_pycli.datatypes import (
     AcceptedChangeRequestData,
     ActiveDateAndTimeData,
     ActivityData,
+    ActivityDetailData,
     AddedCodeChangeLineData,
     AttentionData,
     BusFactorData,
@@ -144,7 +145,7 @@ class BaseChartExporter(abc.ABC):
 @register_exporter
 class BarExporter(BaseChartExporter):
     exporter_name = "bar_exporter"
-    accepted_indicator_dataclass = [OpenRankData]
+    accepted_indicator_dataclass = [OpenRankData, ActivityData]
 
     def export(self) -> t.List[ExportData]:
         export_datum = []
@@ -177,7 +178,7 @@ class BarExporter(BaseChartExporter):
 @register_exporter
 class SumAndDetailExporter(BaseChartExporter):
     exporter_name = "sum_and_detail_exporter"
-    accepted_indicator_dataclass = [ActivityData, BusFactorData]
+    accepted_indicator_dataclass = [ActivityDetailData, BusFactorData]
 
     def __handle_bar_detail_chart(
         self, indicator_data: t.Any
