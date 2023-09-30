@@ -5,9 +5,9 @@ import click
 from click.shell_completion import CompletionItem
 
 from opendigger_pycli.console import CONSOLE
+from opendigger_pycli.config import ALL_CONFIGS
 
 from ..base import pass_environment
-from ..config import ALL_CONFIGS
 
 if t.TYPE_CHECKING:
     from click.core import Context, Parameter
@@ -82,25 +82,22 @@ def check_config_setting(
     callback=check_config_setting,
     shell_complete=config_shell_completion,
     help="Set config value",
-    required=True,
-)
-@click.option(
-    "--persist/--no-persist",
-    "-p/-n",
-    is_flag=True,
-    default=True,
-    help="Set config value persistently",
 )
 @pass_environment
 def config(
-    env: "Environment", config_settings: t.List[t.Tuple[str, str]], persist: bool
+    env: "Environment",
+    config_settings: t.List[t.Tuple[str, str]],
 ) -> None:
+    if not config_settings:
+        CONSOLE.print(env.cli_config)
+        return
+
     """Set config value"""
     for config_setting in config_settings:
         key, value = config_setting
         section_name, key = parse_config_key(key)
         env.dlog(f"set config: {section_name}.{key}={value}")
-        env.set_config(section_name, key, value, is_persist=persist)
+        env.set_config(section_name, key, value)
         env.dlog(f"finished to set config: {section_name}.{key}={value}")
 
     CONSOLE.print("[green]Config set successfully[/]")

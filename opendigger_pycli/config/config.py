@@ -1,6 +1,6 @@
 import configparser
 import typing as t
-from dataclasses import dataclass, fields, is_dataclass
+from dataclasses import fields, is_dataclass
 from pathlib import Path
 
 import click
@@ -32,7 +32,7 @@ class OpenDiggerCliConfig:
 
     @property
     def default_config_file_path(self) -> str:
-        default_config = Path(__file__).parent / "default_config.ini"
+        default_config = Path(__file__).with_name("default_config.ini")
         return str(default_config)
 
     @property
@@ -44,7 +44,6 @@ class OpenDiggerCliConfig:
         parser.read(self.config_file_paths)
 
         for config_dataclass_key in ALL_CONFIGS:
-            config_dataclass = ALL_CONFIGS[config_dataclass_key]
             config_dataclass = ALL_CONFIGS[config_dataclass_key]
             if not is_dataclass(config_dataclass):
                 raise TypeError(f"{config_dataclass} is not a dataclass")

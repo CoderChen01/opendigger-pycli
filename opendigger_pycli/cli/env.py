@@ -6,7 +6,7 @@ import typing as t
 import click
 from rich.logging import RichHandler
 
-from opendigger_pycli.cli.config import OpenDiggerCliConfig
+from opendigger_pycli.config import OpenDiggerCliConfig
 from opendigger_pycli.console import CONSOLE
 
 FORMAT = "%(message)s"
@@ -108,13 +108,10 @@ class Environment:
 
         self.load_configs()
 
-    def set_config(
-        self, section_name: str, key: str, value: str, *, is_persist: bool = True
-    ) -> None:
+    def set_config(self, section_name: str, key: str, value: str) -> None:
         config = getattr(self.cli_config, section_name.replace(".", "_"))
         setattr(config, key, value)
-        if is_persist:
-            self.cli_config.update_config()
-            self.dlog(
-                f"[bold green]set config {section_name}.{key} to {value} successfully"
-            )
+        self.cli_config.update_config()
+        self.dlog(
+            f"[bold green]set config {section_name}.{key} to {value} successfully"
+        )
