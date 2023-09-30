@@ -162,11 +162,15 @@ class DisplyCMDResult:
 
         save_paths = []
         for query_result in self.query_results:
+            if not query_result.queried_data:
+                continue
+
             if self.paging:
                 with CONSOLE.pager(styles=self.pager_color):
                     self._handle_title(query_result)
             else:
                 self._handle_title(query_result)
+
             self._handle_query_result(query_result)
 
             save_path = self._handle_save_path(query_result)
