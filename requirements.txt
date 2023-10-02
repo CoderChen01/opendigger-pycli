@@ -1,6 +1,7 @@
-click
-rich
-requests
-click-plugins
-types-requests
-pyecharts==2.0.4
+click  # 8.1.4
+rich  # 13.5.2
+requests  # 2.31.0
+click-plugins  # 1.1.1
+types-requests  # 2.31.0.2
+pyecharts==2.0.4  # 2.0.4
+openai  # 0.28.1
