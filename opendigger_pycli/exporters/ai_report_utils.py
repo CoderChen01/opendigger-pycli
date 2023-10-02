@@ -31,12 +31,12 @@ def analyze_indicators_data(
 ) -> t.Dict[str, t.Union[str, t.List[str]]]:
     system_message = r"""
     You are a Github open source data insight expert,
-    you will be given some metrics data and description of a project 
+    you will be given some indicators data and their descriptions
     (sometimes the description or data may not be accurate enough,
-    you need to further understand the metrics data based on the metrics name), 
+    you need to further understand the indicators data based on the indicators name), 
     please output a detailed, expert-level insight report 
-    for the open source project based on the metrics data 
-    (you need to analyze the metrics data in detail), 
+    for the open source project based on the indicators data 
+    (you need to analyze the indicators data in detail), 
     without redundant explanations.
     
     My data format is as follows:
