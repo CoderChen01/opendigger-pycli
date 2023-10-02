@@ -16,7 +16,7 @@ if t.TYPE_CHECKING:
 
 def export_trivial_network_to_json(
     indicator_data: "TrivialNetworkIndicatorData",
-) -> str:
+) -> t.Dict[str, t.Any]:
     result = {}
     warmup = getattr(indicator_data.value, "nodes")[0]
     if hasattr(warmup, "tuple"):
@@ -31,12 +31,12 @@ def export_trivial_network_to_json(
     else:
         result = asdict(indicator_data)
 
-    return json.dumps(result, indent=2, sort_keys=True)
+    return result
 
 
 def export_non_trivial_indicator_to_json(
     indicator_data: "NonTrivialIndicatorData",
-) -> str:
+) -> t.Dict[str, t.Any]:
     result: t.Dict[str, t.Dict[str, t.Any]] = {}
     indicator_data = t.cast("NonTrivialIndicatorData", indicator_data)
     for key, values in indicator_data.value.items():
@@ -49,7 +49,7 @@ def export_non_trivial_indicator_to_json(
                 else f"{value.year}-{value.month:02}"
             )
             result[key][sub_key] = value.value  # type: ignore
-    return json.dumps(result, indent=2, sort_keys=True)
+    return result
 
 
 def export_indicator_to_json(
@@ -59,7 +59,7 @@ def export_indicator_to_json(
         "TrivialNetworkIndicatorData",
         "NonTrivalNetworkInciatorData",
     ],
-) -> str:
+) -> t.Dict[str, t.Any]:
     if hasattr(indicator_data.value, "nodes"):
         indicator_data = t.cast("TrivialNetworkIndicatorData", indicator_data)
         return export_trivial_network_to_json(indicator_data)
@@ -94,4 +94,4 @@ def export_indicator_to_json(
             else:
                 result[key] = value.value
 
-    return json.dumps(result, indent=2, sort_keys=True)
+    return result

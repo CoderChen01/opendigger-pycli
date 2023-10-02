@@ -372,6 +372,9 @@ def run_query(query_result: "BaseQueryResult") -> None:
             indicator_dataloder_result, data=queried_indciator_data
         )
 
+    if not nodata_indicator_names:
+        return
+
     if query_result.type == "user":
         query_result = t.cast("UserQueryResult", query_result)
         title = f"User: {query_result.username}"
@@ -382,7 +385,6 @@ def run_query(query_result: "BaseQueryResult") -> None:
         print_str = f"{title}, Indicator Names: {str(nodata_indicator_names)}, No Data"
 
     CONSOLE.print(f"[red]{print_str}[/red]")
-
     if not has_github_pat():
         CONSOLE.print(
             "[yellow]You can config github personal access token to create issues automatically[/yellow]"
