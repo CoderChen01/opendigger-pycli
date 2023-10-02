@@ -82,6 +82,7 @@ def check_config_setting(
     callback=check_config_setting,
     shell_complete=config_shell_completion,
     help="Set config value",
+    metavar="<CONFIG_KEY CONFIG_VALUE>",
 )
 @pass_environment
 def config(
