@@ -10,15 +10,15 @@ class BaseConfig:
 @dataclass
 class AppKeyConfig(BaseConfig):
     config_name: t.ClassVar[str] = "app_keys"
-    openai_key: str = ""
-    github_pat: str = ""
+    openai_key: str = "None"
+    github_pat: str = "None"
 
 
 @dataclass
 class UserInfoConfig(BaseConfig):
     config_name: t.ClassVar[str] = "user_info"
-    name: str = ""
-    email: str = ""
+    name: str = "Unknown"
+    email: str = "Unknown"
 
 
 ALL_CONFIGS: t.Dict[str, t.Type[BaseConfig]] = {

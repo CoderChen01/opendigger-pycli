@@ -67,9 +67,7 @@ class ActivityRepoDataloader(BaseRepoDataloader):
             is_success=True,
             dataloader=t.cast("DataloaderProto", self),
             data=ActivityData(
-                value=load_base_data(
-                    data, lambda x: [load_name_and_value(i) for i in x]
-                ),
+                value=load_base_data(data, float),
             ),
             desc="",
         )

@@ -102,6 +102,11 @@ class BaseData(Generic[T]):
     value: T
     is_raw: bool = False
 
+    def __lt__(self, other: "BaseData[T]") -> bool:
+        if self.year == other.year:
+            return self.month < other.month
+        return self.year < other.year
+
 
 class NameAndValue(NamedTuple):
     name: str

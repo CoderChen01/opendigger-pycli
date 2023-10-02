@@ -15,7 +15,7 @@ def update_filtered_indicator_dataloaders(ctx: "Context") -> None:
     if "indicator_types" in ctx.params and ctx.params["indicator_types"]:
         indicator_types = ctx.params["indicator_types"]
     else:
-        indicator_types = {"index", "indicator", "network"}
+        indicator_types = {"index", "metric", "network"}
 
     if "introducers" in ctx.params and ctx.params["introducers"]:
         introducers = ctx.params["introducers"]

@@ -24,6 +24,7 @@ from opendigger_pycli.datatypes import (
     StarData,
     SumCodeChangeLineData,
     TechnicalForkData,
+    ActivityDetailData,
 )
 
 from .base import BaseRepoDataloader, register_dataloader
@@ -619,6 +620,34 @@ class ChangeRequestAgeRepoDataloader(BaseRepoDataloader):
             dataloader=t.cast("DataloaderProto", self),
             data=ChangeRequestAgeData(
                 value=load_non_trival_indicator_data(data),
+            ),
+            desc="",
+        )
+
+
+@register_dataloader
+class ActivityDetailRepoDataloader(BaseRepoDataloader):
+    name = "activity_detail"
+    indicator_type = "metric"
+    introducer = "X-lab"
+    demo_url = "https://oss.x-lab.info/open_digger/github/X-lab2017/open-digger/activity_details.json"
+
+    def load(self, org: str, repo: str) -> DataloaderResult[ActivityDetailData]:
+        data = get_repo_data(org, repo, ActivityDetailData.name)
+        if data is None:
+            return DataloaderResult(
+                is_success=False,
+                dataloader=t.cast("DataloaderProto", self),
+                data=None,
+                desc="Cannot find data for this indicator",
+            )
+        return DataloaderResult(
+            is_success=True,
+            dataloader=t.cast("DataloaderProto", self),
+            data=ActivityDetailData(
+                value=load_base_data(
+                    data, lambda x: [load_name_and_value(i) for i in x]
+                ),
             ),
             desc="",
         )

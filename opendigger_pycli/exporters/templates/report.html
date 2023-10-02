@@ -1,8 +1,8 @@
 {% import 'macro' as macro %}
 
-{%- macro render_chart_extra_data(extra_data) %}
+{%- macro render_chart_extra_data(extra_data, chart_id) %}
   {% for key, value in extra_data.items() %}
-  <div class="chart-container">
+  <div class="{{chart_id+'-extra-data'}} extra-data">
     <p><b>{{key}}:</b></p>
     <p>{{value}}</p>
     <br />
@@ -42,7 +42,7 @@
             {% else %}
                 {{ macro.render_chart_content(c) }}
             {% endif %}
-            {{render_chart_extra_data(extra_chart_datum[c.chart_id])}} 
+            {{render_chart_extra_data(extra_chart_datum[c.chart_id], c.chart_id)}} 
         {% endfor %}
     </div>
 

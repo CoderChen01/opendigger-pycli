@@ -1,7 +1,7 @@
+from __future__ import annotations
 import copy
 import datetime
 import typing as t
-from collections import defaultdict
 from dataclasses import dataclass, field, replace
 
 from rich.progress import track
@@ -13,6 +13,16 @@ from opendigger_pycli.datatypes import (
     TRIVIAL_NETWORK_INDICATOR_DATA,
     IndicatorQuery,
 )
+from opendigger_pycli.console import CONSOLE
+from opendigger_pycli.utils.gtihub_api import (
+    create_issue,
+    search_issue_title,
+    create_issue_comment,
+    get_issue_comments,
+    create_issue_comment_reactions,
+)
+from opendigger_pycli.config.utils import get_github_pat, has_github_pat, get_user_info
+from opendigger_pycli.utils import THREAD_POOL
 
 if t.TYPE_CHECKING:
     from opendigger_pycli.datatypes import (
@@ -24,6 +34,7 @@ if t.TYPE_CHECKING:
         TrivialIndicatorData,
         TrivialNetworkIndicatorData,
     )
+    from opendigger_pycli.utils.gtihub_api import IssueCommentInfoType, IssueInfoType
 
 
 @t.overload
@@ -198,9 +209,100 @@ def query_trivial_network_indicator(
     return replace(indicator_data), None
 
 
-def run_query(query_result: "BaseQueryResult"):
+class NodataIssueCreator:
+    _github_pat: str
+
+    def __init__(self, title: str, nodata_indicator_names: t.List[str]) -> None:
+        self.title = title
+        self.nodata_indicator_names = nodata_indicator_names
+
+        self._github_pat = get_github_pat()
+
+        self.has_issue, self.issue_infos = search_issue_title(
+            "CoderChen01",
+            "opendigger-pycli",
+            self.title,
+            ["nodata", "bot"],
+            self._github_pat,
+        )
+
+        self.existed_issue_map: t.Dict[int, IssueInfoType] = {}
+        self.existed_nodata_infos: t.Dict[int, t.List[IssueCommentInfoType]] = {}
+
+        if self._has_existed_issue:
+            for issue_info in self.issue_infos:  # type: ignore
+                self.existed_issue_map[issue_info["issue_number"]] = issue_info
+
+    @property
+    def _has_existed_issue(self) -> bool:
+        return bool(self.has_issue and self.issue_infos)
+
+    def _create_nodata_issue(self) -> bool:
+        if self._has_existed_issue:
+            for issue_info in self.issue_infos:  # type: ignore
+                (
+                    _,
+                    self.existed_nodata_infos[issue_info["issue_number"]],
+                ) = get_issue_comments(
+                    issue_api_url=issue_info["issue_api_url"],
+                    github_pat=self._github_pat,
+                )
+            return True
+
+        is_success, issue_info = create_issue(
+            "CoderChen01",
+            "opendigger-pycli",
+            self._github_pat,
+            self.title,
+            labels=["nodata", "bot"],
+            assignees=["CoderChen01"],
+        )
+        if is_success and issue_info:
+            self.existed_issue_map[issue_info["issue_number"]] = issue_info
+            self.existed_nodata_infos[issue_info["issue_number"]] = []
+            return True
+        return False
+
+    def _add_nodata_info(self) -> None:
+        for indicator_name in self.nodata_indicator_names:
+            is_ok = False
+            for _, issue_comment_infos in self.existed_nodata_infos.items():
+                for issue_comment_info in issue_comment_infos:
+                    if indicator_name not in issue_comment_info["body"]:
+                        continue
+                    create_issue_comment_reactions(
+                        issue_cooment_api_url=issue_comment_info[
+                            "issue_comment_api_url"
+                        ],
+                        content="eyes",
+                        github_pat=self._github_pat,
+                    )
+                    is_ok = True
+                    break
+                if is_ok:
+                    break
+            if is_ok:
+                continue
+            create_issue_comment(
+                issue_api_url=list(self.existed_issue_map.values())[0]["issue_api_url"],
+                body=f"No Indicator Data: {indicator_name}",
+                github_pat=self._github_pat,
+            )
+
+    def run(self) -> None:
+        try:
+            if not self._create_nodata_issue():
+                return
+            self._add_nodata_info()
+        except Exception:
+            return
+
+
+def run_query(query_result: "BaseQueryResult") -> None:
     indicator_queries = query_result.indicator_queries
     indicators_data = query_result.data
+
+    nodata_indicator_names = []
     for (
         indicator_name,
         indicator_dataloder_result,
@@ -220,6 +322,7 @@ def run_query(query_result: "BaseQueryResult"):
             not indicator_dataloder_result.is_success
             or not indicator_dataloder_result.data
         ):
+            nodata_indicator_names.append(indicator_name)
             continue
 
         indicator_data_class = indicator_dataloder_result.data.data_class
@@ -268,6 +371,27 @@ def run_query(query_result: "BaseQueryResult"):
         query_result.queried_data[indicator_name] = replace(
             indicator_dataloder_result, data=queried_indciator_data
         )
+
+    if not nodata_indicator_names:
+        return
+
+    if query_result.type == "user":
+        query_result = t.cast("UserQueryResult", query_result)
+        title = f"User: {query_result.username}"
+        print_str = f"{title}, Indicator Names: {str(nodata_indicator_names)}, No Data"
+    else:
+        query_result = t.cast("RepoQueryResult", query_result)
+        title = f"Repo: {query_result.org_name}/{query_result.repo_name}"
+        print_str = f"{title}, Indicator Names: {str(nodata_indicator_names)}, No Data"
+
+    CONSOLE.print(f"[red]{print_str}[/red]")
+    if not has_github_pat():
+        CONSOLE.print(
+            "[yellow]You can config github personal access token to create issues automatically[/yellow]"
+        )
+        return
+    with CONSOLE.status("Issues being returned to OpenDigger..."):
+        NodataIssueCreator(title, nodata_indicator_names).run()
 
 
 @dataclass

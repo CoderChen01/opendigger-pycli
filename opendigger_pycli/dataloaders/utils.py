@@ -63,16 +63,16 @@ def load_base_data(
 
         # value has different types,
         # you need to pass in a function to handle it
-        base_data = BaseData(
-            year=int(year),
-            month=int(month),
-            is_raw=is_raw,
-            value=load_value(value),
+        base_data_list.append(
+            BaseData(
+                year=int(year),
+                month=int(month),
+                is_raw=is_raw,
+                value=load_value(value),
+            )
         )
-        if is_raw:  # raw data is always at the beginning
-            base_data_list.insert(0, base_data)
-            continue
-        base_data_list.append(base_data)
+
+    base_data_list.sort()
 
     return base_data_list
 

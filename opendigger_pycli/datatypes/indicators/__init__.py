@@ -43,5 +43,6 @@ from .metrics import (
     StarData,
     SumCodeChangeLineData,
     TechnicalForkData,
+    ActivityDetailData,
 )
 from .networks import DeveloperNetworkData, ProjectOpenRankNetworkData, RepoNetworkData

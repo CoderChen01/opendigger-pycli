@@ -21,6 +21,7 @@ from opendigger_pycli.datatypes import (
     AcceptedChangeRequestData,
     ActiveDateAndTimeData,
     ActivityData,
+    ActivityDetailData,
     AddedCodeChangeLineData,
     AttentionData,
     BusFactorData,
@@ -47,6 +48,8 @@ from opendigger_pycli.datatypes import (
     SumCodeChangeLineData,
     TechnicalForkData,
 )
+
+from .ai_report_utils import analyze_indicators_data
 
 if t.TYPE_CHECKING:
     from pyecharts.charts.base import Base as EchartsBase
@@ -144,7 +147,7 @@ class BaseChartExporter(abc.ABC):
 @register_exporter
 class BarExporter(BaseChartExporter):
     exporter_name = "bar_exporter"
-    accepted_indicator_dataclass = [OpenRankData]
+    accepted_indicator_dataclass = [OpenRankData, ActivityData]
 
     def export(self) -> t.List[ExportData]:
         export_datum = []
@@ -165,11 +168,9 @@ class BarExporter(BaseChartExporter):
                     legend_opts=opts.LegendOpts(is_show=False),
                 )
             )
+            ai_rv = analyze_indicators_data([indicator_data])
             export_datum.append(
-                ExportData(
-                    name=indicator_data.name,
-                    chart=bar,
-                )
+                ExportData(name=indicator_data.name, chart=bar, extra_data=ai_rv)  # type: ignore
             )
         return export_datum
 
@@ -177,7 +178,7 @@ class BarExporter(BaseChartExporter):
 @register_exporter
 class SumAndDetailExporter(BaseChartExporter):
     exporter_name = "sum_and_detail_exporter"
-    accepted_indicator_dataclass = [ActivityData, BusFactorData]
+    accepted_indicator_dataclass = [ActivityDetailData, BusFactorData]
 
     def __handle_bar_detail_chart(
         self, indicator_data: t.Any
@@ -293,7 +294,7 @@ class SumAndDetailExporter(BaseChartExporter):
                 )
             )
             export_datum.append(
-                ExportData(name=f"{indicator_name} Details", chart=activity_detail)
+                ExportData(name=f"{indicator_name} Details", chart=activity_detail, extra_data=analyze_indicators_data([indicator_data]))  # type: ignore
             )
         return export_datum
 
@@ -349,6 +350,7 @@ class AccumulatedBarExporter(BaseChartExporter):
                     .replace("_", " ")
                     .title(),
                     chart=bar,
+                    extra_data=analyze_indicators_data([indicator_data]),  # type: ignore
                 )
             )
 
@@ -526,11 +528,11 @@ class IssueStatusExporter(BaseChartExporter):
             line = self.__handle_issue_comment_chart()
             if line is not None:
                 bar.overlap(line)
-            return [ExportData(name="Issue Status", chart=bar)]
+            return [ExportData(name="Issue Status", chart=bar, extra_data=analyze_indicators_data(self.indicator_datum))]  # type: ignore
         else:
             line = self.__handle_issue_comment_chart(yaxis_index=0)
             if line is not None:
-                return [ExportData(name="Issue Status", chart=line)]
+                return [ExportData(name="Issue Status", chart=line, extra_data=analyze_indicators_data(self.indicator_datum))]  # type: ignore
 
         return []
 
@@ -713,11 +715,11 @@ class ChangeRequestStatusExporter(BaseChartExporter):
             line = self.__handle_change_request_review_chart()
             if line is not None:
                 bar.overlap(line)
-            return [ExportData(name="Change Request Status", chart=bar)]
+            return [ExportData(name="Change Request Status", chart=bar, extra_data=analyze_indicators_data(self.indicator_datum))]  # type: ignore
         else:
             line = self.__handle_change_request_review_chart(yaxis_index=0)
             if line is not None:
-                return [ExportData(name="Change Request Status", chart=line)]
+                return [ExportData(name="Change Request Status", chart=line, extra_data=analyze_indicators_data(self.indicator_datum))]  # type: ignore
 
         return []
 
@@ -892,11 +894,17 @@ class DeveloperStatusExporter(BaseChartExporter):
             bar = self.__handle_new_and_inactive_contrib_chart()
             if bar is not None:
                 line.overlap(bar)
-            return [ExportData(name="Developer Status", chart=line)]
+            return [
+                ExportData(
+                    name="Developer Status",
+                    chart=line,
+                    extra_data=analyze_indicators_data(self.indicator_datum),  # type: ignore
+                )
+            ]
         else:
             bar = self.__handle_new_and_inactive_contrib_chart()
             if bar is not None:
-                return [ExportData(name="Developer Status", chart=bar)]
+                return [ExportData(name="Developer Status", chart=bar, extra_data=analyze_indicators_data(self.indicator_datum))]  # type: ignore
 
         return []
 
@@ -1003,7 +1011,7 @@ class ActiveDateAndTimeHeatmapExporter(BaseChartExporter):
             )
         )
 
-        return [ExportData(name="Active Dates And Times", chart=heatmap)]
+        return [ExportData(name="Active Dates And Times", chart=heatmap, extra_data=analyze_indicators_data(self.indicator_datum))]  # type: ignore
 
 
 @register_exporter
@@ -1069,6 +1077,7 @@ class TimeDurationRelatedExporter(BaseChartExporter):
                     .replace("_", " ")
                     .title(),
                     candle_stick,
+                    extra_data=analyze_indicators_data([indicator_data]),  # type: ignore
                 )
             )
         return export_datum
@@ -1179,7 +1188,7 @@ class CodeChangeLinesExporter(BaseChartExporter):
 
         line.set_global_opts(legend_opts=opts.LegendOpts(is_show=False))
 
-        return [ExportData(name="Code Change Lines", chart=line)]
+        return [ExportData(name="Code Change Lines", chart=line, extra_data=analyze_indicators_data(self.indicator_datum))]  # type: ignore
 
 
 @register_exporter

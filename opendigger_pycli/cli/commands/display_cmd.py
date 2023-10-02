@@ -16,12 +16,13 @@ if t.TYPE_CHECKING:
     from ..base import Environment
 
 
-@click.command("display", help="Display metrics")
+@click.command("display", help="Display indicators in terminal")
 @click.option(
     "--format",
     "-f",
     "format_name",
     type=click.Choice(SURPPORTED_DISPLAY_FORMATS),
+    help="Display format",
     required=True,
 )
 @click.option(

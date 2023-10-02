@@ -56,7 +56,7 @@ pass_environment = click.make_pass_decorator(Environment, ensure=True)
 def opendigger(
     env: Environment,
     log_level: t.Literal["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-):
+) -> None:
     """Open Digger CLI"""
     env.set_log_level(log_level)
 
@@ -74,7 +74,7 @@ opendigger_cmd = t.cast("Group", opendigger)
     help="GitHub username",
 )
 @pass_environment
-def user(env: Environment, usernames: t.List[str]):
+def user(env: Environment, usernames: t.List[str]) -> None:
     """
     Operate on user indicators
     """
@@ -112,7 +112,7 @@ def user(env: Environment, usernames: t.List[str]):
     metavar="<org>/<repo>",
 )
 @pass_environment
-def repo(env: Environment, repos: t.List[t.Tuple[str, str]]):
+def repo(env: Environment, repos: t.List[t.Tuple[str, str]]) -> None:
     """
     Operate on repository indicators
     """
@@ -240,7 +240,7 @@ def query(
     is_only_select: bool,
     ignore_indicator_names: t.List[str],
     uniform_query: t.Optional["IndicatorQuery"],
-):
+) -> None:
     """
     Query Metrics
 
@@ -267,7 +267,7 @@ def process_query_results(
     is_only_select: bool,
     ignore_indicator_names: t.List[str],
     uniform_query: t.Optional["IndicatorQuery"],
-):
+) -> None:
     # Processing parameters: deduplication and default value processing
     selected_indicator_queries = distinct_indicator_queries(selected_indicator_queries)
     ignore_indicator_names = distinct_indicator_names(ignore_indicator_names)

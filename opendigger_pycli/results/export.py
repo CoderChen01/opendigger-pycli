@@ -40,8 +40,8 @@ class ExportResult:
 
     def _query_result_to_json(
         self, query_result: t.Union["RepoQueryResult", "UserQueryResult"]
-    ) -> t.Dict[str, str]:
-        result: t.Dict[str, str] = {}
+    ) -> t.Dict[str, t.Dict]:
+        result: t.Dict[str, t.Dict] = {}
         queried_indicators_data = query_result.queried_data
         failed_queries = query_result.failed_query
         for (
@@ -165,7 +165,9 @@ class ExportResult:
                 if self.is_split:
                     for indicator_name, indicator_json_data in result.items():
                         save_path_splited = save_path / f"{indicator_name}.json"
-                        save_path_splited.write_text(indicator_json_data)
+                        save_path_splited.write_text(
+                            json.dumps(indicator_json_data, indent=2, sort_keys=True)
+                        )
                         CONSOLE.print(
                             f"[green]Save Indicator {indicator_name} Data to {save_path}"
                         )
