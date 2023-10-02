@@ -112,20 +112,26 @@
 {%- macro switch_tabs() -%}
     <script>
         (function() {
-            containers = document.getElementsByClassName("chart-container");
-            if(containers.length > 0) {
-                containers[0].style.display = "block";
-            }
+            // containers = document.getElementsByClassName("chart-container");
+            // if(containers.length > 0) {
+            //     containers[0].style.display = "block";
+            // }
             tablinks = document.getElementsByClassName("tablinks");
             if(tablinks.length > 0) {
-                tablinks[0].className += " active";
+                // tablinks[0].className += " active";
+                tablinks[0].click();
             }
         })()
 
         function showChart(evt, chartID) {
             let containers = document.getElementsByClassName("chart-container");
+            let extra_data = document.getElementsByClassName("extra-data");
+
             for (let i = 0; i < containers.length; i++) {
                 containers[i].style.display = "none";
+            }
+            for (let i = 0; i < extra_data.length; i++) {
+                extra_data[i].style.display = "none";
             }
 
             let tablinks = document.getElementsByClassName("tablinks");
@@ -134,6 +140,10 @@
             }
 
             document.getElementById(chartID).style.display = "block";
+            let display_extra_data = document.getElementsByClassName(chartID+"-extra-data");
+            for (let i = 0; i < display_extra_data.length; i++) {
+                display_extra_data[i].style.display = "block";
+            }
             evt.currentTarget.className += " active";
         }
     </script>

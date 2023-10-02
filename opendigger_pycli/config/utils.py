@@ -17,3 +17,11 @@ def has_github_pat() -> bool:
 
 def get_user_info() -> UserInfoConfig:
     return OpenDiggerCliConfig().user_info
+
+
+def get_openai_api_key_from_config() -> str:
+    return OpenDiggerCliConfig().app_keys.openai_key
+
+
+def has_openai_api_key() -> bool:
+    return get_openai_api_key_from_config() != "None"
