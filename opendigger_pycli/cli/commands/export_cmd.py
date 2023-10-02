@@ -40,7 +40,7 @@ if t.TYPE_CHECKING:
     "is_split",
     default=False,
     is_flag=True,
-    help="Save indicators in separate files",
+    help="Save indicators in separate files, ONLY For JSON format",
 )
 @processor
 @pass_environment
