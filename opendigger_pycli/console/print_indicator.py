@@ -4,7 +4,11 @@ from opendigger_pycli.datatypes.query import IndicatorQuery
 
 from . import CONSOLE
 from .print_indicator_graph import print_base_data_graph, print_base_network_data_graph
-from .print_indicator_json import print_base_data_json, print_base_network_data_json
+from .print_indicator_json import (
+    print_base_data_json,
+    print_base_network_data_json,
+    print_time_duration_related_indicator_json,
+)
 from .print_indicator_table import print_base_data_table, print_base_network_data_table
 from .utils import print_failed_query
 
@@ -59,17 +63,19 @@ def print_non_trivial_indicator(
 
     if mode == "table":
         print_func = print_base_data_table
-    elif mode == "json":
-        print_func = print_base_data_json
     elif mode == "graph":
         print_func = print_base_data_graph
-
-    if print_func is None:
-        return
 
     indicator_name_formated = format_indicator_name(indicator_name)
     title = f"[green]{indicator_name_formated} Indicator Data: "
     CONSOLE.print(title, end="\n\n")
+
+    if mode == "json":
+        print_time_duration_related_indicator_json(indicator_data.value)
+        return
+
+    if print_func is None:
+        return
     for key, base_data_list in indicator_data.value.items():
         if failed_queries is not None:
             print_failed_query(f"{indicator_name}.{key}", failed_queries[key])
