@@ -137,7 +137,7 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]) -> None:
     env.vlog("Set params to env")
 
 
-@with_plugins(iter_entry_points("opendigger-pycli.plugins"))  # type: ignore
+@with_plugins(iter_entry_points("opendigger_pycli.plugins"))  # type: ignore
 @click.group(  # type: ignore
     chain=True,
     help="Query indicators",
