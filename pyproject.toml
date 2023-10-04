@@ -3,8 +3,7 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [tool.flit.sdist]
-include = ["README.md", "LICENSE", "docs/"]
-exclude = ["docs/*.html"]
+include = ["docs/决赛-T2-ahpu_new_peasants-autogit.md", "LICENSE"]
 
 [project]
 name = "opendigger_pycli"
