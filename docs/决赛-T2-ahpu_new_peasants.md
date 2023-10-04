@@ -2,6 +2,8 @@
 
 ![opendigger](https://img.shields.io/badge/Data-OpenDigger-2097FF)
 
+## 🗺️Big Picture
+
 ![Big Picture](./assets/commands_big_picture.png)
 
 ## 🪛安装
@@ -13,7 +15,12 @@ Python >= 3.8
 ### 从源码安装
 
 ```bash
+python3 -m pip install flit
+
 git clone https://github.com/CoderChen01/opendigger-pycli.git
+
+flit install
+# 详见：https://github.com/pypa/flit
 ```
 
 ### 从PyPI安装
@@ -346,24 +353,388 @@ opendigger repo -r X-lab2017/open-digger query -i -s openrank:8 display -f table
 
 #### 正向筛选指标
 
+我们已经可以对指标通过类型、时间进行筛选并将其在终端以表格形式输出了，并且我们还能针对某一个指标进行时间上的筛选。但是，query命令默认查询所有的指标，即使我们使用了`-i`, `-m`, `-n`, `-x`和`-c`筛选出特定的指标，通过`-f`和`-s`筛选出特定的指标数据，但是我们仍然会得到大量的指标数据，这些指标数据中可能有我们不关心的指标数据。
+
+我们可以通过`-o / --only-select`参数与`-s`参数配合使用，只查询我们关心的指标数据。
+
+比如我们只查询仓库`X-lab2017/open-digger`的`index`类型的指标数据，并且只查询`openrank`指标的数据，我们可以这样做：
+
+```bash
+# 只查看过往年份3~8月的openrank指标数据
+opendigger repo -r X-lab2017/open-digger query -i -s openrank:3~8 -o display -f table
+# 或者
+opendigger repo -r X-lab2017/open-digger query -i -s openrank:3~8 --only-select display -f table
+# 或者
+opendigger repo -r X-lab2017/open-digger query -i -os openrank:3~8 display -f table
+```
+
+<details>
+<summary> 演示录屏 </summary>
+
+![query](
+    ./assets/demos/repo-query-i-s-openrank-3~8-o.gif
+)
+</details>
+
+我们还可以查询多个指标的数据，比如我们还想查看`openrank`和`issue_age`指标的数据，我们可以这样做：
+
+```bash
+# 只查看过往年份3~8月的openrank和过往5~8月的issue_age指标数据
+opendigger repo -r X-lab2017/open-digger query -s openrank:3~8 -s issue_age:5~8 -o display -f table
+```
+
 #### 反向筛选指标
+
+我们还可以通过`-I / --ignore`参数来反向筛选指标，即我们可以通过`-I / --ignore`参数来忽略某些指标。
+
+比如我们只查询仓库`X-lab2017/open-digger`的`index`类型的指标数据，并且忽略`openrank`指标的数据，我们可以这样做：
+
+```bash
+opendigger repo -r X-lab2017/open-digger query -i -I openrank display -f table
+```
 
 ### display 命令
 
+`display`命令是`query`命令的子命令，用于将筛选出来的数据以表格、图表或json格式在终端输出。该命令在上文演示中已经使用过，不过该命令还支持除了table格式的其他格式。具体支持参数如下：
+
+```text
+-f, --format [table|graph|json]
+                                Display format  [required]
+-s, --save DIRECTORY            Save output to file, you can use this option
+                                get a simple report
+-p, --paging / --no-paging      Page output like more/less command, you
+                                CANNOT use this option and save to file at
+                                the same time
+-c, --pager-color / --no-pager-color
+                                Enable color in pager, Only works when
+                                paging is enabled
+```
+
+可以通过`-f`参数指定输出格式，并且通过`-s / --save`参数可以将终端输出的内容保存到文件(一个简易版的数据报告)中，通过`-p / --paging`参数可以将终端输出的内容分页显示，通过`-c / --pager-color`参数可以在分页显示时启用颜色。
+
 #### 表格格式
+
+表格格式在上文中已经提及，这里不再赘述。
 
 #### 图表格式
 
+图表格式可以将筛选出来的数据以图表的形式在终端输出。目前支持的图表类型有：
+
+- 横向柱状图
+- 热力图
+
+具体使用如下：
+
+**查看仓库X-lab2017/open-digger的index类型的openrank指标数据，只查看2023年的数据，并以图表形式在终端打印:**
+
+```bash
+opendigger repo -r X-lab2017/open-digger query -i -os openrank:2023 display -f graph
+```
+
+结果截图：
+
+![bar01](./assets/result_screenshots/bar-01.png)
+
+从图中可以看出openrank 2023年每个月的数据变化。
+
+**查看仓库X-lab2017/open-digger的metric类型的active_date_and_time指标数据，只查看2023年的数据，并以图表形式在终端打印:**
+
+```bash
+opendigger repo -r X-lab2017/open-digger query -m -os active_date_and_time:2023 display -f graph
+```
+
+结果截图：
+
+![heatmap](./assets/result_screenshots/heatmap-01.png)
+
+从图中可以看出2023年每个月的活跃时间段。热力图的横纵坐标标号的含义在图下方也会有相应的说明。
+
+**查看仓库X-lab2017/open-digger的metric类型的summed_code_change_line指标数据，并以图表形式在终端打印:**
+
+```bash
+opendigger repo -r X-lab2017/open-digger query -m -os summed_code_change_line display -f graph
+```
+
+结果截图：
+
+![bar02](./assets/result_screenshots/bar-02.png)
+
+从图中可以看出summed_code_change_line指标的数据变化。对于负值的数据，我们会将其转换为正值，然后在图表中以红色显示。
+
 #### json格式
+
+我们输出的json格式与原数据不一样，我们对原始数据进行了处理，将年月解析了出来并进行了排序，对于包含`-raw`的字段我们也进行了处理。这样用户直接复制打印出来的json数据为自己所用。
+
+具体使用如下：
+
+查看仓库X-lab2017/open-digger的metric类型的issue_age指标数据,并以json格式在终端打印:
+
+```bash
+opendigger repo -r X-lab2017/open-digger query -mos issue_age display -f json
+```
+
+<details>
+<summary> 演示录屏 </summary>
+
+![json_display](./assets/demos/repo-query-mos-issue_age-display-json.gif)
+</details>
+
+#### 保存输出结果
+
+我们可以将终端输出的内容保存到文件中，这样我们可以得到一个简易版的数据报告。
+
+比如我们以图表形式输出仓库X-lab2017/open-digger的所有指标数据(除了project_openrank_network指标)，并将输出结果保存到文件中：
+
+```bash
+opendigger repo -r X-lab2017/open-digger query display -f graph -s .
+```
+
+<details>
+<summary> 演示录屏 </summary>
+
+<video src="./assets/demos/repo-query-dispaly-save.mp4"></video>
+</details>
 
 ### export 命令
 
+`export`命令是`query`命令的子命令，用于将筛选出来的数据经过GPT分析后导出数据报告或直接导出原始json数据。具体支持参数如下：
+
+```text
+-f, --format [report|json]  Format to export  [required]
+-s, --save-dir DIRECTORY    Directory to save indicators  [required]
+--split / --no-split        Save indicators in separate files, ONLY For JSON format
+```
+
+可以通过`-f`参数指定输出格式，并且通过`-s / --save-dir`参数可以将数据保存到指定目录中，通过`--split / --no-split`参数可以将数据分别保存到不同的文件中(只对json格式有用)。
+
 #### 数据报告
+
+数据报告是我们对筛选出来的数据进行GPT分析后生成的，该报告包含了筛选出来的数据的分析结果和数据的可视化结果。
+
+具体使用如下：
+
+**查看仓库X-lab2017/open-digger的所有指标数据（除project_openrank_detail指标），并导出数据报告：**
+
+```bash
+opendigger repo -r X-lab2017/open-digger query export -f report -s .
+```
+
+<details>
+<summary> 演示录屏 </summary>
+
+<video src="./assets/demos/repo-query-export-report.mp4"> </video>
+</details>
+
+**查看仓库X-lab2017/open-digger的所有指标数据(其中查看2023年8月的project_openrank_detail指标，并导出数据报告：**
+
+```bash
+open-digger repo -r X-lab2017/open-digger query -s project_openrank_detail:2023-08 export -f report -s .
+```
 
 #### 原始Json数据
 
+我们可以将筛选出来的数据导出为原始的json数据，这样用户可以自行处理数据。
+
+具体使用如下：
+
+```bash
+# 查看仓库X-lab2017/open-digger的所有指标数据(其中查看2023年8月的project_openrank_detail的指标)，并导出原始json数据
+open-digger repo -r X-lab2017/open-digger query -s project_openrank_detail:2023-08 export -f json -s .
+```
+
 ### 组合使用
+
+query的所有子命令都可以组合使用，比如我们可以先使用`query`命令筛选出我们关心的指标数据，然后使用`display`命令将筛选出来的数据以表格、图表或json格式在终端输出，最后使用`export`命令将筛选出来的数据经过GPT分析后导出数据报告或直接导出原始json数据。如果用户开发了自定义的插件，也可以使用自定义的插件对筛选出来的数据进行处理。
+
+比如我们想要查看仓库`X-lab2017/open-digger`的`index`类型的`openrank`指标数据，并且只查看2023年的数据，并以表格形式在终端打印，最后将筛选出来的数据已json格式导出，我们可以这样做：
+
+```bash
+opendigger repo -r X-lab2017/open-digger query -ios openrank:2023 display -f table export -f json -s .
+```
+
+结果截图：
+
+![query-display-export](./assets/result_screenshots/export_display.png)
 
 ## 🔌插件开发 <a id="plugin-system"></a>
 
+插件是opendigger-pycli的一个重要特性，它可以帮助用户快速开发自定义的命令，对筛选出来的数据进行处理。最为重要的就是我们的`query`命令，它利用了`click`库提供的[Mult Command Pipelines](https://click.palletsprojects.com/en/8.1.x/commands/#multi-command-pipelines)特性，可以将筛选出来的数据传递给它的子命令，子命令可以是`display`命令，也可以是用户自定义的命令。
+
+### query的返回数据
+
+```python
+@dataclass
+class BaseQueryResult:
+    type: t.ClassVar[t.Literal["user", "repo"]]
+    dataloaders: t.List["DataloaderProto"]
+    indicator_queries: t.List[t.Tuple[str, t.Optional["IndicatorQuery"]]]
+    uniform_query: t.Optional["IndicatorQuery"]
+    data: t.Dict[str, "DataloaderResult"] = field(default_factory=dict, init=False)
+    queried_data: t.Dict[str, "DataloaderResult"] = field(
+        default_factory=dict, init=False
+    )
+    failed_query: t.Dict[
+        str,
+        t.Union[
+            t.Optional["IndicatorQuery"],
+            t.Dict[str, t.Optional["IndicatorQuery"]],
+        ],
+    ] = field(default_factory=dict, init=False)
+
+
+@dataclass
+class RepoQueryResult(BaseQueryResult):
+    type: t.ClassVar[t.Literal["repo"]] = "repo"
+    repo: t.Tuple[str, str]
+    org_name: str = field(init=False)
+    repo_name: str = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.org_name, self.repo_name = self.repo
+        run_dataloader(self)
+        run_query(self)
+
+
+@dataclass
+class UserQueryResult(BaseQueryResult):
+    type: t.ClassVar[t.Literal["user"]] = "user"
+    username: str
+
+    def __post_init__(self) -> None:
+        run_dataloader(self)
+        run_query(self)
+
+```
+
+### 插件示例
+
+该示例插件的功能是将筛选出来的数据基本信息打印到终端。
+
+示例插件命令代码：
+
+```python
+# plugin_example/print_result/print_result.py
+
+from __future__ import annotations
+import typing as t
+import click
+
+from opendigger_pycli.console import CONSOLE
+from opendigger_pycli.utils.decorators import processor
+
+
+if t.TYPE_CHECKING:
+    from opendigger_pycli.results.query import QueryResults
+
+
+@click.command("print-result", help="[Plugin Demo] Print query result to terminal")
+@processor
+def print_result(results: QueryResults):
+    CONSOLE.print(results)
+    yield from results  # 这个yield from是必须的，它会将结果传递给其他子命令。
+    
+```
+
+模块的安装配置如下：
+
+```python
+# plugin_example/print_result/setup.py
+
+from setuptools import setup
+
+setup(
+    name="opendigger_pycli_print_result",
+    version="0.1",
+    py_modules=["print_result"],
+    install_requires=[
+        "click",
+    ],
+    entry_points="""
+        [opendigger_pycli.plugins]
+        print-result=print_result:print_result
+    """,
+)
+```
+
+注意`entry_points`的写法，`opendigger_pycli.plugins`是固定的，`print-result`是插件的名称，`print_result:print_result`定位到插件的入口函数。
+
+### 示例插件使用
+
+进入示例插件的目录，执行如下命令安装插件：
+
+```bash
+cd plugin_example/print_result
+
+python3 setup.py install
+```
+
+我们运行如下命令：
+
+```bash
+opendigger repo -r X-lab2017/open-digger  query  --help
+```
+
+![plugin_example](./assets/result_screenshots/plugin.png)
+
+会发现`query`命令的`--help`中多了一个`print-result`子命令。
+
+我们运行如下命令：
+
+```bash
+opendigger repo -r X-lab2017/open-digger  query -ios openrank:2023 print-result
+```
+
+结果如下：
+
+![plugin_example](./assets/result_screenshots/plugin-result.png)
+
 ## 📄筛选条件表达式详解 <a id="indicator-query"></a>
+
+筛洗条件表达式主要分为如下几种：
+
+- 年份查询
+- 月份查询
+- 年月查询
+- 年月范围查询
+- 年份范围查询
+- 年份月份范围查询
+
+我们使用~来表示范围，使用-来表示年月。
+
+通过如下几个示例来说明：
+
+查询2023年的数据：
+
+```bash
+opendigger repo -r X-lab2017/open-digger query -ios openrank -f 2023 display -f table
+```
+
+查询2021年到2023年的数据：
+
+```bash
+opendigger repo -r X-lab2017/open-digger query -ios openrank -f 2021~2023 display -f table
+```
+
+查询过往年份3月的数据：
+
+```bash
+opendigger repo -r X-lab2017/open-digger query -ios openrank -f 3 display -f table
+```
+
+查询过往年份3月到8月的数据：
+
+```bash
+opendigger repo -r X-lab2017/open-digger query -ios openrank -f 3~8 display -f table
+```
+
+查询2023年3月的数据：
+
+```bash
+opendigger repo -r X-lab2017/open-digger query -ios openrank -f 2023-03 display -f table
+```
+
+查询2022年3月到2023年3月的数据：
+
+```bash
+opendigger repo -r X-lab2017/open-digger query -ios openrank -f 2022-03~2023-03 display -f table
+```
