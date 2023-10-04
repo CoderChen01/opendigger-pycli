@@ -906,4 +906,6 @@ opendigger repo -r X-lab2017/open-digger query -ios openrank -f 2022-03~2023-03 
 
 ## End
 
+GPT 分析报告DEMO见：[./docs/assets/result_examples/export/report/repo-X-lab2017-open-digger](./docs/assets/result_examples/export/report/repo-X-lab2017-open-digger/)
+
 更多功能等待您的探索...
