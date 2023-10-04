@@ -3,13 +3,14 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [tool.flit.sdist]
-include = ["LICENSE"]
+exclude = ["docs/assets/demos/*"]
 
 [project]
 name = "opendigger_pycli"
 requires-python = ">=3.8"
 authors = [{ name = "CoderChen01", email = "wwseyy@gmail.com" }]
 license = { file = "LICENSE" }
+readme = "docs/决赛-T2-ahpu_new_peasants-autogit.md"
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
@@ -28,6 +29,15 @@ dependencies = [
     "openai==0.28.1",
 ]
 dynamic = ["version", "description"]
+keywords = [
+    "opendigger",
+    "opendigger-pycli",
+    "opendigger-cli",
+    "opendigger-py",
+    "opensoda",
+    "open-digger",
+]
+
 
 [project.urls]
 AuthorGithub = "https://github.com/CoderChen01"
