@@ -9,6 +9,7 @@
     - [从源码安装](#从源码安装)
     - [从PyPI安装](#从pypi安装)
   - [🕹️基本用法](#️基本用法)
+    - [开启自动补全](#开启自动补全)
     - [获取Github Personal Access Token](#获取github-personal-access-token)
     - [获取OpenAI key](#获取openai-key)
     - [config 命令](#config-命令)
@@ -75,7 +76,23 @@ pip3 install opendigger_pycli
 
 <a id="基本用法"></a>
 
+### 开启自动补全
+
+zsh:
+
+```zsh
+eval "$(_OPENDIGGER_COMPLETE=zsh_source opendigger)"
+```
+
+bash:
+
+```bash
+eval "$(_FOO_BAR_COMPLETE=bash_source opendigger)"
+```
+
 ### 获取Github Personal Access Token
+
+Github Personal Access Token用于访问Github API，获取Github API的权限。通过Github API我们可以获取到Github上的仓库和用户的基本信息和自动反馈缺失数据。
 
 [点击这里](https://github.com/settings/tokens?type=beta) 获取。
 
@@ -101,7 +118,9 @@ pip3 install opendigger_pycli
 
 ### 获取OpenAI key
 
-自行搜索教程
+OpenAI key用于访问OpenAI API，获取OpenAI API的权限。通过OpenAI API我们可以对指标数据进行分析和生成洞察报告。
+
+[点击这里](https://beta.openai.com/account/api-keys) 获取。
 
 ### config 命令
 
