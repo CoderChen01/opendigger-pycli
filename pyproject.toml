@@ -3,15 +3,14 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [tool.flit.sdist]
-include = ["README.md", "LICENSE", "docs/"]
-exclude = ["docs/*.html"]
+exclude = ["docs/assets/demos/*"]
 
 [project]
 name = "opendigger_pycli"
 requires-python = ">=3.8"
 authors = [{ name = "CoderChen01", email = "wwseyy@gmail.com" }]
-readme = "README.md"
 license = { file = "LICENSE" }
+readme = "docs/决赛-T2-ahpu_new_peasants-autogit.md"
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
@@ -21,35 +20,43 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
 ]
 dependencies = [
-    "click",
-    "rich",
-    "requests",
-    "types-requests",
-    "click-plugins",
+    "click==8.1.4",
+    "rich==13.5.2",
+    "requests==2.31.0",
+    "types-requests==2.31.0.2",
+    "click-plugins==1.1.1",
     "pyecharts==2.0.4",
-    "openai",
+    "openai==0.28.1",
 ]
 dynamic = ["version", "description"]
+keywords = [
+    "opendigger",
+    "opendigger-pycli",
+    "opendigger-cli",
+    "opendigger-py",
+    "opensoda",
+    "open-digger",
+]
+
 
 [project.urls]
 AuthorGithub = "https://github.com/CoderChen01"
 Source = "https://github.com/CoderChen01/opendigger-pycli/"
+Documentation = "https://github.com/CoderChen01/opendigger-pycli/blob/main/README.md"
 
 [project.scripts]
 opendigger = "opendigger_pycli.__main__:opendigger"
 
 [project.optional-dependencies]
 test = [
-    "pytest",
-    "coverage",
-    "flake8",
-    "black",
-    "isort",
-    "pytest-cov",
-    "codecov",
-    "mypy",
-    "gitchangelog",
-    "mkdocs",
+    "pytest==7.4.0",
+    "coverage==7.2.7",
+    "flake8==6.0.0",
+    "black==23.7.0",
+    "isort==5.12.0",
+    "pytest-cov==4.1.0",
+    "codecov==2.1.13",
+    "mypy==1.4.1",
 ]
 
 [tool.black]
