@@ -137,7 +137,7 @@ def repo(env: Environment, repos: t.List[t.Tuple[str, str]]) -> None:
     env.vlog("Set params to env")
 
 
-@with_plugins(iter_entry_points("opendigger-pycli.plugins"))  # type: ignore
+@with_plugins(iter_entry_points("opendigger_pycli.plugins"))  # type: ignore
 @click.group(  # type: ignore
     chain=True,
     help="Query indicators",
@@ -309,17 +309,23 @@ def process_query_results(
 
     # Query only selected indicators
     if is_only_select:
-        if not selected_indicator_queries:
-            env.elog("You must specify the indicators you want to query.")
-            raise click.UsageError("You must specify the indicators you want to query.")
         env.vlog("Query only selected indicators")
         dataloaders = [
             filtered_dataloaders[indicator_name]
             for indicator_name, _ in selected_indicator_queries
+            if indicator_name not in ignore_indicator_names
         ]
     else:  # Query all indicators
         env.vlog("Query all indicators")
-        dataloaders = list(filtered_dataloaders.values())
+        dataloaders = dataloaders = [
+            filtered_dataloaders[indicator_name]
+            for indicator_name in filtered_dataloaders
+            if indicator_name not in ignore_indicator_names
+        ]
+
+    if not dataloaders:
+        env.elog("Your query cannot query any indicators.")
+        raise click.UsageError("Your query cannot query any indicators.")
 
     mode = env.mode  # This is assigned in the repo command
     results: t.Union[t.List[UserQueryResult], t.List[RepoQueryResult]]

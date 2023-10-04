@@ -1,48 +1,50 @@
-# OpenDigger CLI
+# OpenDigger CLI 文档
 
-[![opendigger](https://img.shields.io/badge/Data-OpenDigger-2097FF)](https://github.com/X-lab2017/open-digger)
-[![codecov](https://codecov.io/gh/CoderChen01/opendigger-pycli/branch/main/graph/badge.svg?token=WNKNCLGBQV)](https://codecov.io/gh/CoderChen01/opendigger-pycli)
-[![CI](https://github.com/CoderChen01/opendigger-pycli/actions/workflows/main.yml/badge.svg)](https://github.com/CoderChen01/opendigger-pycli/actions/workflows/main.yml)
+![opendigger](https://img.shields.io/badge/Data-OpenDigger-2097FF)
 
-一个可拓展的 [OpenDigger](https://github.com/X-lab2017/open-digger) GitHub开源数据查询、导出、可视化和监控等功能一体的命令行工具。
+- [OpenDigger CLI 文档](#opendigger-cli-文档)
+  - [🗺️Big Picture](#️big-picture)
+  - [🪛安装](#安装)
+    - [基本环境](#基本环境)
+    - [从源码安装](#从源码安装)
+    - [从PyPI安装](#从pypi安装)
+  - [🕹️基本用法](#️基本用法)
+    - [获取Github Personal Access Token](#获取github-personal-access-token)
+    - [获取OpenAI key](#获取openai-key)
+    - [config 命令](#config-命令)
+    - [repo 命令](#repo-命令)
+    - [user 命令](#user-命令)
+    - [query 命令](#query-命令)
+      - [按类型筛选指标](#按类型筛选指标)
+      - [按时间筛选指标数据](#按时间筛选指标数据)
+      - [对某一指标进行时间筛选](#对某一指标进行时间筛选)
+      - [正向筛选指标](#正向筛选指标)
+      - [反向筛选指标](#反向筛选指标)
+    - [display 命令](#display-命令)
+      - [表格格式](#表格格式)
+      - [图表格式](#图表格式)
+      - [json格式](#json格式)
+      - [保存输出结果](#保存输出结果)
+    - [export 命令](#export-命令)
+      - [数据报告](#数据报告)
+      - [原始Json数据](#原始json数据)
+    - [组合使用](#组合使用)
+  - [👀异常处理](#异常处理)
+    - [缺失数据自动反馈](#缺失数据自动反馈)
+    - [仓库不存在](#仓库不存在)
+    - [用户不存在](#用户不存在)
+  - [🔌插件开发](#插件开发)
+    - [query的返回数据](#query的返回数据)
+    - [插件示例](#插件示例)
+    - [示例插件使用](#示例插件使用)
+  - [📄筛选条件表达式详解](#筛选条件表达式详解)
+  - [End](#end)
 
 ## 🗺️Big Picture
 
-![Big Picture](./docs/assets/commands_big_picture.png)
+<a id="big-picture"></a>
 
-## 🧾项目简介
-
-项目地址：[CoderChen01/opendigger-pycli](https://github.com/CoderChen01/opendigger-pycli)
-
-本项目来源于：[OpenSODA | OpenDigger 开源软件生态数据分析挖掘平台挑战赛](https://atomgit.com/x-lab/OpenSODA) [任务类（T）| T2：命令行交互的指标结果查询子模块](https://xlab2017.yuque.com/staff-kbz9wp/olpzth/bs86kmg94pbg9fu6)。
-
-本项目所提交的复赛方案文档：[复赛-T2-ahpu_new_peasants.md](./docs/复赛-T2-ahpu_new_peasants.md)
-
-本项目的详细介绍文档：[决赛-T2-ahpu_new_peasants.md](./docs/决赛-T2-ahpu_new_peasants.md)。
-
-**如果您正在使用autogit查看该项目请查看：**[决赛-T2-ahpu_new_peasants-autogit.md](./docs/决赛-T2-ahpu_new_peasants-autogit.md)。
-
-本项目的演示视频：[OpenDigger CLI 演示视频](https://www.bilibili.com/video/BV1A8411y7UB)。
-
-## 🪄功能亮点
-
-- 提供**灵活的查询**功能，用户可以在查询所有指标的同时针对某个指标进行筛选，也可以只查询某个指标。
-- 提供**灵活的数据导出**功能，用户可以将过滤的指标数据进行导出，也可以将所有指标数据进行导出。
-- 提供**可拓展的数据可视化**功能，用户不仅可以选择需要可视化的指标，还可以通过接口拓展自定义的可视化指标。
-- 提供**数据缺失自动反馈**功能，当用户所需数据不存在时，自动提交Issue给开发者。
-- 实现了简易的**插件系统**，用户可以通过提供的接口拓展自定义的功能。
-- 接入**OpenAI GPT API**，在导出图表报告的同时进行分析。
-
-## 🗓️TODO
-
-- [x] 命令行解析模块
-- [x] 命令行配置模块
-- [x] 数据获取模块
-- [x] 数据查询模块
-- [x] 数据导出模块
-- [x] 数据反馈模块
-- [x] 数据报告AI生成模块
-- [x] 数据可视化模块
+![Big Picture](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/commands_big_picture.png)
 
 ## 🪛安装
 
@@ -81,21 +83,21 @@ pip3 install opendigger_pycli
 
 1.点击`Fine-grained tokens` > 点击`Generate new token`
 
-![第一步](./docs/assets/github_pat/01.png)
+![第一步](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/github_pat/01.png)
 
 2.设置`Token name`和`Token Expiration`
 
-![第二步](./docs/assets/github_pat/02.png)
+![第二步](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/github_pat/02.png)
 
 3.选择仓库权限
 
-![第三步](./docs/assets/github_pat/03.png)
+![第三步](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/github_pat/03.png)
 
 4.设置issue的读写权限
 
 注意metadata权限也必须同时设置只读权限
 
-![第四步](./docs/assets/github_pat/04.png)
+![第四步](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/github_pat/04.png)
 
 ### 获取OpenAI key
 
@@ -125,7 +127,7 @@ opendigger config -s user_info.name <your_name> -s user_info.email <your_email>
 <details>
 <summary> 演示录屏 </summary>
 
-![config](./docs/assets/demos/config.gif)
+![config](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/config.gif)
 </details>
 
 ### repo 命令
@@ -151,15 +153,15 @@ opendigger repo -r X-lab2017/open-digger -r microsoft/vscode
 <details>
 <summary> 结果截图 </summary>
 
-![repo](./docs/assets/result_screenshots/repo-01.png)
+![repo](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/repo-01.png)
 
-![repo](./docs/assets/result_screenshots/repo-02.png)
+![repo](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/repo-02.png)
 </details>
 
 <details>
 <summary> 演示录屏 </summary>
 
-![repo](./docs/assets/demos/repo.gif)
+![repo](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo.gif)
 </details>
 
 ### user 命令
@@ -185,9 +187,9 @@ opendigger user -u CoderChen01 -u X-lab2017
 <details>
 <summary> 结果截图 </summary>
 
-![user](./docs/assets/result_screenshots/user-01.png)
+![user](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/user-01.png)
 
-![user](./docs/assets/result_screenshots/user-02.png)
+![user](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/user-02.png)
 </details>
 
 ### query 命令
@@ -246,7 +248,7 @@ opendigger repo -r X-lab2017/open-digger query
 <summary> 演示录屏 </summary>
 
 ![query](
-    ./docs/assets/demos/repo-query.gif
+    https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo-query.gif
 )
 </details>
 
@@ -318,11 +320,11 @@ opendigger repo -r X-lab2017/open-digger query -i -f 3 display -f table
 <summary> 演示录屏 </summary>
 
 ![query](
-    ./docs/assets/demos/repo-query-i-f.gif
+    https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo-query-i-f.gif
 )
 
 [query](
-    ./docs/assets/demos/repo-query-i-f.gif
+    https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo-query-i-f.gif
 )
 </details>
 
@@ -357,7 +359,7 @@ opendigger repo -r X-lab2017/open-digger query -i -s openrank:8 display -f table
 <summary> 查看仓库X-lab2017/open-digger的index类型的指标数据，并对openrank指标进行筛选，只查看2023年的数据，并以表格形式在终端打印 </summary>
 
 ![query](
-    ./docs/assets/demos/repo-query-i-s-openrank-2023.gif
+    https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo-query-i-s-openrank-2023.gif
 )
 </details>
 
@@ -365,7 +367,7 @@ opendigger repo -r X-lab2017/open-digger query -i -s openrank:8 display -f table
 <summary> 查看仓库X-lab2017/open-digger的index类型的指标数据，并对openrank指标进行筛选，只查看2021~2022年的数据，并以表格形式在终端打印 </summary>
 
 ![query](
-    ./docs/assets/demos/repo-query-i-s-openrank-2021~2022.gif
+    https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo-query-i-s-openrank-2021~2022.gif
 )
 </details>
 
@@ -373,7 +375,7 @@ opendigger repo -r X-lab2017/open-digger query -i -s openrank:8 display -f table
 <summary> 查看仓库X-lab2017/open-digger的index类型的指标数据，并对openrank指标进行筛选，只查看2021年3月~2022年3月的数据，并以表格形式在终端打印 </summary>
 
 ![query](
-    ./docs/assets/demos/repo-query-i-s-openrank-2021-3~2022-3.gif
+    https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo-query-i-s-openrank-2021-3~2022-3.gif
 )
 </details>
 
@@ -381,7 +383,7 @@ opendigger repo -r X-lab2017/open-digger query -i -s openrank:8 display -f table
 <summary> 查看仓库X-lab2017/open-digger的index类型的指标数据，并对openrank指标进行筛选，只查看过去年份3月到8月的数据，并以表格形式在终端打印 </summary>
 
 ![query](
-    ./docs/assets/demos/repo-query-i-s-openrank-3~8.gif
+    https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo-query-i-s-openrank-3~8.gif
 )
 </details>
 
@@ -389,7 +391,7 @@ opendigger repo -r X-lab2017/open-digger query -i -s openrank:8 display -f table
 <summary> 查看仓库X-lab2017/open-digger的index类型的指标数据，并对openrank指标进行筛选，只查看过去年份8月的数据，并以表格形式在终端打印 </summary>
 
 ![query](
-    ./docs/assets/demos/repo-query-i-s-openrank-08.gif
+    https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo-query-i-s-openrank-08.gif
 )
 </details>
 
@@ -414,7 +416,7 @@ opendigger repo -r X-lab2017/open-digger query -i -os openrank:3~8 display -f ta
 <summary> 演示录屏 </summary>
 
 ![query](
-    ./docs/assets/demos/repo-query-i-s-openrank-3~8-o.gif
+    https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo-query-i-s-openrank-3~8-o.gif
 )
 </details>
 
@@ -475,7 +477,7 @@ opendigger repo -r X-lab2017/open-digger query -i -os openrank:2023 display -f g
 
 结果截图：
 
-![bar01](./docs/assets/result_screenshots/bar-01.png)
+![bar01](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/bar-01.png)
 
 从图中可以看出openrank 2023年每个月的数据变化。
 
@@ -487,7 +489,7 @@ opendigger repo -r X-lab2017/open-digger query -m -os active_date_and_time:2023 
 
 结果截图：
 
-![heatmap](./docs/assets/result_screenshots/heatmap-01.png)
+![heatmap](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/heatmap-01.png)
 
 从图中可以看出2023年每个月的活跃时间段。热力图的横纵坐标标号的含义在图下方也会有相应的说明。
 
@@ -499,7 +501,7 @@ opendigger repo -r X-lab2017/open-digger query -m -os summed_code_change_line di
 
 结果截图：
 
-![bar02](./docs/assets/result_screenshots/bar-02.png)
+![bar02](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/bar-02.png)
 
 从图中可以看出summed_code_change_line指标的数据变化。对于负值的数据，我们会将其转换为正值，然后在图表中以红色显示。
 
@@ -518,7 +520,7 @@ opendigger repo -r X-lab2017/open-digger query -mos issue_age display -f json
 <details>
 <summary> 演示录屏 </summary>
 
-![json_display](./docs/assets/demos/repo-query-mos-issue_age-display-json.gif)
+![json_display](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo-query-mos-issue_age-display-json.gif)
 </details>
 
 #### 保存输出结果
@@ -534,7 +536,7 @@ opendigger repo -r X-lab2017/open-digger query display -f graph -s .
 <details>
 <summary> 演示录屏 </summary>
 
-<video src="./docs/assets/demos/repo-query-dispaly-save.mp4"></video>
+<video src="https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo-query-dispaly-save.mp4"></video>
 </details>
 
 ### export 命令
@@ -564,7 +566,7 @@ opendigger repo -r X-lab2017/open-digger query export -f report -s .
 <details>
 <summary> 演示录屏 </summary>
 
-<video src="./docs/assets/demos/repo-query-export-report.mp4"> </video>
+<video src="https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/demos/repo-query-export-report.mp4"> </video>
 </details>
 
 **查看仓库X-lab2017/open-digger的所有指标数据(其中查看2023年8月的project_openrank_detail指标，并导出数据报告：**
@@ -596,7 +598,7 @@ opendigger repo -r X-lab2017/open-digger query -ios openrank:2023 display -f tab
 
 结果截图：
 
-![query-display-export](./docs/assets/result_screenshots/export_display.png)
+![query-display-export](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/export_display.png)
 
 ## 👀异常处理
 
@@ -608,7 +610,7 @@ open-digger官方仓库对于一些仓库的指标数据是缺失的。用户查
 
 issue信息如图所示：
 
-![issue](./docs/assets/result_screenshots/issue.png)
+![issue](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/issue.png)
 
 如果多个用户重复查询同一个仓库的指标数据，我们不会冗余的提交，而是在原有的issue上添加一个"👀"符号。这样open-digger开发者可以通过定期查看issue来了解用户关注哪些仓库/用户的哪些指标数据。如果关注人数较多，可以决策是否添加该仓库/用户的指标数据。
 
@@ -622,7 +624,7 @@ issue信息如图所示：
 opendigger repo -r X-lab2017/open-digger-404
 ```
 
-![repo_not_found](./docs/assets/result_screenshots/repo-404.png)
+![repo_not_found](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/repo-404.png)
 
 ### 用户不存在
 
@@ -634,7 +636,7 @@ opendigger repo -r X-lab2017/open-digger-404
 opendigger user -u CoderChen01-404
 ```
 
-![repo_not_found](./docs/assets/result_screenshots/user-404.png)
+![repo_not_found](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/user-404.png)
 
 ## 🔌插件开发
 
@@ -771,7 +773,7 @@ python3 setup.py install
 opendigger repo -r X-lab2017/open-digger  query  --help
 ```
 
-![plugin_example](./docs/assets/result_screenshots/plugin.png)
+![plugin_example](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/plugin.png)
 
 会发现`query`命令的`--help`中多了一个`print-result`子命令。
 
@@ -783,7 +785,7 @@ opendigger repo -r X-lab2017/open-digger  query -ios openrank:2023 print-result
 
 结果如下：
 
-![plugin_example](./docs/assets/result_screenshots/plugin-result.png)
+![plugin_example](https://atomgit.com/opendigger-pycli/opendigger-pycli/raw/cjj_dev/docs/assets/result_screenshots/plugin-result.png)
 
 ## 📄筛选条件表达式详解
 

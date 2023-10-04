@@ -104,6 +104,10 @@ class BaseData(Generic[T]):
 
     def __lt__(self, other: "BaseData[T]") -> bool:
         if self.year == other.year:
+            if self.month == other.month:
+                # When encountering data of the same year and month,
+                # the data with is raw as true are ranked first.
+                return self.is_raw > other.is_raw
             return self.month < other.month
         return self.year < other.year
 

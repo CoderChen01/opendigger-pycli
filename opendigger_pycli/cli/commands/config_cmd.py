@@ -89,11 +89,12 @@ def config(
     env: "Environment",
     config_settings: t.List[t.Tuple[str, str]],
 ) -> None:
+    """Set config value"""
+
     if not config_settings:
         CONSOLE.print(env.cli_config)
         return
 
-    """Set config value"""
     for config_setting in config_settings:
         key, value = config_setting
         section_name, key = parse_config_key(key)
