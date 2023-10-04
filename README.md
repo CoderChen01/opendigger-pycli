@@ -6,6 +6,53 @@
 
 一个可拓展的 [OpenDigger](https://github.com/X-lab2017/open-digger) GitHub开源数据查询、导出、可视化和监控等功能一体的命令行工具。
 
+<details>
+
+<summary> 目录 </summary>
+
+- [OpenDigger CLI](#opendigger-cli)
+  - [🗺️Big Picture](#️big-picture)
+  - [🧾项目简介](#项目简介)
+  - [🪄功能亮点](#功能亮点)
+  - [🗓️TODO](#️todo)
+  - [🪛安装](#安装)
+    - [基本环境](#基本环境)
+    - [从源码安装](#从源码安装)
+    - [从PyPI安装](#从pypi安装)
+  - [🕹️基本用法](#️基本用法)
+    - [获取Github Personal Access Token](#获取github-personal-access-token)
+    - [获取OpenAI key](#获取openai-key)
+    - [config 命令](#config-命令)
+    - [repo 命令](#repo-命令)
+    - [user 命令](#user-命令)
+    - [query 命令](#query-命令)
+      - [按类型筛选指标](#按类型筛选指标)
+      - [按时间筛选指标数据](#按时间筛选指标数据)
+      - [对某一指标进行时间筛选](#对某一指标进行时间筛选)
+      - [正向筛选指标](#正向筛选指标)
+      - [反向筛选指标](#反向筛选指标)
+    - [display 命令](#display-命令)
+      - [表格格式](#表格格式)
+      - [图表格式](#图表格式)
+      - [json格式](#json格式)
+      - [保存输出结果](#保存输出结果)
+    - [export 命令](#export-命令)
+      - [数据报告](#数据报告)
+      - [原始Json数据](#原始json数据)
+    - [组合使用](#组合使用)
+  - [👀异常处理](#异常处理)
+    - [缺失数据自动反馈](#缺失数据自动反馈)
+    - [仓库不存在](#仓库不存在)
+    - [用户不存在](#用户不存在)
+  - [🔌插件开发](#插件开发)
+    - [query的返回数据](#query的返回数据)
+    - [插件示例](#插件示例)
+    - [示例插件使用](#示例插件使用)
+  - [📄筛选条件表达式详解](#筛选条件表达式详解)
+  - [End](#end)
+
+</details>
+
 ## 🗺️Big Picture
 
 ![Big Picture](./docs/assets/commands_big_picture.png)
