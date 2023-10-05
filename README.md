@@ -60,7 +60,7 @@
 
 ## 🧾项目简介
 
-项目地址：[CoderChen01/opendigger-pycli](https://github.com/CoderChen01/opendigger-pycli)
+项目地址：[CoderChen01/opendigger-pycli](https://github.com/CoderChen01/opendigger-pycli); 本项目基于Github进行团队协作。
 
 本项目来源于：[OpenSODA | OpenDigger 开源软件生态数据分析挖掘平台挑战赛](https://atomgit.com/x-lab/OpenSODA) [任务类（T）| T2：命令行交互的指标结果查询子模块](https://xlab2017.yuque.com/staff-kbz9wp/olpzth/bs86kmg94pbg9fu6)。
 
