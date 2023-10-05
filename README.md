@@ -597,11 +597,7 @@ opendigger repo -r X-lab2017/open-digger query -mos issue_age display -f json
 opendigger repo -r X-lab2017/open-digger query display -f graph -s .
 ```
 
-<details>
-<summary> 演示录屏 </summary>
-
-<video src="./docs/assets/demos/repo-query-dispaly-save.mp4"></video>
-</details>
+[演示录屏](./docs/assets/demos/repo-query-dispaly-save.mp4)
 
 ### export 命令
 
@@ -627,11 +623,7 @@ opendigger repo -r X-lab2017/open-digger query display -f graph -s .
 opendigger repo -r X-lab2017/open-digger query export -f report -s .
 ```
 
-<details>
-<summary> 演示录屏 </summary>
-
-<video src="./docs/assets/demos/repo-query-export-report.mp4"> </video>
-</details>
+[演示录屏](./docs/assets/demos/repo-query-export-report.mp4)
 
 **查看仓库X-lab2017/open-digger的所有指标数据(其中查看2023年8月的project_openrank_detail指标，并导出数据报告：**
 
