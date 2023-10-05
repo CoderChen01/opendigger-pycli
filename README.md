@@ -68,7 +68,7 @@
 
 本项目的详细介绍文档：[决赛-T2-ahpu_new_peasants.md](./docs/决赛-T2-ahpu_new_peasants.md)。
 
-**如果您正在使用autogit查看该项目请查看：**[决赛-T2-ahpu_new_peasants-autogit.md](./docs/决赛-T2-ahpu_new_peasants-autogit.md)。
+**如果您正在使用atomgit查看该项目请查看：**[决赛-T2-ahpu_new_peasants-autogit.md](./docs/决赛-T2-ahpu_new_peasants-autogit.md)。
 
 本项目的演示视频：[OpenDigger CLI 演示视频](https://www.bilibili.com/video/BV1A8411y7UB)。
 
