@@ -56,10 +56,7 @@ def load_base_data(
             year, month = date.split("-")[:2]
         except Exception:
             # TODO(chenjunjie): add warning
-            year, month = (
-                "0",
-                "0",
-            )  # If the date is not in the correct format, set it to 0
+            continue
 
         # value has different types,
         # you need to pass in a function to handle it
